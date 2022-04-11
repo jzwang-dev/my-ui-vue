@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import MyTestComp from './components/MyTestComp.vue';
 import MyTable from './components/MyTable';
-export { MyTable };
+export { MyTestComp, MyTable };

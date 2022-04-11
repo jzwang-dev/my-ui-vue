@@ -4,17 +4,257 @@ author: jzwang
 -->
 <template>
   <div class="my-table">
-    <table>
+    <!-- toolbar(begin) -->
+    <div
+      class="border d-sm-flex align-items-center justify-content-between p-2"
+      v-if="showToolbar"
+    >
+      <div class="d-sm-flex align-items-center">
+        <slot name="before-toolbuttons" :vmData="$data"></slot>
+        <button
+          type="button"
+          class="btn btn-danger mr-1"
+          @click="$emit('destroy-items', inner.selected)"
+          :disabled="!inner.selected.length"
+          v-if="showDestroy"
+        >
+          <i class="fas fa-trash"></i> 刪除勾選
+        </button>
+        <div class="dropdown" v-if="showExport">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-toggle="dropdown"
+          >
+            <i class="fas fa-file-export"></i> 匯出
+          </button>
+          <div class="dropdown-menu">
+            <a
+              class="dropdown-item border-0"
+              href="#"
+              @click.prevent="doExportExcel"
+              >匯出Excel</a
+            >
+            <a
+              class="dropdown-item border-0"
+              href="#"
+              @click.prevent="doExportPdf"
+              >匯出Pdf</a
+            >
+          </div>
+        </div>
+        <slot name="after-toolbuttons" :vmData="$data"></slot>
+      </div>
+      <div class="form-inline">
+        <template v-if="showItemsPerPage">
+          顯示
+          <select class="form-control mx-1" v-model="inner.paging.itemsPerPage">
+            <option
+              v-for="option in inner.itemsPerPageOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option === 0 ? '-不限-' : option }}
+            </option>
+          </select>
+          項結果
+        </template>
+        <div class="dropdown ml-1">
+          <button
+            class="btn btn-outline-secondary dropdown-toggle"
+            type="button"
+            data-toggle="dropdown"
+          >
+            顯示欄位
+          </button>
+          <div class="dropdown-menu">
+            <form class="px-4 py-3">
+              <div
+                class="custom-control custom-checkbox"
+                v-for="column in displayableColumns"
+                :key="column.key"
+              >
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  :id="`visibleColumnKeys_${column.key}`"
+                  :value="column.key"
+                  v-model="inner.visibleColumnKeys"
+                />
+                <label
+                  class="custom-control-label d-inline-block"
+                  :for="`visibleColumnKeys_${column.key}`"
+                  >{{ column.header }}</label
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- toolbar(end) -->
+
+    <!-- top pagingbar(begin) -->
+    <div
+      class="border d-sm-flex align-items-center justify-content-between p-2"
+      v-if="paginatorPosition !== 'bottom'"
+    >
+      <div>
+        <my-paginator
+          :paging.sync="inner.paging"
+          :paginator.sync="inner.paginator"
+          :totalItems="totalItems"
+          @change-page="(page) => $emit('change-page', page)"
+          v-if="inner.paging.itemsPerPage > 0"
+        ></my-paginator>
+      </div>
+      <div>
+        顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
+        {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共 {{ totalItems }} 項。
+      </div>
+    </div>
+    <!-- top pagingbar(end) -->
+
+    <table
+      class="table table-bordered table-striped table-hover table-sm responsive mb-0"
+    >
       <thead>
         <tr class="table-active">
-          <th></th>
+          <th class="text-center align-middle" v-if="showSelection">
+            <div class="custom-control custom-checkbox">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="checkAll"
+                v-model="_checkAll"
+              />
+              <label class="custom-control-label" for="checkAll"></label>
+            </div>
+          </th>
+          <th
+            v-for="column in visibleColumns"
+            :key="column.key"
+            :class="[{ sortable: column.sortable !== false }, column.thClass]"
+            :style="column.thStyle"
+            @click="column.sortable !== false && _doSort(column.key)"
+          >
+            {{ column.header }}
+            <i
+              class="fas"
+              :class="[
+                (inner.sorting.direction &&
+                  inner.sorting.direction.toLowerCase()) === 'desc'
+                  ? 'fa-sort-down'
+                  : 'fa-sort-up'
+              ]"
+              v-show="inner.sorting && inner.sorting.key === column.key"
+            ></i>
+          </th>
+          <th v-if="showActions"></th>
         </tr>
       </thead>
+      <tbody>
+        <tr v-for="item in pagedItems" :key="item[rowKey]">
+          <td class="text-center align-middle" v-if="showSelection">
+            <div>
+              <div class="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  :id="`selected_${item[rowKey]}`"
+                  :value="item[rowKey]"
+                  v-model="inner.selected"
+                />
+                <label
+                  class="custom-control-label"
+                  :for="`selected_${item[rowKey]}`"
+                ></label>
+              </div>
+            </div>
+          </td>
+          <td
+            v-for="column in visibleColumns"
+            :key="column.key"
+            :data-title="column.header"
+          >
+            <div>
+              <slot
+                :name="`edit-${column.key}`"
+                :item="inner.inlineEditItem"
+                :column="column"
+                v-if="
+                  column.editable !== false &&
+                  inner.inlineEditItem &&
+                  inner.inlineEditItem[rowKey] === item[rowKey]
+                "
+              >
+              </slot>
+              <slot v-else :name="`item-${column.key}`" :item="item">{{
+                (column.format
+                  ? column.format(column.value(item), item)
+                  : column.value(item)) | nil
+              }}</slot>
+            </div>
+          </td>
+          <td v-if="showActions" class="actions">
+            <div>
+              <div
+                v-if="
+                  inner.inlineEditItem &&
+                  inner.inlineEditItem[rowKey] === item[rowKey]
+                "
+              >
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  @click="_onSave"
+                >
+                  儲存
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  @click="_onCancel"
+                >
+                  取消
+                </button>
+              </div>
+              <div v-else>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  @click="_onRead(item)"
+                  v-if="showRead"
+                >
+                  檢視
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  @click="_onUpdate(item)"
+                  v-if="showUpdate"
+                >
+                  編輯
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  @click="_onDelete(item)"
+                  v-if="showDelete"
+                >
+                  刪除
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
 
 <script>
+import MyPaginator from '../MyPaginator';
 import {
   defaultSorting,
   defaultPaging,
@@ -23,9 +263,14 @@ import {
   defaultControlTypes
 } from '../../configs';
 import myUtil from '../../utils/myUtil';
+import exportUtil from '../../utils/exportUtil';
 
 export default {
   name: 'MyTable',
+
+  components: {
+    MyPaginator
+  },
 
   props: {
     items: {
@@ -138,7 +383,7 @@ export default {
 
     exportName: {
       type: String,
-      default: 'export'
+      default: 'export_data'
     },
 
     showSelection: {
@@ -190,6 +435,7 @@ export default {
         columns: this._getNormalizedColumns(),
         visibleColumnKeys: this._getNormalizedVisibleColumnKeys(),
         selected: this._getNormalizedSelected(),
+        searchTerm: this._getNormalizedSearchTerm(),
         filter: this._getNormalizedFilter(),
         sorting: this._getNormalizedSorting(),
         paging: this._getNormalizedPaging(),
@@ -205,6 +451,18 @@ export default {
   },
 
   computed: {
+    displayableColumns() {
+      return this.inner.columns.filter(
+        (column) => column.displayable !== false
+      );
+    },
+
+    visibleColumns() {
+      return this.displayableColumns.filter((column) =>
+        this.inner.visibleColumnKeys.includes(column.key)
+      );
+    },
+
     _checkAll: {
       get() {
         return (
@@ -216,7 +474,7 @@ export default {
         let selected = [];
 
         if (value) {
-          this.processedItem.forEach((item) => {
+          this.processedItems.forEach((item) => {
             selected.push(item[this.rowKey]);
           });
         }
@@ -269,7 +527,7 @@ export default {
         Object.assign(
           {
             header: column.key,
-            visible: true,
+            displayable: true,
             value: (item) => item[column.key],
             defaultValue: null,
             format: (value) => value,
@@ -293,6 +551,7 @@ export default {
               dataTextField: 'text',
               showEmptyOption: true,
               emptyOptionValue: '',
+              emptyOptionText: '-請選擇-',
               inline: true
             },
             validators: [],
@@ -308,12 +567,16 @@ export default {
       );
     },
 
-    _getNormalizedVisibleColumns() {
-      return this._getNormalizedColumns().filter((column) => column.visible);
+    _getNormalizedDisplayableColumns() {
+      return this._getNormalizedColumns().filter(
+        (column) => column.displayable !== false
+      );
     },
 
     _getNormalizedVisibleColumnKeys() {
-      const keys = this._getNormalizedVisibleColumns().map((col) => col.key);
+      const keys = this._getNormalizedDisplayableColumns().map(
+        (col) => col.key
+      );
       return (
         this.visibleColumnKeys?.filter((key) => keys.includes(key)) ?? keys
       );
@@ -323,10 +586,14 @@ export default {
       return this.selected ?? [];
     },
 
+    _getNormalizedSearchTerm() {
+      return this.searchTerm ?? '';
+    },
+
     _getNormalizedFilter() {
       return Object.assign(
         {},
-        this._getNormalizedVisibleColumns().reduce(
+        this._getNormalizedDisplayableColumns().reduce(
           (prev, curr) => ({ ...prev, [curr.key]: null }),
           {}
         ),
@@ -433,7 +700,7 @@ export default {
         return;
       }
 
-      let items = [...this.data];
+      let items = [...this.items];
 
       this.processedItems =
         this.filteredItems =
@@ -447,7 +714,7 @@ export default {
       ) {
         items = items.filter((item) => {
           const passeds = [];
-          for (let column of this.inner.columns) {
+          for (let column of this.displayableColumns) {
             let passed = false;
             let value = column.value ? column.value(item) : item[column.key];
             if (value != null) {
@@ -475,9 +742,9 @@ export default {
 
       this.filteredItems = items;
 
-      if (this.innner.sorting?.key) {
+      if (this.inner.sorting?.key) {
         items.sort((a, b) => {
-          const column = this.innner.columns.find(
+          const column = this.displayableColumns.find(
             (column) => column.key === this.inner.sorting.key
           );
 
@@ -520,72 +787,145 @@ export default {
 
       this.processedItems = this.sortedItems;
 
-      this.pagedItems = this.processedItem.filter(
+      this.pagedItems = this.processedItems.filter(
         (item, index) =>
           index >= this.pageFromIndex && index <= this.pageToIndex
       );
     },
 
     getExportParams() {
-
-      //test
-      const visibleColumns = this.innerColumns.filter(
-        (col) =>
-          this.innerVisibleColumns.includes(col.key) &&
-          col.exportVisible !== false
+      const exportableColumns = this.visibleColumns.filter(
+        (column) => column.exportable !== false
       );
 
-      const exportData = this.processedData.map((item) => {
+      const exportItems = this.processedItems.map((item) => {
         const tmpItem = {};
-        visibleColumns.forEach((col) => {
-          tmpItem[col.key] = '';
+        exportableColumns.forEach((column) => {
+          let value = '';
 
-          if (col.stringify) {
-            try {
-              tmpItem[col.key] = col.stringify(item);
-            } catch (e) {
-              if (process.env.NODE_ENV === 'development') {
-                console.log(
-                  `[Debug] (column key: ${col.key}) call stringify() function failed!`
-                );
-                throw e;
-              }
-            }
-          } else if (col.value) {
-            try {
-              tmpItem[col.key] = col.value(item);
-            } catch (e) {
-              if (process.env.NODE_ENV === 'development') {
-                console.log(
-                  `[Debug] (column key: ${col.key}) call value() function failed!`
-                );
-                throw e;
-              }
-            }
+          if (column.valueToExport) {
+            value = column.valueToExport(item);
+          } else if (column.value) {
+            value = column.value(item);
           } else {
-            tmpItem[col.key] = item[col.key];
+            value = item[column.key] ?? '';
           }
 
-          if (
-            Object.prototype.toString.call(tmpItem[col.key]) !==
-            '[object String]'
-          ) {
-            tmpItem[col.key] = JSON.stringify(tmpItem[col.key]);
+          if (Object.prototype.toString.call(value) !== '[object String]') {
+            value = JSON.stringify(value);
           }
+
+          tmpItem[column.key] = value;
         });
 
         return tmpItem;
       });
 
-      const exportColumns = visibleColumns.map((col) => ({
-        key: col.key,
-        header: col.header ?? col.key
+      const exportColumns = exportableColumns.map((column) => ({
+        key: column.key,
+        header: column.header ?? column.key
       }));
 
       return {
-        exportData,
+        exportItems,
         exportColumns
       };
+    },
+
+    doExportExcel() {
+      const { exportItems, exportColumns } = this.getExportParams();
+      if (this.exportExcel) {
+        this.exportExcel({ exportItems, exportColumns });
+        return;
+      }
+      exportUtil.exportExcel(exportItems, exportColumns, this.exportName);
+    },
+
+    doExportPdf() {
+      const { exportItems, exportColumns } = this.getExportParams();
+      if (this.exportPdf) {
+        this.exportPdf({ exportItems, exportColumns });
+        return;
+      }
+      exportUtil.exportPdf(exportItems, exportColumns, this.exportName);
+    },
+
+    getProcessedItems() {
+      return this.processedItems;
+    },
+
+    getPagedItems() {
+      return this.pagedItems;
+    },
+
+    validateInlineEditItem() {
+      this.clearErrors();
+      if (!this.inner.inlineEditItem) {
+        return true;
+      }
+      let valid = true;
+      for (let column of this.inner.columns) {
+        for (let validator of column.validators ?? []) {
+          const result = validator(
+            this.inner.inlineEditItem[column.key],
+            this.inner.inlineEditItem
+          );
+          if (result !== true) {
+            column.errors.push(result);
+            valid = false;
+            if (column.validation.greedy !== true) {
+              break;
+            }
+          }
+        }
+      }
+      return valid;
+    },
+
+    clearErrors() {
+      for (let column of this.inner.columns) {
+        column.errors = [];
+      }
+    },
+
+    getErrors() {
+      return this.inner.columns.map((column) => {
+        const errors = column.errors ?? [];
+        return {
+          key: column.key,
+          errors,
+          errMsg: errors.join(column.errorsSeparator || ', ')
+        };
+      });
+    },
+
+    _onSave() {
+      if (!this.validateInlineEditItem()) {
+        this.$emit('validate-item-failed', {
+          errors: this.getErrors(),
+          item: this.inner.inlineEditItem
+        });
+        return;
+      }
+      this.$emit('save-item', this.inner.inlineEditItem);
+    },
+
+    _onCancel() {
+      this.clearErrors();
+      this.$emit('cancel-item', this.inner.inlineEditItem);
+      this.inner.inlineEditItem = null;
+    },
+
+    _onRead(item) {
+      this.$emit('read-item', item);
+    },
+
+    _onUpdate(item) {
+      this.$emit('update-item', item);
+    },
+
+    _onDelete(item) {
+      this.$emit('delete-item', item);
     }
   },
 
@@ -671,9 +1011,25 @@ export default {
     },
 
     searchTerm: {
-      handler() {
+      handler(searchTerm) {
+        if (searchTerm === this.inner.searchTerm) {
+          return;
+        }
+        myUtil.devLog('searchTerm', searchTerm);
         this._onFilteringChange();
+        this.inner.searchTerm = this._getNormalizedSearchTerm();
       }
+    },
+
+    'inner.searchTerm': {
+      handler(innerSearchTerm) {
+        if (innerSearchTerm === this.searchTerm) {
+          return;
+        }
+        myUtil.devLog('innerSearchTerm', innerSearchTerm);
+        this.$emit('update:searchTerm', innerSearchTerm);
+      },
+      immediate: true
     },
 
     filter: {
