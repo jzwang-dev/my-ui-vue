@@ -256,6 +256,31 @@ author: jzwang
         </tr>
       </tbody>
     </table>
+
+    <div class="border p-2 text-center" v-if="totalItems === 0">
+      {{ emptyText }}
+    </div>
+
+    <!-- bottom pagingbar(begin) -->
+    <div
+      class="border d-sm-flex align-items-center justify-content-between p-2"
+      v-if="paginatorPosition === 'bottom'"
+    >
+      <div>
+        <my-paginator
+          :paging.sync="inner.paging"
+          :paginator.sync="inner.paginator"
+          :totalItems="totalItems"
+          @change-page="(page) => $emit('change-page', page)"
+          v-if="inner.paging.itemsPerPage > 0"
+        ></my-paginator>
+      </div>
+      <div>
+        顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
+        {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共 {{ totalItems }} 項。
+      </div>
+    </div>
+    <!-- bottom pagingbar(end) -->
   </div>
 </template>
 
