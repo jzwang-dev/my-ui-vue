@@ -28,3 +28,7 @@ export const defaultControlTypes = {
   [Array]: 'checkboxlist',
   [Date]: 'input'
 };
+
+export default {
+  debug: false
+};

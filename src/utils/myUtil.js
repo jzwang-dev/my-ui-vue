@@ -1,3 +1,5 @@
+import configs from '../configs';
+
 export const getEnv = () => {
   return process.env.NODE_ENV;
 };
@@ -11,7 +13,7 @@ export const isDevelopmentEnv = () => {
 };
 
 export function devLog() {
-  if (isDevelopmentEnv()) {
+  if (isDevelopmentEnv() && configs.debug === true) {
     console.log.apply(this, arguments);
   }
 }

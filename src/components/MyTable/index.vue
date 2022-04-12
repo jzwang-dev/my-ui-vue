@@ -189,11 +189,17 @@ author: jzwang
                 "
               >
               </slot>
-              <slot v-else :name="`item-${column.key}`" :item="item">{{
-                (column.format
-                  ? column.format(column.value(item), item)
-                  : column.value(item)) | nil
-              }}</slot>
+              <slot
+                v-else
+                :name="`item-${column.key}`"
+                :item="item"
+                :column="column"
+                >{{
+                  (column.format
+                    ? column.format(column.value(item), item)
+                    : column.value(item)) | nil
+                }}</slot
+              >
             </div>
           </td>
           <td v-if="showActions" class="actions">
@@ -285,10 +291,7 @@ export default {
     },
 
     visibleColumnKeys: {
-      type: Array,
-      default() {
-        return [];
-      }
+      type: Array
     },
 
     rowKey: {

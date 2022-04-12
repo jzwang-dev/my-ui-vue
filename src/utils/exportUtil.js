@@ -7,7 +7,7 @@ async function exportExcel(
   title = '',
   options = {}
 ) {
-  myUtil.devLog(
+  console.log(
     'exportExcel',
     exportItems,
     exportColumns,
@@ -24,7 +24,7 @@ async function exportPdf(
   title = '',
   docDefinition = {}
 ) {
-  myUtil.devLog(
+  console.log(
     'exportPdf',
     exportItems,
     exportColumns,
