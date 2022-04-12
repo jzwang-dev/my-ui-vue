@@ -435,16 +435,16 @@ export default {
   data() {
     return {
       inner: {
-        columns: this._getNormalizedColumns(),
-        visibleColumnKeys: this._getNormalizedVisibleColumnKeys(),
-        selected: this._getNormalizedSelected(),
-        searchTerm: this._getNormalizedSearchTerm(),
-        filter: this._getNormalizedFilter(),
-        sorting: this._getNormalizedSorting(),
-        paging: this._getNormalizedPaging(),
-        paginator: this._getNormalizedPaginator(),
-        itemsPerPageOptions: this._getNormalizedItemsPerPageOptions(),
-        inlineEditItem: this._getNormalizedInlineEditItem()
+        columns: this._normalized_columns(),
+        visibleColumnKeys: this._normalized_visibleColumnKeys(),
+        selected: this._normalized_selected(),
+        searchTerm: this._normalized_searchTerm(),
+        filter: this._normalized_filter(),
+        sorting: this._normalized_sorting(),
+        paging: Object.assign({}, defaultPaging, this.paging),
+        paginator: Object.assign({}, defaultPaginator, this.paginator),
+        itemsPerPageOptions: this._normalized_itemsPerPageOptions(),
+        inlineEditItem: this._normalized_inlineEditItem()
       },
       processedItems: [],
       filteredItems: [],
@@ -525,7 +525,7 @@ export default {
   },
 
   methods: {
-    _getNormalizedColumns() {
+    _normalized_columns() {
       return this.columns.map((column) =>
         Object.assign(
           {
@@ -570,41 +570,34 @@ export default {
       );
     },
 
-    _getNormalizedDisplayableColumns() {
-      return this._getNormalizedColumns().filter(
-        (column) => column.displayable !== false
-      );
-    },
-
-    _getNormalizedVisibleColumnKeys() {
-      const keys = this._getNormalizedDisplayableColumns().map(
-        (col) => col.key
-      );
+    _normalized_visibleColumnKeys() {
+      const keys = this._normalized_columns()
+        .filter((column) => column.displayable !== false)
+        .map((column) => column.key);
       return (
         this.visibleColumnKeys?.filter((key) => keys.includes(key)) ?? keys
       );
     },
 
-    _getNormalizedSelected() {
+    _normalized_selected() {
       return this.selected ?? [];
     },
 
-    _getNormalizedSearchTerm() {
+    _normalized_searchTerm() {
       return this.searchTerm ?? '';
     },
 
-    _getNormalizedFilter() {
+    _normalized_filter() {
       return Object.assign(
         {},
-        this._getNormalizedDisplayableColumns().reduce(
-          (prev, curr) => ({ ...prev, [curr.key]: null }),
-          {}
-        ),
+        this._normalized_columns()
+          .filter((column) => column.displayable !== false)
+          .reduce((prev, curr) => ({ ...prev, [curr.key]: null }), {}),
         this.filter
       );
     },
 
-    _getNormalizedSorting() {
+    _normalized_sorting() {
       const sorting = { ...this.sorting };
       if (
         sorting.direction != null &&
@@ -615,24 +608,12 @@ export default {
       return Object.assign({}, defaultSorting, this.sorting, sorting);
     },
 
-    _getNormalizedPaging() {
-      const paging = { ...this.paging };
-      if (paging.itemsPerPage != null && paging.itemsPerPage <= 0) {
-        paging.itemsPerPage = 0;
-      }
-      return Object.assign({}, defaultPaging, this.paging, paging);
-    },
-
-    _getNormalizedPaginator() {
-      return Object.assign({}, defaultPaginator, this.paginator);
-    },
-
-    _getNormalizedItemsPerPageOptions() {
+    _normalized_itemsPerPageOptions() {
       const options = [
         ...(this.itemsPerPageOptions ?? defaultItemsPerPageOptions)
       ];
-      const itemsPerPage = this._getNormalizedPaging().itemsPerPage;
-      if (!options.includes(itemsPerPage)) {
+      const itemsPerPage = this.paging?.itemsPerPage;
+      if (itemsPerPage != null && !options.includes(itemsPerPage)) {
         options.push(itemsPerPage);
       }
       options.sort((a, b) => a - b);
@@ -640,13 +621,13 @@ export default {
       return options;
     },
 
-    _getNormalizedInlineEditItem() {
+    _normalized_inlineEditItem() {
       if (!this.inlineEditItem) {
         return null;
       }
 
       const inlineEditItem = { ...this.inlineEditItem };
-      for (let column of this._getNormalizedColumns()) {
+      for (let column of this._normalized_columns()) {
         if (inlineEditItem[column.key] === undefined) {
           inlineEditItem[column.key] = column.defaultValue;
         } else {
@@ -671,6 +652,7 @@ export default {
         clearTimeout(this.filteringTimeoutId);
       }
       this.filteringTimeoutId = setTimeout(() => {
+        console.log('_onFilteringChange:_processItems');
         this._processItems();
       }, 500);
     },
@@ -691,7 +673,7 @@ export default {
     },
 
     _processItems() {
-      myUtil.devLog('_processItems');
+      //myUtil.devLog('_processItems');
 
       if (this.serverTotalItems != null) {
         this.$emit('request', {
@@ -932,6 +914,13 @@ export default {
     }
   },
 
+  created() {
+    this.$emit('update:searchTerm', this.inner.searchTerm);
+    this.$emit('update:filter', this.inner.filter);
+    this.$emit('update:sorting', this.inner.sorting);
+    this.$emit('update:paging', this.inner.paging);
+  },
+
   watch: {
     items: {
       deep: true,
@@ -944,233 +933,180 @@ export default {
               items;
         }
 
+        console.log('items:_processItems');
         this._processItems();
-      }
-    },
-
-    columns: {
-      deep: true,
-      handler(columns) {
-        // if (columns === this.inner.columns) {
-        //   return;
-        // }
-        myUtil.devLog('columns', columns);
-        this.inner.columns = this._getNormalizedColumns();
       }
     },
 
     'inner.columns': {
       deep: true,
-      handler(innerColumns) {
-        if (innerColumns === this.columns) {
-          return;
-        }
-        myUtil.devLog('innerColumns', innerColumns);
-        this.$emit('update:columns', innerColumns);
-      }
-      //immediate: true
+      handler() {
+        this.$emit('update:columns', this.inner.columns);
+      },
+      immediate: true
     },
 
-    visibleColumnKeys: {
-      handler(visibleColumnKeys) {
-        // if (visibleColumnKeys === this.inner.visibleColumnKeys) {
-        //   return;
-        // }
-        myUtil.devLog('visibleColumnKeys', visibleColumnKeys);
-        this.inner.visibleColumnKeys = this._getNormalizedVisibleColumnKeys();
+    columns: {
+      handler() {
+        if (this.inner.columns !== this.columns) {
+          this.inner.columns = this._normalized_columns();
+        }
       }
     },
 
     'inner.visibleColumnKeys': {
-      handler(innerVisibleColumnKeys) {
-        if (innerVisibleColumnKeys === this.visibleColumnKeys) {
-          return;
-        }
-        myUtil.devLog('innerVisibleColumnKeys', innerVisibleColumnKeys);
-        this.$emit('update:visibleColumnKeys', innerVisibleColumnKeys);
-      }
-      //immediate: true
+      handler() {
+        this.$emit('update:visibleColumnKeys', this.inner.visibleColumnKeys);
+      },
+      immediate: true
     },
 
-    selected: {
-      handler(selected) {
-        // if (selected === this.inner.selected) {
-        //   return;
-        // }
-        myUtil.devLog('selected', selected);
-        this.inner.selected = this._getNormalizedSelected();
+    visibleColumnKeys: {
+      handler() {
+        if (this.inner.visibleColumnKeys !== this.visibleColumnKeys) {
+          this.inner.visibleColumnKeys = this._normalized_visibleColumnKeys();
+        }
       }
     },
 
     'inner.selected': {
-      handler(innerSelected) {
-        if (innerSelected === this.selected) {
-          return;
-        }
-        myUtil.devLog('innerSelected', innerSelected);
-        this.$emit('update:selected', innerSelected);
-      }
-      //immediate: true
+      handler() {
+        this.$emit('update:selected', this.inner.selected);
+      },
+      immediate: true
     },
 
-    searchTerm: {
-      handler(searchTerm) {
-        // if (searchTerm === this.inner.searchTerm) {
-        //   return;
-        // }
-        myUtil.devLog('searchTerm', searchTerm);
-        this._onFilteringChange();
-        this.inner.searchTerm = this._getNormalizedSearchTerm();
+    selected: {
+      handler() {
+        if (this.inner.selected !== this.selected) {
+          this.inner.selected = this._normalized_selected();
+        }
       }
     },
 
     'inner.searchTerm': {
-      handler(innerSearchTerm) {
-        if (innerSearchTerm === this.searchTerm) {
-          return;
-        }
-        myUtil.devLog('innerSearchTerm', innerSearchTerm);
-        this.$emit('update:searchTerm', innerSearchTerm);
+      handler() {
+        this._onFilteringChange();
+        this.$emit('update:searchTerm', this.inner.searchTerm);
       }
-      //immediate: true
     },
 
-    filter: {
-      deep: true,
-      handler(filter) {
-        // if (filter === this.inner.filter) {
-        //   return;
-        // }
-        myUtil.devLog('filter', filter);
-        this._onFilteringChange();
-        this.inner.filter = this._getNormalizedFilter();
+    searchTerm: {
+      handler() {
+        if (this.inner.searchTerm !== this.searchTerm) {
+          this.inner.searchTerm = this._normalized_searchTerm();
+        }
       }
     },
 
     'inner.filter': {
       deep: true,
-      handler(innerFilter) {
-        if (innerFilter === this.filter) {
-          return;
-        }
-        myUtil.devLog('innerFilter', innerFilter);
-        this.$emit('update:filter', innerFilter);
+      handler() {
+        this._onFilteringChange();
+        this.$emit('update:filter', this.inner.filter);
       }
-      //immediate: true
     },
 
-    sorting: {
-      deep: true,
-      handler(sorting) {
-        // if (sorting === this.inner.sorting) {
-        //   return;
-        // }
-        myUtil.devLog('sorting', sorting);
-        this._processItems();
-        this.inner.sorting = this._getNormalizedSorting();
+    filter: {
+      handler() {
+        if (this.inner.filter !== this.filter) {
+          this.inner.filter = this._normalized_filter();
+        }
       }
     },
 
     'inner.sorting': {
       deep: true,
-      handler(innerSorting) {
-        if (innerSorting === this.sorting) {
-          return;
-        }
-        myUtil.devLog('innerSorting', innerSorting);
-        this.$emit('update:sorting', innerSorting);
-      }
-      //immediate: true
-    },
-
-    paging: {
-      deep: true,
-      handler(paging) {
-        // if (paging === this.inner.paging) {
+      handler() {
+        // if (this.inner.paging.page !== 1) {
+        //   this.inner.paging.page = 1;
         //   return;
         // }
-        myUtil.devLog('paging', paging);
+        // if (this.inner.selected.length > 0) {
+        //   this.inner.selected = [];
+        // }
+
+        console.log('inner.sorting:_processItems');
         this._processItems();
-        this.inner.paging = this._getNormalizedPaging();
+        this.$emit('update:sorting', this.inner.sorting);
+      }
+    },
+
+    sorting: {
+      handler() {
+        if (this.inner.sorting !== this.sorting) {
+          this.inner.sorting = this._normalized_sorting();
+        }
       }
     },
 
     'inner.paging': {
-      deep: true,
-      handler(innerPaging) {
-        if (innerPaging === this.paging) {
-          return;
-        }
-        myUtil.devLog('innerPaging', innerPaging);
-        this.$emit('update:paging', innerPaging);
+      handler() {
+        this.$emit('update:paging', this.inner.paging);
       }
-      //immediate: true
     },
 
-    paginator: {
-      deep: true,
-      handler(paginator) {
-        // if (paginator === this.inner.paginator) {
-        //   return;
+    'inner.paging.page': {
+      handler() {
+        console.log('inner.paging.page:_processItems');
+        this._processItems();
+      }
+    },
+
+    'inner.paging.itemsPerPage': {
+      handler() {
+        if (this.inner.paging.page !== 1) {
+          this.inner.paging.page = 1;
+          return;
+        }
+        // if (this.inner.selected.length > 0) {
+        //   this.inner.selected = [];
         // }
-        myUtil.devLog('paginator', paginator);
-        this.inner.paginator = this._getNormalizedPaginator();
+
+        console.log('inner.paging.itemsPerPage:_processItems');
+        this._processItems();
       }
     },
 
     'inner.paginator': {
-      deep: true,
-      handler(innerPaginator) {
-        if (innerPaginator === this.paginator) {
-          return;
-        }
-        myUtil.devLog('innerPaginator', innerPaginator);
-        this.$emit('update:paginator', innerPaginator);
-      }
-      //immediate: true
-    },
-
-    itemsPerPageOptions: {
-      handler(itemsPerPageOptions) {
-        // if (itemsPerPageOptions === this.inner.itemsPerPageOptions) {
-        //   return;
-        // }
-        myUtil.devLog('itemsPerPageOptions', itemsPerPageOptions);
-        this.inner.itemsPerPageOptions =
-          this._getNormalizedItemsPerPageOptions();
+      handler() {
+        this.$emit('update:paginator', this.inner.paginator);
       }
     },
 
     'inner.itemsPerPageOptions': {
-      handler(innerItemsPerPageOptions) {
-        if (innerItemsPerPageOptions === this.itemsPerPageOptions) {
-          return;
-        }
-        myUtil.devLog('innerItemsPerPageOptions', innerItemsPerPageOptions);
-        this.$emit('update:itemsPerPageOptions', innerItemsPerPageOptions);
-      }
-      //immediate: true
+      handler() {
+        this.$emit(
+          'update:itemsPerPageOptions',
+          this.inner.itemsPerPageOptions
+        );
+      },
+      immediate: true
     },
 
-    inlineEditItem: {
-      handler(inlineEditItem) {
-        // if (inlineEditItem === this.inner.inlineEditItem) {
-        //   return;
-        // }
-        myUtil.devLog('inlineEditItem', inlineEditItem);
-        this.inner.inlineEditItem = this._getNormalizedInlineEditItem();
+    itemsPerPageOptions: {
+      handler() {
+        if (this.inner.itemsPerPageOptions !== this.itemsPerPageOptions) {
+          this.inner.itemsPerPageOptions =
+            this._normalized_itemsPerPageOptions();
+        }
       }
     },
 
     'inner.inlineEditItem': {
-      handler(innerInlineEditItem) {
-        if (innerInlineEditItem === this.inlineEditItem) {
-          return;
+      deep: true,
+      handler() {
+        this.$emit('update:inlineEditItem', this.inner.inlineEditItem);
+      },
+      immediate: true
+    },
+
+    inlineEditItem: {
+      handler() {
+        if (this.inner.inlineEditItem !== this.inlineEditItem) {
+          this.inner.inlineEditItem = this._normalized_inlineEditItem();
         }
-        myUtil.devLog('innerInlineEditItem', innerInlineEditItem);
-        this.$emit('update:inlineEditItem', innerInlineEditItem);
       }
-      //immediate: true
     }
   }
 };

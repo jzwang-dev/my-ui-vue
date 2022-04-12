@@ -104,8 +104,8 @@ export default {
   data() {
     return {
       inner: {
-        paging: this._getNormalizedPaging(),
-        paginator: this._getNormalizedPaginator()
+        paging: this._normalize_paging(),
+        paginator: this._normalize_paginator()
       }
     };
   },
@@ -224,7 +224,7 @@ export default {
   },
 
   methods: {
-    _getNormalizedPaging() {
+    _normalize_paging() {
       const paging = { ...this.paging };
       if (paging.itemsPerPage != null && paging.itemsPerPage <= 0) {
         paging.itemsPerPage = 0;
@@ -232,7 +232,7 @@ export default {
       return Object.assign({}, defaultPaging, this.paging, paging);
     },
 
-    _getNormalizedPaginator() {
+    _normalize_paginator() {
       return Object.assign({}, defaultPaginator, this.paginator);
     },
 
@@ -243,50 +243,36 @@ export default {
   },
 
   watch: {
-    paging: {
-      deep: true,
-      handler(paging) {
-        // if (paging === this.inner.paging) {
-        //   return;
-        // }
-        myUtil.devLog('paging(MyPaginator)', paging);
-        this.inner.paging = this._getNormalizedPaging();
-      }
-    },
-
     'inner.paging': {
       deep: true,
-      handler(innerPaging) {
-        if (innerPaging === this.paging) {
-          return;
-        }
-        myUtil.devLog('innerPaging(MyPaginator)', innerPaging);
-        this.$emit('update:paging', innerPaging);
+      handler() {
+        this.$emit('update:paging', this.inner.paging);
       },
-      //immediate: true
+      immediate: true
     },
 
-    paginator: {
-      deep: true,
-      handler(paginator) {
-        // if (paginator === this.inner.paginator) {
-        //   return;
-        // }
-        myUtil.devLog('paginator(MyPaginator)', paginator);
-        this.inner.paginator = this._getNormalizedPaginator();
+    paging: {
+      handler() {
+        if (this.inner.paging !== this.paging) {
+          this.inner.paging = this._normalize_paging();
+        }
       }
     },
 
     'inner.paginator': {
       deep: true,
-      handler(innerPaginator) {
-        if (innerPaginator === this.paginator) {
-          return;
-        }
-        myUtil.devLog('innerPaginator(MyPaginator)', innerPaginator);
-        this.$emit('update:paginator', innerPaginator);
+      handler() {
+        this.$emit('update:paginator', this.inner.paginator);
       },
-      //immediate: true
+      immediate: true
+    },
+
+    paginator: {
+      handler() {
+        if (this.inner.paginator !== this.paginator) {
+          this.inner.paginator = this._normalize_paginator();
+        }
+      }
     }
   }
 };
