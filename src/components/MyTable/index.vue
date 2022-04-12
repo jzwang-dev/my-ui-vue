@@ -951,9 +951,9 @@ export default {
     columns: {
       deep: true,
       handler(columns) {
-        if (columns === this.inner.columns) {
-          return;
-        }
+        // if (columns === this.inner.columns) {
+        //   return;
+        // }
         myUtil.devLog('columns', columns);
         this.inner.columns = this._getNormalizedColumns();
       }
@@ -967,15 +967,15 @@ export default {
         }
         myUtil.devLog('innerColumns', innerColumns);
         this.$emit('update:columns', innerColumns);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     visibleColumnKeys: {
       handler(visibleColumnKeys) {
-        if (visibleColumnKeys === this.inner.visibleColumnKeys) {
-          return;
-        }
+        // if (visibleColumnKeys === this.inner.visibleColumnKeys) {
+        //   return;
+        // }
         myUtil.devLog('visibleColumnKeys', visibleColumnKeys);
         this.inner.visibleColumnKeys = this._getNormalizedVisibleColumnKeys();
       }
@@ -988,15 +988,15 @@ export default {
         }
         myUtil.devLog('innerVisibleColumnKeys', innerVisibleColumnKeys);
         this.$emit('update:visibleColumnKeys', innerVisibleColumnKeys);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     selected: {
       handler(selected) {
-        if (selected === this.inner.selected) {
-          return;
-        }
+        // if (selected === this.inner.selected) {
+        //   return;
+        // }
         myUtil.devLog('selected', selected);
         this.inner.selected = this._getNormalizedSelected();
       }
@@ -1009,15 +1009,15 @@ export default {
         }
         myUtil.devLog('innerSelected', innerSelected);
         this.$emit('update:selected', innerSelected);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     searchTerm: {
       handler(searchTerm) {
-        if (searchTerm === this.inner.searchTerm) {
-          return;
-        }
+        // if (searchTerm === this.inner.searchTerm) {
+        //   return;
+        // }
         myUtil.devLog('searchTerm', searchTerm);
         this._onFilteringChange();
         this.inner.searchTerm = this._getNormalizedSearchTerm();
@@ -1031,16 +1031,16 @@ export default {
         }
         myUtil.devLog('innerSearchTerm', innerSearchTerm);
         this.$emit('update:searchTerm', innerSearchTerm);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     filter: {
       deep: true,
       handler(filter) {
-        if (filter === this.inner.filter) {
-          return;
-        }
+        // if (filter === this.inner.filter) {
+        //   return;
+        // }
         myUtil.devLog('filter', filter);
         this._onFilteringChange();
         this.inner.filter = this._getNormalizedFilter();
@@ -1055,16 +1055,16 @@ export default {
         }
         myUtil.devLog('innerFilter', innerFilter);
         this.$emit('update:filter', innerFilter);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     sorting: {
       deep: true,
       handler(sorting) {
-        if (sorting === this.inner.sorting) {
-          return;
-        }
+        // if (sorting === this.inner.sorting) {
+        //   return;
+        // }
         myUtil.devLog('sorting', sorting);
         this._processItems();
         this.inner.sorting = this._getNormalizedSorting();
@@ -1079,16 +1079,16 @@ export default {
         }
         myUtil.devLog('innerSorting', innerSorting);
         this.$emit('update:sorting', innerSorting);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     paging: {
       deep: true,
       handler(paging) {
-        if (paging === this.inner.paging) {
-          return;
-        }
+        // if (paging === this.inner.paging) {
+        //   return;
+        // }
         myUtil.devLog('paging', paging);
         this._processItems();
         this.inner.paging = this._getNormalizedPaging();
@@ -1103,16 +1103,16 @@ export default {
         }
         myUtil.devLog('innerPaging', innerPaging);
         this.$emit('update:paging', innerPaging);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     paginator: {
       deep: true,
       handler(paginator) {
-        if (paginator === this.inner.paginator) {
-          return;
-        }
+        // if (paginator === this.inner.paginator) {
+        //   return;
+        // }
         myUtil.devLog('paginator', paginator);
         this.inner.paginator = this._getNormalizedPaginator();
       }
@@ -1126,15 +1126,15 @@ export default {
         }
         myUtil.devLog('innerPaginator', innerPaginator);
         this.$emit('update:paginator', innerPaginator);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     itemsPerPageOptions: {
       handler(itemsPerPageOptions) {
-        if (itemsPerPageOptions === this.inner.itemsPerPageOptions) {
-          return;
-        }
+        // if (itemsPerPageOptions === this.inner.itemsPerPageOptions) {
+        //   return;
+        // }
         myUtil.devLog('itemsPerPageOptions', itemsPerPageOptions);
         this.inner.itemsPerPageOptions =
           this._getNormalizedItemsPerPageOptions();
@@ -1148,15 +1148,15 @@ export default {
         }
         myUtil.devLog('innerItemsPerPageOptions', innerItemsPerPageOptions);
         this.$emit('update:itemsPerPageOptions', innerItemsPerPageOptions);
-      },
-      immediate: true
+      }
+      //immediate: true
     },
 
     inlineEditItem: {
       handler(inlineEditItem) {
-        if (inlineEditItem === this.inner.inlineEditItem) {
-          return;
-        }
+        // if (inlineEditItem === this.inner.inlineEditItem) {
+        //   return;
+        // }
         myUtil.devLog('inlineEditItem', inlineEditItem);
         this.inner.inlineEditItem = this._getNormalizedInlineEditItem();
       }
@@ -1169,8 +1169,8 @@ export default {
         }
         myUtil.devLog('innerInlineEditItem', innerInlineEditItem);
         this.$emit('update:inlineEditItem', innerInlineEditItem);
-      },
-      immediate: true
+      }
+      //immediate: true
     }
   }
 };

@@ -246,11 +246,10 @@ export default {
     paging: {
       deep: true,
       handler(paging) {
-        if (paging === this.inner.paging) {
-          return;
-        }
+        // if (paging === this.inner.paging) {
+        //   return;
+        // }
         myUtil.devLog('paging(MyPaginator)', paging);
-        this._processItems();
         this.inner.paging = this._getNormalizedPaging();
       }
     },
@@ -264,15 +263,15 @@ export default {
         myUtil.devLog('innerPaging(MyPaginator)', innerPaging);
         this.$emit('update:paging', innerPaging);
       },
-      immediate: true
+      //immediate: true
     },
 
     paginator: {
       deep: true,
       handler(paginator) {
-        if (paginator === this.inner.paginator) {
-          return;
-        }
+        // if (paginator === this.inner.paginator) {
+        //   return;
+        // }
         myUtil.devLog('paginator(MyPaginator)', paginator);
         this.inner.paginator = this._getNormalizedPaginator();
       }
@@ -287,7 +286,7 @@ export default {
         myUtil.devLog('innerPaginator(MyPaginator)', innerPaginator);
         this.$emit('update:paginator', innerPaginator);
       },
-      immediate: true
+      //immediate: true
     }
   }
 };

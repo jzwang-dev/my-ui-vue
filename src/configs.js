@@ -30,5 +30,5 @@ export const defaultControlTypes = {
 };
 
 export default {
-  debug: false
+  debug: true
 };
