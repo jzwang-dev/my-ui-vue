@@ -75,7 +75,6 @@ author: jzwang
 
 <script>
 import { defaultPaging, defaultPaginator } from '../../configs';
-import myUtil from '../../utils/myUtil';
 
 export default {
   name: 'MyPaginator',

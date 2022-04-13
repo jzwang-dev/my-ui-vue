@@ -293,7 +293,6 @@ import {
   defaultItemsPerPageOptions,
   defaultControlTypes
 } from '../../configs';
-import myUtil from '../../utils/myUtil';
 import exportUtil from '../../utils/exportUtil';
 
 export default {
@@ -698,8 +697,6 @@ export default {
     },
 
     _processItems() {
-      //myUtil.devLog('_processItems');
-
       if (this.serverTotalItems != null) {
         this.$emit('request', {
           searchTerm: this.searchTerm,
