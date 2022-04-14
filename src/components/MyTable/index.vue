@@ -216,7 +216,7 @@ author: jzwang
                         column.control.cssClass,
                         { 'is-invalid': column.errors.length }
                       ]"
-                      :style="column.control.cssStyle"
+                      :style="column.control.style"
                       @input="
                         _onEditControlModelChange($event.target.value, column)
                       "
@@ -237,7 +237,7 @@ author: jzwang
                         column.control.cssClass,
                         { 'is-invalid': column.errors.length }
                       ]"
-                      :style="column.control.cssStyle"
+                      :style="column.control.style"
                       @change="
                         _onEditControlModelChange($event.target.value, column)
                       "
@@ -267,15 +267,56 @@ author: jzwang
                     <my-radio-button-list
                       :name="`inilne-edit-${column.key}`"
                       v-model="inner.inlineEditItem[column.key]"
-                      :dataSource="column.control.dataSouce"
+                      :dataSource="column.control.dataSource"
                       :dataValueField="column.control.dataValueField"
                       :dataTextField="column.control.dataTextField"
                       :inline="column.control.inline"
-                      :cssClass="[
+                      :class="[
                         column.control.cssClass,
                         { 'in-invalid': column.errors.length }
                       ]"
-                      :cssStyle="column.control.cssStyle"
+                      :style="column.control.style"
+                      @change="_onEditControlModelChange($event, column)"
+                    />
+                  </template>
+                  <template
+                    v-else-if="
+                      column.control.type &&
+                      column.control.type.toLowerCase() === 'checkbox'
+                    "
+                  >
+                    <my-check-box
+                      :name="`inilne-edit-${column.key}`"
+                      v-model="inner.inlineEditItem[column.key]"
+                      :trueValue="column.control.trueValue"
+                      :falseValue="column.control.falseValue"
+                      :label="column.header"
+                      :class="[
+                        column.control.cssClass,
+                        { 'in-invalid': column.errors.length }
+                      ]"
+                      :style="column.control.style"
+                      @change="_onEditControlModelChange($event, column)"
+                    />
+                  </template>
+                  <template
+                    v-else-if="
+                      column.control.type &&
+                      column.control.type.toLowerCase() === 'checkboxlist'
+                    "
+                  >
+                    <my-check-box-list
+                      :name="`inilne-edit-${column.key}`"
+                      v-model="inner.inlineEditItem[column.key]"
+                      :dataSource="column.control.dataSource"
+                      :dataValueField="column.control.dataValueField"
+                      :dataTextField="column.control.dataTextField"
+                      :inline="column.control.inline"
+                      :class="[
+                        column.control.cssClass,
+                        { 'in-invalid': column.errors.length }
+                      ]"
+                      :style="column.control.style"
                       @change="_onEditControlModelChange($event, column)"
                     />
                   </template>
@@ -382,6 +423,8 @@ author: jzwang
 <script>
 import MyPaginator from '../MyPaginator';
 import MyRadioButtonList from '../controls/MyRadioButtonList.vue';
+import MyCheckBox from '../controls/MyCheckBox.vue';
+import MyCheckBoxList from '../controls/MyCheckBoxList.vue';
 import {
   defaultSorting,
   defaultPaging,
@@ -399,7 +442,9 @@ export default {
 
   components: {
     MyPaginator,
-    MyRadioButtonList
+    MyRadioButtonList,
+    MyCheckBox,
+    MyCheckBoxList
   },
 
   filters: {
@@ -684,14 +729,16 @@ export default {
               {
                 type: defaultControlTypes[column.dataType ?? String],
                 cssClass: null,
-                cssStyle: null,
-                dataSouce: [],
+                style: null,
+                dataSource: [],
                 dataValueField: 'value',
                 dataTextField: 'text',
                 showEmptyOption: true,
                 emptyOptionValue: '',
                 emptyOptionText: '-請選擇-',
-                inline: true
+                inline: true,
+                trueValue: true,
+                falseValue: false
               },
               column.control
             ),
@@ -1048,6 +1095,8 @@ export default {
     },
 
     _onEditControlModelChange(value, column) {
+      console.log('_onEditControlModelChange', value);
+
       if (column.validationMode.lazy !== true) {
         this._validateInlineEditItemField(value, column);
       }

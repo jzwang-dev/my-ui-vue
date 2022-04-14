@@ -1,0 +1,62 @@
+<template>
+  <div class="my-check-box custom-control custom-checkbox">
+    <input
+      type="checkbox"
+      :name="name"
+      :id="_id"
+      :value="trueValue"
+      :checked="checked === trueValue"
+      @change="$emit('change', $event.target.checked ? trueValue : falseValue)"
+      class="custom-control-input"
+    />
+    <label class="custom-control-label" :for="_id">{{ label }}</label>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'MyCheckBox',
+
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+
+  props: {
+    checked: {
+      type: [Boolean, String, Number],
+      default: false
+    },
+
+    name: {
+      type: String,
+      required: true
+    },
+
+    id: {
+      type: String
+    },
+
+    trueValue: {
+      type: [Boolean, String, Number],
+      default: true
+    },
+
+    falseValue: {
+      type: [Boolean, String, Number],
+      default: false
+    },
+
+    label: {
+      type: String,
+      default: ''
+    }
+  },
+
+  computed: {
+    _id() {
+      return this.id ?? this.name;
+    }
+  }
+};
+</script>

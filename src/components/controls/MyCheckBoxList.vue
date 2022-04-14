@@ -1,13 +1,13 @@
 <template>
-  <div class="my-radio-button-list">
+  <div class="my-check-box-list">
     <div
-      class="custom-control custom-radio"
+      class="custom-control custom-checkbox"
       :class="{ 'custom-control-inline': inline }"
       v-for="item in dataSource"
       :key="item[dataValueField]"
     >
       <input
-        type="radio"
+        type="checkbox"
         :name="name"
         :id="`${_id}_${item[dataValueField]}`"
         :value="item[dataValueField]"
@@ -28,7 +28,7 @@
 import dataSourceMixin from '../../mixins/dataSourceMixin';
 
 export default {
-  name: 'MyRadioButtonList',
+  name: 'MyCheckBoxList',
 
   mixins: [dataSourceMixin],
 
@@ -39,8 +39,10 @@ export default {
 
   props: {
     checked: {
-      type: [String, Number],
-      default: ''
+      type: Array,
+      default() {
+        return [];
+      }
     },
 
     name: {
@@ -66,12 +68,6 @@ export default {
   computed: {
     _id() {
       return this.id ?? this.name;
-    }
-  },
-
-  watch: {
-    innerChecked() {
-      this.$emit('change', this.innerChecked);
     }
   }
 };
