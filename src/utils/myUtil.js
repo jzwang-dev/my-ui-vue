@@ -1,26 +1,31 @@
-import configs from '../configs';
-
-export const getEnv = () => {
+export function getEnv() {
   return process.env.NODE_ENV;
-};
+}
 
-export const isEnv = (env) => {
+export function isEnv(env) {
   return getEnv() === env;
-};
+}
 
-export const isDevelopmentEnv = () => {
+export function isDevelopmentEnv() {
   return isEnv('development');
-};
+}
 
 export function devLog() {
-  if (isDevelopmentEnv() && configs.debug === true) {
+  if (isDevelopmentEnv()) {
     console.log.apply(this, arguments);
   }
+}
+
+export function typeToString(type) {
+  let typeStr = type.toString();
+  typeStr = typeStr.substring(9, typeStr.indexOf('()'));
+  return typeStr;
 }
 
 export default {
   getEnv,
   isEnv,
   isDevelopmentEnv,
-  devLog
+  devLog,
+  typeToString
 };

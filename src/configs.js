@@ -29,6 +29,11 @@ export const defaultControlTypes = {
   [Date]: 'input'
 };
 
-export default {
-  debug: true
+export const controlAllowedDataTypes = {
+  input: [String, Number, Date],
+  select: [String, Number],
+  radiobuttonlist: [String, Number],
+  checkbox: [Boolean, String, Number],
+  checkboxlist: [Array],
+  textarea: [String]
 };

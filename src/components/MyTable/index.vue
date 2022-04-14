@@ -188,18 +188,113 @@ author: jzwang
                   inner.inlineEditItem[rowKey] === item[rowKey]
                 "
               >
+                <div>{{ column.control }}</div>
+                <div
+                  class="inline-edit-item"
+                  :class="{ 'is-invalid': column.errors.length }"
+                >
+                  <template
+                    v-if="
+                      column.control.type &&
+                      column.control.type.toLowerCase() === 'input'
+                    "
+                  >
+                    <input
+                      :type="
+                        column.dataType === Date
+                          ? 'date'
+                          : column.dataType === Number
+                          ? 'number'
+                          : 'text'
+                      "
+                      :name="`inline-edit-${column.key}`"
+                      :id="`inline-edit-${column.key}`"
+                      v-model="inner.inlineEditItem[column.key]"
+                      :placeholder="column.header"
+                      class="form-control"
+                      :class="[
+                        column.control.cssClass,
+                        { 'is-invalid': column.errors.length }
+                      ]"
+                      :style="column.control.cssStyle"
+                      @input="
+                        _onEditControlModelChange($event.target.value, column)
+                      "
+                    />
+                  </template>
+                  <template
+                    v-else-if="
+                      column.control.type &&
+                      column.control.type.toLowerCase() === 'select'
+                    "
+                  >
+                    <select
+                      :name="`inline-edit-${column.key}`"
+                      :id="`inline-edit-${column.key}`"
+                      v-model="inner.inlineEditItem[column.key]"
+                      class="form-control"
+                      :class="[
+                        column.control.cssClass,
+                        { 'is-invalid': column.errors.length }
+                      ]"
+                      :style="column.control.cssStyle"
+                      @change="
+                        _onEditControlModelChange($event.target.value, column)
+                      "
+                    >
+                      <option
+                        :value="column.control.emptyOptionValue"
+                        v-if="column.control.showEmptyOption"
+                      >
+                        {{ column.control.emptyOptionText }}
+                      </option>
+                      <option
+                        v-for="item in column.control.dataSource"
+                        :key="item[column.control.dataValueField]"
+                        :value="item[column.control.dataValueField]"
+                        :disabled="item.disabled === true"
+                      >
+                        {{ item[column.control.dataTextField] }}
+                      </option>
+                    </select>
+                  </template>
+                  <template
+                    v-else-if="
+                      column.control.type &&
+                      column.control.type.toLowerCase() === 'radiobuttonlist'
+                    "
+                  >
+                    <my-radio-button-list
+                      :name="`inilne-edit-${column.key}`"
+                      v-model="inner.inlineEditItem[column.key]"
+                      :dataSource="column.control.dataSouce"
+                      :dataValueField="column.control.dataValueField"
+                      :dataTextField="column.control.dataTextField"
+                      :inline="column.control.inline"
+                      :cssClass="[
+                        column.control.cssClass,
+                        { 'in-invalid': column.errors.length }
+                      ]"
+                      :cssStyle="column.control.cssStyle"
+                      @change="_onEditControlModelChange($event, column)"
+                    />
+                  </template>
+                </div>
+                <div class="invalid-feedback">
+                  {{ column.errors.join(column.errorsSeparator || ', ') }}
+                </div>
               </slot>
               <slot
                 v-else
                 :name="`item-${column.key}`"
                 :item="item"
                 :column="column"
-                >{{
-                  (column.format
-                    ? column.format(column.value(item), item)
-                    : column.value(item)) | nil
-                }}</slot
               >
+                <!-- prettier-ignore -->
+                <div class="pre-line">{{ (column.format ?
+                  column.format(column.value(item), item) :
+                  column.value(item)) | nulltext(column.nullText) }}</div>
+              </slot>
             </div>
           </td>
           <td v-if="showActions" class="actions">
@@ -286,20 +381,29 @@ author: jzwang
 
 <script>
 import MyPaginator from '../MyPaginator';
+import MyRadioButtonList from '../controls/MyRadioButtonList.vue';
 import {
   defaultSorting,
   defaultPaging,
   defaultPaginator,
   defaultItemsPerPageOptions,
-  defaultControlTypes
+  defaultControlTypes,
+  controlAllowedDataTypes
 } from '../../configs';
+import myUtil from '../../utils/myUtil';
 import exportUtil from '../../utils/exportUtil';
+import { nulltext } from '../../filters';
 
 export default {
   name: 'MyTable',
 
   components: {
-    MyPaginator
+    MyPaginator,
+    MyRadioButtonList
+  },
+
+  filters: {
+    nulltext
   },
 
   props: {
@@ -550,14 +654,15 @@ export default {
 
   methods: {
     _normalized_columns() {
-      return this.columns.map((column) =>
-        Object.assign(
+      return this.columns.map((column) => {
+        const normalizedColumn = Object.assign(
           {
             header: column.key,
             displayable: true,
             value: (item) => item[column.key],
             defaultValue: null,
             format: (value) => value,
+            nullText: '--',
             sort: null,
             sortable: true,
             thClass: null,
@@ -569,29 +674,53 @@ export default {
             editable: true,
             valueToEdit: (item) => item[column.key],
             dataType: String,
-            control: {
-              type: defaultControlTypes[column.dataType ?? String],
-              cssClass: null,
-              cssStyle: null,
-              dataSouce: [],
-              dataValueField: 'value',
-              dataTextField: 'text',
-              showEmptyOption: true,
-              emptyOptionValue: '',
-              emptyOptionText: '-請選擇-',
-              inline: true
-            },
             validators: [],
-            validationMode: {
-              greedy: false,
-              lazy: false
-            },
             errors: [],
             errorsSeparator: ', '
           },
-          column
-        )
-      );
+          column,
+          {
+            control: Object.assign(
+              {
+                type: defaultControlTypes[column.dataType ?? String],
+                cssClass: null,
+                cssStyle: null,
+                dataSouce: [],
+                dataValueField: 'value',
+                dataTextField: 'text',
+                showEmptyOption: true,
+                emptyOptionValue: '',
+                emptyOptionText: '-請選擇-',
+                inline: true
+              },
+              column.control
+            ),
+            validationMode: Object.assign(
+              {
+                greedy: false,
+                lazy: false
+              },
+              column.validationMode
+            )
+          }
+        );
+
+        const allowedDataTypes =
+          controlAllowedDataTypes[normalizedColumn.control.type];
+        if (!allowedDataTypes.includes(normalizedColumn.dataType)) {
+          console.log(
+            `[warning] 欄位 ${normalizedColumn.key} 的 control.type 為「${
+              normalizedColumn.control.type
+            }」，其 dataType (${myUtil.typeToString(
+              normalizedColumn.dataType
+            )}) 是否有誤？ (allowedDataTypes: ${allowedDataTypes
+              .map((type) => myUtil.typeToString(type))
+              .join(', ')})`
+          );
+        }
+
+        return normalizedColumn;
+      });
     },
 
     _normalized_visibleColumnKeys() {
@@ -655,8 +784,11 @@ export default {
         if (inlineEditItem[column.key] === undefined) {
           inlineEditItem[column.key] = column.defaultValue;
         } else {
-          inlineEditItem[`_${column.key}`] = inlineEditItem[column.key];
-          inlineEditItem[column.key] = column.valueToEdit(inlineEditItem);
+          const valueToEdit = column.valueToEdit(inlineEditItem);
+          if (inlineEditItem[column.key] !== valueToEdit) {
+            inlineEditItem[`_${column.key}`] = inlineEditItem[column.key];
+            inlineEditItem[column.key] = valueToEdit;
+          }
         }
       }
 
@@ -865,6 +997,20 @@ export default {
       return this.pagedItems;
     },
 
+    _validateInlineEditItemField(value, column) {
+      column.errors = [];
+      for (let validator of column.validators ?? []) {
+        const result = validator(value, this.inner.inlineEditItem);
+        if (result !== true) {
+          column.errors.push(result);
+          if (column.validationMode.greedy !== true) {
+            break;
+          }
+        }
+      }
+      return column.errors.length === 0;
+    },
+
     validateInlineEditItem() {
       this.clearErrors();
       if (!this.inner.inlineEditItem) {
@@ -872,18 +1018,13 @@ export default {
       }
       let valid = true;
       for (let column of this.inner.columns) {
-        for (let validator of column.validators ?? []) {
-          const result = validator(
+        if (
+          !this._validateInlineEditItemField(
             this.inner.inlineEditItem[column.key],
-            this.inner.inlineEditItem
-          );
-          if (result !== true) {
-            column.errors.push(result);
-            valid = false;
-            if (column.validation.greedy !== true) {
-              break;
-            }
-          }
+            column
+          )
+        ) {
+          valid = false;
         }
       }
       return valid;
@@ -904,6 +1045,12 @@ export default {
           errMsg: errors.join(column.errorsSeparator || ', ')
         };
       });
+    },
+
+    _onEditControlModelChange(value, column) {
+      if (column.validationMode.lazy !== true) {
+        this._validateInlineEditItemField(value, column);
+      }
     },
 
     _onSave() {
