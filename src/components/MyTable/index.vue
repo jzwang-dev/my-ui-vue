@@ -7,6 +7,8 @@ author: jzwang
     <!-- toolbar (begin) -->
     <div
       class="toolbar d-sm-flex align-items-center justify-content-between"
+      :class="toolbarClass"
+      :style="toolbarStyle"
       v-if="showToolbar"
     >
       <div class="toolbar-left">
@@ -40,6 +42,8 @@ author: jzwang
     <!-- menubar (begin) -->
     <div
       class="menubar border d-sm-flex align-items-center justify-content-between p-2"
+      :class="menubarClass"
+      :style="menubarStyle"
       v-if="showMenubar"
     >
       <div class="menubar-left d-sm-flex align-items-center">
