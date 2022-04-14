@@ -1,3 +1,8 @@
+export const defaultFiltering = {
+  ignoreCase: true,
+  logicOperation: 'or'
+};
+
 export const defaultSorting = {
   key: '',
   direction: 'asc'

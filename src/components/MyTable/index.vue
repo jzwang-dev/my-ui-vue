@@ -482,6 +482,7 @@ import MyRadioButtonList from '../controls/MyRadioButtonList.vue';
 import MyCheckBox from '../controls/MyCheckBox.vue';
 import MyCheckBoxList from '../controls/MyCheckBoxList.vue';
 import {
+  defaultFiltering,
   defaultSorting,
   defaultPaging,
   defaultPaginator,
@@ -543,6 +544,13 @@ export default {
     searchFilter: {
       type: Object,
       defualt() {
+        return {};
+      }
+    },
+
+    filtering: {
+      type: Object,
+      default() {
         return {};
       }
     },
@@ -716,6 +724,7 @@ export default {
         selected: this._normalized_selected(),
         searchTerm: this._normalized_searchTerm(),
         searchFilter: this._normalized_searchFilter(),
+        filtering: this._normalized_filtering(),
         sorting: this._normalized_sorting(),
         paging: Object.assign({}, defaultPaging, this.paging),
         paginator: Object.assign({}, defaultPaginator, this.paginator),
@@ -900,6 +909,10 @@ export default {
       );
     },
 
+    _normalized_filtering() {
+      return Object.assign({}, defaultFiltering, this.filtering);
+    },
+
     _normalized_sorting() {
       const sorting = { ...this.sorting };
       if (
@@ -983,6 +996,7 @@ export default {
         this.$emit('request', {
           searchTerm: this.inner.searchTerm,
           searchFilter: this.inner.searchFilter,
+          filtering: this.inner.filtering,
           sorting: this.inner.sorting,
           paging: this.inner.paging
         });
@@ -1003,6 +1017,11 @@ export default {
       ) {
         items = items.filter((item) => {
           const passeds = [];
+          let normalizedSearchTerm = this.inner.searchTerm;
+          if (this.inner.filtering.ignoreCase) {
+            normalizedSearchTerm = normalizedSearchTerm.toLowerCase();
+          }
+
           for (let column of this.displayableColumns) {
             let passed = false;
             let value = column.value ? column.value(item) : item[column.key];
@@ -1017,15 +1036,45 @@ export default {
               } else {
                 valueString = value.toString();
               }
+
+              let normalizedValueString = valueString;
+              if (this.inner.filtering.ignoreCase) {
+                normalizedValueString = normalizedValueString.toLowerCase();
+              }
+
               let filterTerm =
                 (this.inner.searchFilter ?? {})[column.key]?.toString() ?? '';
+
+              let normalizedFilterTerm = filterTerm;
+              if (this.inner.filtering.ignoreCase) {
+                normalizedFilterTerm = normalizedFilterTerm.toLowerCase();
+              }
+
               passed =
-                valueString.indexOf(this.inner.searchTerm) !== -1 ||
-                (filterTerm && valueString.indexOf(filterTerm) !== -1);
+                normalizedValueString.indexOf(normalizedSearchTerm) !== -1;
+
+              if (normalizedFilterTerm) {
+                if (
+                  this.inner.filtering.logicOperation?.toLowerCase() === 'and'
+                ) {
+                  passed =
+                    passed &&
+                    normalizedValueString.indexOf(normalizedFilterTerm) !== -1;
+                } else {
+                  passed =
+                    passed ||
+                    normalizedValueString.indexOf(normalizedFilterTerm) !== -1;
+                }
+              }
             }
             passeds.push(passed);
           }
-          return passeds.some((passed) => passed);
+
+          if (this.inner.filtering.logicOperation?.toLowerCase() === 'and') {
+            return passeds.every((passed) => passed);
+          } else {
+            return passeds.some((passed) => passed);
+          }
         });
       }
 
@@ -1238,6 +1287,7 @@ export default {
   created() {
     this.$emit('update:searchTerm', this.inner.searchTerm);
     this.$emit('update:searchFilter', this.inner.searchFilter);
+    this.$emit('update:filtering', this.inner.filtering);
     this.$emit('update:sorting', this.inner.sorting);
     this.$emit('update:paging', this.inner.paging);
   },
@@ -1332,6 +1382,22 @@ export default {
       handler() {
         if (this.inner.searchFilter !== this.searchFilter) {
           this.inner.searchFilter = this._normalized_searchFilter();
+        }
+      }
+    },
+
+    'inner.filtering': {
+      deep: true,
+      handler() {
+        this._onFilteringChange();
+        this.$emit('update:filtering', this.inner.filtering);
+      }
+    },
+
+    filtering: {
+      handler() {
+        if (this.inner.filtering !== this.filtering) {
+          this.inner.filtering = this._normalized_filtering();
         }
       }
     },
