@@ -4,13 +4,46 @@ author: jzwang
 -->
 <template>
   <div class="my-table">
-    <!-- toolbar(begin) -->
+    <!-- toolbar (begin) -->
     <div
-      class="border d-sm-flex align-items-center justify-content-between p-2"
+      class="toolbar d-sm-flex align-items-center justify-content-between"
       v-if="showToolbar"
     >
-      <div class="d-sm-flex align-items-center">
-        <slot name="before-toolbuttons" :vmData="$data"></slot>
+      <div class="toolbar-left">
+        <slot name="toolbar-left-before" :vmData="$data"></slot>
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="$emit('create-item')"
+          v-if="showCreate"
+        >
+          <i class="fas fa-plus"></i> 新增
+        </button>
+        <slot name="toolbar-left-after" :vmData="$data"></slot>
+      </div>
+      <div class="toolbar-right">
+        <slot name="toolbar-right-before" :vmData="$data"></slot>
+        <div class="input-icon-right" v-if="showSearch">
+          <input
+            class="form-control"
+            type="search"
+            placeholder="搜尋"
+            v-model="inner.searchTerm"
+          />
+          <i class="fas fa-search"></i>
+        </div>
+        <slot name="toolbar-right-after" :vmData="$data"></slot>
+      </div>
+    </div>
+    <!-- toolbar (end) -->
+
+    <!-- menubar (begin) -->
+    <div
+      class="menubar border d-sm-flex align-items-center justify-content-between p-2"
+      v-if="showMenubar"
+    >
+      <div class="menubar-left d-sm-flex align-items-center">
+        <slot name="menubar-left-before" :vmData="$data"></slot>
         <button
           type="button"
           class="btn btn-danger mr-1"
@@ -43,9 +76,10 @@ author: jzwang
             >
           </div>
         </div>
-        <slot name="after-toolbuttons" :vmData="$data"></slot>
+        <slot name="menubar-left-after" :vmData="$data"></slot>
       </div>
-      <div class="form-inline">
+      <div class="menubar-right form-inline">
+        <slot name="menubar-right-before" :vmData="$data"></slot>
         <template v-if="showItemsPerPage">
           顯示
           <select class="form-control mx-1" v-model="inner.paging.itemsPerPage">
@@ -59,7 +93,7 @@ author: jzwang
           </select>
           項結果
         </template>
-        <div class="dropdown ml-1">
+        <div class="dropdown ml-1" v-if="showVisibleColumns">
           <button
             class="btn btn-outline-secondary dropdown-toggle"
             type="button"
@@ -90,30 +124,40 @@ author: jzwang
             </form>
           </div>
         </div>
+        <slot name="menubar-right-after" :vmData="$data"></slot>
       </div>
     </div>
-    <!-- toolbar(end) -->
+    <!-- menubar (end) -->
 
-    <!-- top pagingbar(begin) -->
+    <!-- pagebar(top) (begin) -->
     <div
-      class="border d-sm-flex align-items-center justify-content-between p-2"
-      v-if="paginatorPosition !== 'bottom'"
+      class="pagebar border d-sm-flex align-items-center justify-content-between p-2"
+      :class="pagebarClass"
+      :style="pagebarStyle"
+      v-if="showPagebar && pagebarPosition !== 'bottom'"
     >
-      <div>
+      <div class="pagebar-left">
+        <slot name="pagebar-left-before" :vmData="$data"></slot>
         <my-paginator
           :paging.sync="inner.paging"
           :paginator.sync="inner.paginator"
           :totalItems="totalItems"
           @change-page="(page) => $emit('change-page', page)"
-          v-if="inner.paging.itemsPerPage > 0"
+          v-if="showPaginator && inner.paging.itemsPerPage > 0"
         ></my-paginator>
+        <slot name="pagebar-left-after" :vmData="$data"></slot>
       </div>
-      <div>
-        顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
-        {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共 {{ totalItems }} 項。
+      <div class="pagebar-right">
+        <slot name="pagebar-right-before" :vmData="$data"></slot>
+        <span v-if="showPageInfo"
+          >顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
+          {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共
+          {{ totalItems }} 項。</span
+        >
+        <slot name="pagebar-right-after" :vmData="$data"></slot>
       </div>
     </div>
-    <!-- top pagingbar(end) -->
+    <!-- pagebar(top) (end) -->
 
     <table
       class="table table-bordered table-striped table-hover table-sm responsive mb-0"
@@ -396,26 +440,35 @@ author: jzwang
       {{ emptyText }}
     </div>
 
-    <!-- bottom pagingbar(begin) -->
+    <!-- pagebar(bottom) (begin) -->
     <div
-      class="border d-sm-flex align-items-center justify-content-between p-2"
-      v-if="paginatorPosition === 'bottom'"
+      class="pagebar border d-sm-flex align-items-center justify-content-between p-2"
+      :class="pagebarClass"
+      :style="pagebarStyle"
+      v-if="showPagebar && pagebarPosition === 'bottom'"
     >
-      <div>
+      <div class="pagebar-left">
+        <slot name="pagebar-left-before" :vmData="$data"></slot>
         <my-paginator
           :paging.sync="inner.paging"
           :paginator.sync="inner.paginator"
           :totalItems="totalItems"
           @change-page="(page) => $emit('change-page', page)"
-          v-if="inner.paging.itemsPerPage > 0"
+          v-if="showPaginator && inner.paging.itemsPerPage > 0"
         ></my-paginator>
+        <slot name="pagebar-left-after" :vmData="$data"></slot>
       </div>
-      <div>
-        顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
-        {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共 {{ totalItems }} 項。
+      <div class="pagebar-right">
+        <slot name="pagebar-right-before" :vmData="$data"></slot>
+        <span v-if="showPageInfo"
+          >顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
+          {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共
+          {{ totalItems }} 項。</span
+        >
+        <slot name="pagebar-right-after" :vmData="$data"></slot>
       </div>
     </div>
-    <!-- bottom pagingbar(end) -->
+    <!-- pagebar(bottom) (end) -->
   </div>
 </template>
 
@@ -521,21 +574,28 @@ export default {
       }
     },
 
-    showItemsPerPage: {
+    serverTotalItems: {
+      type: Number
+    },
+
+    showToolbar: {
       type: Boolean,
       default: true
     },
 
-    paginatorPosition: {
-      type: String,
-      default: 'top',
-      validator(position) {
-        return ['top', 'bottom'].indexOf(position.toLowerCase()) !== -1;
-      }
+    showCreate: {
+      type: Boolean,
+      default: true
     },
 
-    serverTotalItems: {
-      type: Number
+    showSearch: {
+      type: Boolean,
+      default: true
+    },
+
+    showMenubar: {
+      type: Boolean,
+      default: true
     },
 
     showDestroy: {
@@ -547,6 +607,51 @@ export default {
       type: Boolean,
       default: true
     },
+
+    showItemsPerPage: {
+      type: Boolean,
+      default: true
+    },
+
+    showVisibleColumns: {
+      type: Boolean,
+      default: true
+    },
+
+    showPagebar: {
+      type: Boolean,
+      default: true
+    },
+
+    showPaginator: {
+      type: Boolean,
+      default: true
+    },
+
+    showPageInfo: {
+      type: Boolean,
+      default: true
+    },
+
+    pagebarPosition: {
+      type: String,
+      default: 'top',
+      validator(position) {
+        return ['top', 'bottom'].indexOf(position.toLowerCase()) !== -1;
+      }
+    },
+
+    toolbarClass: null,
+
+    toolbarStyle: null,
+
+    menubarClass: null,
+
+    menubarStyle: null,
+
+    pagebarClass: null,
+
+    pagebarStyle: null,
 
     exportExcel: {
       type: Function
@@ -582,11 +687,6 @@ export default {
     },
 
     showDelete: {
-      type: Boolean,
-      default: true
-    },
-
-    showToolbar: {
       type: Boolean,
       default: true
     },
