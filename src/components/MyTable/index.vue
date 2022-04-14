@@ -540,7 +540,7 @@ export default {
       default: ''
     },
 
-    filter: {
+    searchFilter: {
       type: Object,
       defualt() {
         return {};
@@ -715,7 +715,7 @@ export default {
         visibleColumnKeys: this._normalized_visibleColumnKeys(),
         selected: this._normalized_selected(),
         searchTerm: this._normalized_searchTerm(),
-        filter: this._normalized_filter(),
+        searchFilter: this._normalized_searchFilter(),
         sorting: this._normalized_sorting(),
         paging: Object.assign({}, defaultPaging, this.paging),
         paginator: Object.assign({}, defaultPaginator, this.paginator),
@@ -890,13 +890,13 @@ export default {
       return this.searchTerm ?? '';
     },
 
-    _normalized_filter() {
+    _normalized_searchFilter() {
       return Object.assign(
         {},
         this._normalized_columns()
           .filter((column) => column.displayable !== false)
           .reduce((prev, curr) => ({ ...prev, [curr.key]: null }), {}),
-        this.filter
+        this.searchFilter
       );
     },
 
@@ -981,8 +981,8 @@ export default {
     _processItems() {
       if (this.serverTotalItems != null) {
         this.$emit('request', {
-          searchTerm: this.searchTerm,
-          filter: this.inner.filter,
+          searchTerm: this.inner.searchTerm,
+          searchFilter: this.inner.searchFilter,
           sorting: this.inner.sorting,
           paging: this.inner.paging
         });
@@ -998,8 +998,8 @@ export default {
           items;
 
       if (
-        this.searchTerm ||
-        Object.values(this.inner.filter ?? {}).some((val) => val != null)
+        this.inner.searchTerm ||
+        Object.values(this.inner.searchFilter ?? {}).some((val) => val != null)
       ) {
         items = items.filter((item) => {
           const passeds = [];
@@ -1018,10 +1018,10 @@ export default {
                 valueString = value.toString();
               }
               let filterTerm =
-                (this.inner.filter ?? {})[column.key]?.toString() ?? '';
+                (this.inner.searchFilter ?? {})[column.key]?.toString() ?? '';
               passed =
-                valueString.indexOf(this.searchTerm) !== -1 ||
-                valueString.indexOf(filterTerm) !== -1;
+                valueString.indexOf(this.inner.searchTerm) !== -1 ||
+                (filterTerm && valueString.indexOf(filterTerm) !== -1);
             }
             passeds.push(passed);
           }
@@ -1237,7 +1237,7 @@ export default {
 
   created() {
     this.$emit('update:searchTerm', this.inner.searchTerm);
-    this.$emit('update:filter', this.inner.filter);
+    this.$emit('update:searchFilter', this.inner.searchFilter);
     this.$emit('update:sorting', this.inner.sorting);
     this.$emit('update:paging', this.inner.paging);
   },
@@ -1320,18 +1320,18 @@ export default {
       }
     },
 
-    'inner.filter': {
+    'inner.searchFilter': {
       deep: true,
       handler() {
         this._onFilteringChange();
-        this.$emit('update:filter', this.inner.filter);
+        this.$emit('update:searchFilter', this.inner.searchFilter);
       }
     },
 
-    filter: {
+    searchFilter: {
       handler() {
-        if (this.inner.filter !== this.filter) {
-          this.inner.filter = this._normalized_filter();
+        if (this.inner.searchFilter !== this.searchFilter) {
+          this.inner.searchFilter = this._normalized_searchFilter();
         }
       }
     },
