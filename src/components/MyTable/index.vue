@@ -188,7 +188,6 @@ author: jzwang
                   inner.inlineEditItem[rowKey] === item[rowKey]
                 "
               >
-                <div>{{ column.control }}</div>
                 <div
                   class="inline-edit-item"
                   :class="{ 'is-invalid': column.errors.length }"
@@ -736,7 +735,7 @@ export default {
                 showEmptyOption: true,
                 emptyOptionValue: '',
                 emptyOptionText: '-請選擇-',
-                inline: true,
+                inline: false,
                 trueValue: true,
                 falseValue: false
               },

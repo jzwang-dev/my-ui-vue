@@ -69,6 +69,12 @@ export default {
     _id() {
       return this.id ?? this.name;
     }
+  },
+
+  watch: {
+    innerChecked() {
+      this.$emit('change', this.innerChecked);
+    }
   }
 };
 </script>
