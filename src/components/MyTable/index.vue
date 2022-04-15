@@ -205,7 +205,10 @@ author: jzwang
         <tr v-for="item in pagedItems" :key="item[rowKey]">
           <td class="text-center align-middle" v-if="showSelection">
             <div>
-              <div class="custom-control custom-checkbox">
+              <div
+                class="custom-control custom-checkbox"
+                v-if="item[rowKey] != null"
+              >
                 <input
                   type="checkbox"
                   class="custom-control-input"
@@ -221,7 +224,7 @@ author: jzwang
             </div>
           </td>
           <td
-            v-for="column in visibleColumns"
+            v-for="(column, index) in visibleColumns"
             :key="column.key"
             :data-title="column.header"
           >
@@ -233,7 +236,9 @@ author: jzwang
                 v-if="
                   column.editable !== false &&
                   inner.inlineEditItem &&
-                  inner.inlineEditItem[rowKey] === item[rowKey]
+                  (inner.inlineEditItem[rowKey] === item[rowKey] ||
+                    (inner.inlineEditItem[rowKey] == null &&
+                      inner.inlineEditItem._itemIndex === index))
                 "
               >
                 <div
@@ -1276,6 +1281,12 @@ export default {
     _onCancel() {
       this.clearErrors();
       const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
+      if (inlineEditItem._itemIndex != null) {
+        let items = [...this.items];
+        items.splice(inlineEditItem._itemIndex, 1);
+        this.$emit('update:items', items);
+        delete inlineEditItem._itemIndex;
+      }
       this.$emit('cancel-item', inlineEditItem);
       this.inner.inlineEditItem = null;
     },
@@ -1293,7 +1304,12 @@ export default {
     },
 
     _onCreate() {
-      this.$emit('create-item', { _itemIndex: 0 });
+      const _itemIndex = 0;
+      const item = { _itemIndex };
+      for (let column of this.inner.columns) {
+        item[column.key] = column.defaultValue ?? null;
+      }
+      this.$emit('create-item', item, _itemIndex);
     }
   },
 
