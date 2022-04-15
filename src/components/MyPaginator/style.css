@@ -1,0 +1,9 @@
+.pages-page {
+  display: none;
+}
+
+@media screen and (min-width: 576px) {
+  .pages-page {
+    display: list-item;
+  }
+}

@@ -1,3 +1,43 @@
 .pre-line {
   white-space: pre-line;
 }
+
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+  background-image: none;
+}
+
+.was-validated .form-control:valid,
+.form-control.is-valid {
+  background-image: none;
+}
+
+.input-icon-left,
+.input-icon-right {
+  position: relative;
+  display: inline-block;
+}
+
+.input-icon-left > i,
+.input-icon-right > i {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+  color: #6c757d;
+}
+
+.input-icon-left > .form-control {
+  padding-left: 2rem;
+}
+
+.input-icon-left > i:first-of-type {
+  left: 0.5rem;
+}
+
+.input-icon-right > .form-control {
+  padding-right: 2rem;
+}
+
+.input-icon-right > i:last-of-type {
+  right: 0.5rem;
+}

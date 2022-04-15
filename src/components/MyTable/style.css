@@ -1,0 +1,63 @@
+@import '../MyPaginator/style.css';
+
+th.sortable {
+  cursor: pointer;
+}
+
+.inline-edit-item {
+  min-width: 120px;
+}
+
+/* responsive table */
+
+@media screen and (max-width: 576px) {
+  table.responsive {
+    border: none;
+  }
+
+  table.responsive > thead {
+    display: none;
+  }
+
+  table.responsive > tbody > tr {
+    display: block;
+    margin-bottom: 10px;
+    background: #fff !important;
+  }
+
+  table.responsive > tbody > tr:nth-of-type(odd) {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  table.responsive > tbody > tr:last-child {
+    margin-bottom: 0;
+  }
+
+  table.responsive > tbody > tr > td {
+    display: flex;
+    justify-content: space-between;
+    border-bottom-width: 0;
+    padding: 5px;
+  }
+
+  table.responsive > tbody > tr > td.actions {
+    justify-content: flex-start;
+  }
+
+  table.responsive > tbody > tr > td:last-child {
+    border-bottom-width: 1px;
+  }
+
+  table.responsive > tbody > tr > td::before {
+    content: attr(data-title);
+    font-weight: bold;
+    min-width: 2rem;
+  }
+
+  .inline-edit-item {
+    min-width: unset;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
