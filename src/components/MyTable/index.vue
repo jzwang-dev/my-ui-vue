@@ -400,7 +400,7 @@ author: jzwang
               >
                 <button
                   type="button"
-                  class="btn btn-primary btn-sm"
+                  class="btn btn-primary btn-sm mr-1"
                   @click="_onSave"
                 >
                   儲存
@@ -416,7 +416,7 @@ author: jzwang
               <div v-else>
                 <button
                   type="button"
-                  class="btn btn-primary btn-sm"
+                  class="btn btn-primary btn-sm mr-1"
                   @click="_onRead(item)"
                   v-if="showRead"
                 >
@@ -424,7 +424,7 @@ author: jzwang
                 </button>
                 <button
                   type="button"
-                  class="btn btn-secondary btn-sm"
+                  class="btn btn-secondary btn-sm mr-1"
                   @click="_onUpdate(item)"
                   v-if="showUpdate"
                 >
