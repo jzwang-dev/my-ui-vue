@@ -1,24 +1,10 @@
 # my-ui-vue
 
-## Project setup
+## Install peerDependencies
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+npm install "bootstrap@^4.6.1"
 ```
 
-### Compiles and minifies for production
+## Install my-ui-vue
 ```
-npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
