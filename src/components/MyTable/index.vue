@@ -16,7 +16,7 @@ author: jzwang
         <button
           type="button"
           class="btn btn-primary"
-          @click="$emit('create-item')"
+          @click="_onCreate"
           v-if="showCreate"
         >
           <i class="fas fa-plus"></i> 新增
@@ -1262,12 +1262,21 @@ export default {
         });
         return;
       }
-      this.$emit('save-item', this.inner.inlineEditItem);
+
+      const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
+
+      if (!inlineEditItem[this.rowKey]) {
+        delete inlineEditItem._itemIndex;
+        this.$emit('save-create-item', inlineEditItem);
+      } else {
+        this.$emit('save-update-item', inlineEditItem);
+      }
     },
 
     _onCancel() {
       this.clearErrors();
-      this.$emit('cancel-item', this.inner.inlineEditItem);
+      const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
+      this.$emit('cancel-item', inlineEditItem);
       this.inner.inlineEditItem = null;
     },
 
@@ -1281,6 +1290,10 @@ export default {
 
     _onDelete(item) {
       this.$emit('delete-item', item);
+    },
+
+    _onCreate() {
+      this.$emit('create-item', { _itemIndex: 0 });
     }
   },
 
