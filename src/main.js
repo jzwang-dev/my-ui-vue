@@ -1,4 +1,4 @@
-import './main.scss';
+import './main.css';
 
 export { default as MyCheckBox } from './components/controls/MyCheckBox.vue';
 export { default as MyCheckBoxList } from './components/controls/MyCheckBoxList.vue';
