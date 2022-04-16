@@ -1,5 +1,16 @@
 # my-ui-vue
 
+## Install Vue cli
+```
+npm install -g @vue/cli
+```
+
+## Create a Vue 2 project
+```
+vue create sampleapp
+cd sampleapp
+```
+
 ## Install peerDependencies
 ```
 npm install "bootstrap@^4.6.1" "@fortawesome/fontawesome-free@^5.15.4" "jquery@^3.6.0" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"

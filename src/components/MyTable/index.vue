@@ -1178,7 +1178,7 @@ export default {
     doExportExcel() {
       const { exportItems, exportColumns } = this.getExportParams();
       if (this.exportExcel) {
-        this.exportExcel({ exportItems, exportColumns });
+        this.exportExcel(exportItems, exportColumns, this.exportName);
         return;
       }
       exportUtil.exportExcel(exportItems, exportColumns, this.exportName);
@@ -1187,7 +1187,7 @@ export default {
     doExportPdf() {
       const { exportItems, exportColumns } = this.getExportParams();
       if (this.exportPdf) {
-        this.exportPdf({ exportItems, exportColumns });
+        this.exportPdf(exportItems, exportColumns, this.exportName);
         return;
       }
       exportUtil.exportPdf(exportItems, exportColumns, this.exportName);
