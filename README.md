@@ -2,7 +2,7 @@
 
 ## Install peerDependencies
 ```
-npm install "@fortawesome/fontawesome-free@^5.15.4" "bootstrap@^4.6.1" "core-js@^3.8.3" "jquery@^3.6.0" "vue@^2.6.14"
+npm install "bootstrap@^4.6.1" "@fortawesome/fontawesome-free@^5.15.4" "jquery@^3.6.0" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
 ```
 
 ## Install my-ui-vue
@@ -24,6 +24,3 @@ import 'my-ui-vue/src/components/MyTable/style.css';
 
 import { validators } from 'my-ui-vue';
 ```
-
-### Docs
-[MyTable Doc](./docs/MyTable_Doc.md)

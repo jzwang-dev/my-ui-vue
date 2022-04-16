@@ -1,25 +1,29 @@
-export function getEnv() {
+function getEnv() {
   return process.env.NODE_ENV;
 }
 
-export function isEnv(env) {
+function isEnv(env) {
   return getEnv() === env;
 }
 
-export function isDevelopmentEnv() {
+function isDevelopmentEnv() {
   return isEnv('development');
 }
 
-export function devLog() {
+function devLog() {
   if (isDevelopmentEnv()) {
     console.log.apply(this, arguments);
   }
 }
 
-export function typeToString(type) {
+function typeToString(type) {
   let typeStr = type.toString();
   typeStr = typeStr.substring(9, typeStr.indexOf('()'));
   return typeStr;
+}
+
+function setLoading(loading) {
+  console.log(`loading: ${loading}`);
 }
 
 export default {
@@ -27,5 +31,6 @@ export default {
   isEnv,
   isDevelopmentEnv,
   devLog,
-  typeToString
+  typeToString,
+  setLoading
 };

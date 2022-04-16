@@ -3,7 +3,7 @@
     <button type="button" class="btn btn-primary" @click="count++">
       click
     </button>
-    <div>clickedx {{ count }} time(s).</div>
+    <div>clicked {{ count }} time(s).</div>
   </div>
 </template>
 
