@@ -372,6 +372,28 @@ author: jzwang
                       @change="_onEditControlModelChange($event, column)"
                     />
                   </template>
+                  <template
+                    v-else-if="
+                      column.control.type &&
+                      column.control.type.toLowerCase() === 'textarea'
+                    "
+                  >
+                    <textarea
+                      :name="`inline-edit-${column.key}`"
+                      :id="`inline-edit-${column.key}`"
+                      v-model="inner.inlineEditItem[column.key]"
+                      :placeholder="column.header"
+                      class="form-control"
+                      :class="[
+                        column.control.cssClass,
+                        { 'is-invalid': column.errors.length }
+                      ]"
+                      :style="column.control.style"
+                      @input="
+                        _onEditControlModelChange($event.target.value, column)
+                      "
+                    ></textarea>
+                  </template>
                 </div>
                 <div class="invalid-feedback">
                   {{ column.errors.join(column.errorsSeparator || ', ') }}

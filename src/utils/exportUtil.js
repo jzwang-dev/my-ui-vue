@@ -149,7 +149,6 @@ async function exportExcel(
     saveAs(new Blob([buffer]), `${exportName}.xlsx`);
   } catch (err) {
     console.log(err);
-    console.log(err.message);
     let errMsg = '匯出Excel時發生錯誤！';
     if (
       err.message === '不正確的字元集範圍' ||
