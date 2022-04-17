@@ -35,3 +35,6 @@ import 'my-ui-vue/src/components/MyTable/style.css';
 
 import { validators } from 'my-ui-vue';
 ```
+
+## Docs
+[MyTable Doc](./docs/MyTable_Doc.pdf)
