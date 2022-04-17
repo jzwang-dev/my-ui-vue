@@ -1,8 +1,13 @@
 # my-ui-vue
 
 ## Install Vue cli
+### npm
 ```
 npm install -g @vue/cli
+```
+### yarn
+```
+yarn global add @vue/cli
 ```
 
 ## Create a Vue 2 project
@@ -11,14 +16,20 @@ vue create sampleapp
 cd sampleapp
 ```
 
-## Install peerDependencies
-```
-npm install "bootstrap@^4.6.1" "@fortawesome/fontawesome-free@^5.15.4" "jquery@^3.6.0" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
-```
-
-## Install my-ui-vue
+## Installation
+### npm
+#### Install my-ui-vue
 ```
 npm install git+https://github.com/jianzhong-wang/my-ui-vue.git
+```
+### yarn
+#### Install my-ui-vue
+```
+yarn add https://github.com/jianzhong-wang/my-ui-vue.git
+```
+#### Install peerDependencies
+```
+yarn add "bootstrap@^4.6.1" "@fortawesome/fontawesome-free@^5.15.4" "jquery@^3.6.0" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
 ```
 
 ## Import CSS & JavaScript
