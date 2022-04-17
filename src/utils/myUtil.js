@@ -26,11 +26,26 @@ function setLoading(loading) {
   console.log(`loading: ${loading}`);
 }
 
+function formatValue(format, value) {
+  if (Object.prototype.toString.call(format) === '[object Function]') {
+    value = format(value);
+  } else if (Array.isArray(format)) {
+    for (let el of format) {
+      if (Object.prototype.toString.call(el) === '[object Function]') {
+        value = el(value);
+      }
+    }
+  }
+
+  return value;
+}
+
 export default {
   getEnv,
   isEnv,
   isDevelopmentEnv,
   devLog,
   typeToString,
-  setLoading
+  setLoading,
+  formatValue
 };

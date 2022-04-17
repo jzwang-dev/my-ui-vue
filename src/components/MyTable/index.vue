@@ -406,9 +406,7 @@ author: jzwang
                 :column="column"
               >
                 <!-- prettier-ignore -->
-                <div class="pre-line">{{ (column.format ?
-                  column.format(column.value(item), item) :
-                  column.value(item)) | nulltext(column.nullText) }}</div>
+                <div class="pre-line">{{ _formatValue(column.format, column.value(item)) | nulltext(column.nullText) }}</div>
               </slot>
             </div>
           </td>
@@ -1332,6 +1330,10 @@ export default {
         item[column.key] = column.defaultValue ?? null;
       }
       this.$emit('create-item', item, _itemIndex);
+    },
+
+    _formatValue(format, value) {
+      return myUtil.formatValue(format, value);
     }
   },
 
