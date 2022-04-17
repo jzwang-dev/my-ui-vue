@@ -33,7 +33,11 @@ async function exportExcel(
       }
     });
 
-    const exceljs = await import(/* webpackPrefetch: true */ 'exceljs');
+    const exceljs = await import(
+      /* webpackChunkName: "exceljs" */
+      /* webpackPrefetch: true */
+      'exceljs'
+    );
 
     const defaultBorder = {
       top: { style: 'thin' },
@@ -200,8 +204,16 @@ async function exportPdf(
     });
 
     const modules = await Promise.all([
-      import(/* webpackPrefetch: true */ 'pdfmake/build/pdfmake'),
-      import(/* webpackPrefetch: true */ '../assets/vfs_fonts')
+      import(
+        /* webpackChunkName: "pdfmake" */
+        /* webpackPrefetch: true */
+        'pdfmake/build/pdfmake'
+      ),
+      import(
+        /* webpackChunkName: "vfs_fonts" */
+        /* webpackPrefetch: true */
+        '../assets/vfs_fonts'
+      )
     ]);
     const pdfmake = modules[0].default;
     const vfs_fonts = modules[1];
