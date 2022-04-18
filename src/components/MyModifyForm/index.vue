@@ -157,6 +157,9 @@
             ></textarea>
           </template>
         </div>
+        <div class="invalid-feedback">
+          {{ column.errors.join(column.errorsSeparator || ', ') }}
+        </div>
       </slot>
     </div>
   </form>
@@ -317,6 +320,7 @@ export default {
     },
 
     columns: {
+      deep: true,
       handler() {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this._normalized_columns();
