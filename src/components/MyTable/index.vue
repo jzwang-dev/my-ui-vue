@@ -202,7 +202,7 @@ author: jzwang
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in pagedItems" :key="item[rowKey]">
+        <tr v-for="(item, itemIndex) in pagedItems" :key="item[rowKey]">
           <td class="text-center align-middle" v-if="showSelection">
             <div>
               <div
@@ -224,7 +224,7 @@ author: jzwang
             </div>
           </td>
           <td
-            v-for="(column, index) in visibleColumns"
+            v-for="column in visibleColumns"
             :key="column.key"
             :data-title="column.header"
           >
@@ -238,7 +238,7 @@ author: jzwang
                   inner.inlineEditItem &&
                   (inner.inlineEditItem[rowKey] === item[rowKey] ||
                     (inner.inlineEditItem[rowKey] == null &&
-                      inner.inlineEditItem._itemIndex === index))
+                      inner.inlineEditItem._itemIndex === itemIndex))
                 "
               >
                 <div
@@ -317,7 +317,7 @@ author: jzwang
                     "
                   >
                     <my-radio-button-list
-                      :name="`inilne-edit-${column.key}`"
+                      :name="`inline-edit-${column.key}`"
                       v-model="inner.inlineEditItem[column.key]"
                       :dataSource="column.control.dataSource"
                       :dataValueField="column.control.dataValueField"
@@ -338,7 +338,7 @@ author: jzwang
                     "
                   >
                     <my-check-box
-                      :name="`inilne-edit-${column.key}`"
+                      :name="`inline-edit-${column.key}`"
                       v-model="inner.inlineEditItem[column.key]"
                       :trueValue="column.control.trueValue"
                       :falseValue="column.control.falseValue"
@@ -358,7 +358,7 @@ author: jzwang
                     "
                   >
                     <my-check-box-list
-                      :name="`inilne-edit-${column.key}`"
+                      :name="`inline-edit-${column.key}`"
                       v-model="inner.inlineEditItem[column.key]"
                       :dataSource="column.control.dataSource"
                       :dataValueField="column.control.dataValueField"
@@ -503,17 +503,16 @@ author: jzwang
 
 <script>
 import MyPaginator from '../MyPaginator';
-import MyRadioButtonList from '../controls/MyRadioButtonList.vue';
-import MyCheckBox from '../controls/MyCheckBox.vue';
-import MyCheckBoxList from '../controls/MyCheckBoxList.vue';
+import MyRadioButtonList from '../controls/MyRadioButtonList';
+import MyCheckBox from '../controls/MyCheckBox';
+import MyCheckBoxList from '../controls/MyCheckBoxList';
+import _normalizeColumn from './_normalizeColumn';
 import {
   defaultFiltering,
   defaultSorting,
   defaultPaging,
   defaultPaginator,
-  defaultItemsPerPageOptions,
-  defaultControlTypes,
-  controlAllowedDataTypes
+  defaultItemsPerPageOptions
 } from '../../configs';
 import myUtil from '../../utils/myUtil';
 import exportUtil from '../../utils/exportUtil';
@@ -836,75 +835,7 @@ export default {
 
   methods: {
     _normalized_columns() {
-      return this.columns.map((column) => {
-        const normalizedColumn = Object.assign(
-          {
-            header: column.key,
-            displayable: true,
-            value: (item) => item[column.key],
-            defaultValue: null,
-            format: (value) => value,
-            nullText: '--',
-            sort: null,
-            sortable: true,
-            thClass: null,
-            thStyle: null,
-            tdClass: null,
-            tdStyle: null,
-            exportable: true,
-            valueToExport: (item) => item[column.key],
-            editable: true,
-            valueToEdit: (item) => item[column.key],
-            dataType: String,
-            validators: [],
-            errors: [],
-            errorsSeparator: ', '
-          },
-          column,
-          {
-            control: Object.assign(
-              {
-                type: defaultControlTypes[column.dataType ?? String],
-                cssClass: null,
-                style: null,
-                dataSource: [],
-                dataValueField: 'value',
-                dataTextField: 'text',
-                showEmptyOption: true,
-                emptyOptionValue: '',
-                emptyOptionText: '-請選擇-',
-                inline: false,
-                trueValue: true,
-                falseValue: false
-              },
-              column.control
-            ),
-            validationMode: Object.assign(
-              {
-                greedy: false,
-                lazy: false
-              },
-              column.validationMode
-            )
-          }
-        );
-
-        const allowedDataTypes =
-          controlAllowedDataTypes[normalizedColumn.control.type];
-        if (!allowedDataTypes.includes(normalizedColumn.dataType)) {
-          console.log(
-            `[warning] 欄位 ${normalizedColumn.key} 的 control.type 為「${
-              normalizedColumn.control.type
-            }」，其 dataType (${myUtil.typeToString(
-              normalizedColumn.dataType
-            )}) 是否有誤？ (allowedDataTypes: ${allowedDataTypes
-              .map((type) => myUtil.typeToString(type))
-              .join(', ')})`
-          );
-        }
-
-        return normalizedColumn;
-      });
+      return this.columns.map(_normalizeColumn);
     },
 
     _normalized_visibleColumnKeys() {
