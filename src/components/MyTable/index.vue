@@ -241,14 +241,18 @@ author: jzwang
                       inner.inlineEditItem._itemIndex === itemIndex))
                 "
               >
-                <column-edit-control
-                  :column="column"
-                  :editItem.sync="inner.inlineEditItem"
-                  :idPrefix="'inline-edit-'"
+                <div
                   class="inline-edit-item"
                   :class="{ 'is-invalid': column.errors.length }"
-                  @model-change="_onEditControlModelChange"
-                />
+                >
+                  <column-edit-control
+                    :column="column"
+                    :editItem.sync="inner.inlineEditItem"
+                    :idPrefix="'inline-edit-'"
+                    @model-change="_onColumnEditControlModelChange"
+                    :disabled="column.editable === false"
+                  />
+                </div>
                 <div class="invalid-feedback">
                   {{ column.errors.join(column.errorsSeparator || ', ') }}
                 </div>
@@ -1052,8 +1056,8 @@ export default {
       });
     },
 
-    _onEditControlModelChange(value, column) {
-      //console.log('_onEditControlModelChange', value);
+    _onColumnEditControlModelChange(value, column) {
+      //console.log('_onColumnEditControlModelChange', value);
 
       if (column.validationMode.lazy !== true) {
         this._validateInlineEditItemField(value, column);

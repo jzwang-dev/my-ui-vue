@@ -1,6 +1,7 @@
 <template>
   <div class="my-check-box custom-control custom-checkbox">
     <input
+      v-bind="$attrs"
       type="checkbox"
       :name="name"
       :id="_id"
@@ -16,6 +17,8 @@
 <script>
 export default {
   name: 'MyCheckBox',
+
+  inheritAttrs: false,
 
   model: {
     prop: 'checked',

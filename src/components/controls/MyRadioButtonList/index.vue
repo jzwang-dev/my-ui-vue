@@ -7,13 +7,14 @@
       :key="item[dataValueField]"
     >
       <input
+        v-bind="$attrs"
         type="radio"
         :name="name"
         :id="`${_id}_${item[dataValueField]}`"
         :value="item[dataValueField]"
         v-model="innerChecked"
         class="custom-control-input"
-        :disabled="item.disabled === true"
+        :disabled="item.disabled === true || $attrs.disabled"
       />
       <label
         class="custom-control-label"
@@ -29,6 +30,8 @@ import dataSourceMixin from '../../../mixins/dataSourceMixin';
 
 export default {
   name: 'MyRadioButtonList',
+
+  inheritAttrs: false,
 
   mixins: [dataSourceMixin],
 
