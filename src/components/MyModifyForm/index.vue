@@ -302,7 +302,7 @@ export default {
     },
 
     _onEditControlModelChange(value, column) {
-      console.log('_onEditControlModelChange', value);
+      //console.log('_onEditControlModelChange', value);
 
       if (column.validationMode.lazy !== true) {
         this._validateModifyItemField(value, column);

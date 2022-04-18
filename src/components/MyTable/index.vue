@@ -241,160 +241,14 @@ author: jzwang
                       inner.inlineEditItem._itemIndex === itemIndex))
                 "
               >
-                <div
+                <column-edit-control
+                  :column="column"
+                  :editItem.sync="inner.inlineEditItem"
+                  :idPrefix="'inline-edit-'"
                   class="inline-edit-item"
                   :class="{ 'is-invalid': column.errors.length }"
-                >
-                  <template
-                    v-if="
-                      column.control.type &&
-                      column.control.type.toLowerCase() === 'input'
-                    "
-                  >
-                    <input
-                      :type="
-                        column.dataType === Date
-                          ? 'date'
-                          : column.dataType === Number
-                          ? 'number'
-                          : 'text'
-                      "
-                      :name="`inline-edit-${column.key}`"
-                      :id="`inline-edit-${column.key}`"
-                      v-model="inner.inlineEditItem[column.key]"
-                      :placeholder="column.header"
-                      class="form-control"
-                      :class="[
-                        column.control.cssClass,
-                        { 'is-invalid': column.errors.length }
-                      ]"
-                      :style="column.control.style"
-                      @input="
-                        _onEditControlModelChange($event.target.value, column)
-                      "
-                    />
-                  </template>
-                  <template
-                    v-else-if="
-                      column.control.type &&
-                      column.control.type.toLowerCase() === 'select'
-                    "
-                  >
-                    <select
-                      :name="`inline-edit-${column.key}`"
-                      :id="`inline-edit-${column.key}`"
-                      v-model="inner.inlineEditItem[column.key]"
-                      class="form-control"
-                      :class="[
-                        column.control.cssClass,
-                        { 'is-invalid': column.errors.length }
-                      ]"
-                      :style="column.control.style"
-                      @change="
-                        _onEditControlModelChange($event.target.value, column)
-                      "
-                    >
-                      <option
-                        :value="column.control.emptyOptionValue"
-                        v-if="column.control.showEmptyOption"
-                      >
-                        {{ column.control.emptyOptionText }}
-                      </option>
-                      <option
-                        v-for="item in column.control.dataSource"
-                        :key="item[column.control.dataValueField]"
-                        :value="item[column.control.dataValueField]"
-                        :disabled="item.disabled === true"
-                      >
-                        {{ item[column.control.dataTextField] }}
-                      </option>
-                    </select>
-                  </template>
-                  <template
-                    v-else-if="
-                      column.control.type &&
-                      column.control.type.toLowerCase() === 'radiobuttonlist'
-                    "
-                  >
-                    <my-radio-button-list
-                      :name="`inline-edit-${column.key}`"
-                      v-model="inner.inlineEditItem[column.key]"
-                      :dataSource="column.control.dataSource"
-                      :dataValueField="column.control.dataValueField"
-                      :dataTextField="column.control.dataTextField"
-                      :inline="column.control.inline"
-                      :class="[
-                        column.control.cssClass,
-                        { 'in-invalid': column.errors.length }
-                      ]"
-                      :style="column.control.style"
-                      @change="_onEditControlModelChange($event, column)"
-                    />
-                  </template>
-                  <template
-                    v-else-if="
-                      column.control.type &&
-                      column.control.type.toLowerCase() === 'checkbox'
-                    "
-                  >
-                    <my-check-box
-                      :name="`inline-edit-${column.key}`"
-                      v-model="inner.inlineEditItem[column.key]"
-                      :trueValue="column.control.trueValue"
-                      :falseValue="column.control.falseValue"
-                      :label="column.header"
-                      :class="[
-                        column.control.cssClass,
-                        { 'in-invalid': column.errors.length }
-                      ]"
-                      :style="column.control.style"
-                      @change="_onEditControlModelChange($event, column)"
-                    />
-                  </template>
-                  <template
-                    v-else-if="
-                      column.control.type &&
-                      column.control.type.toLowerCase() === 'checkboxlist'
-                    "
-                  >
-                    <my-check-box-list
-                      :name="`inline-edit-${column.key}`"
-                      v-model="inner.inlineEditItem[column.key]"
-                      :dataSource="column.control.dataSource"
-                      :dataValueField="column.control.dataValueField"
-                      :dataTextField="column.control.dataTextField"
-                      :inline="column.control.inline"
-                      :class="[
-                        column.control.cssClass,
-                        { 'in-invalid': column.errors.length }
-                      ]"
-                      :style="column.control.style"
-                      @change="_onEditControlModelChange($event, column)"
-                    />
-                  </template>
-                  <template
-                    v-else-if="
-                      column.control.type &&
-                      column.control.type.toLowerCase() === 'textarea'
-                    "
-                  >
-                    <textarea
-                      :name="`inline-edit-${column.key}`"
-                      :id="`inline-edit-${column.key}`"
-                      v-model="inner.inlineEditItem[column.key]"
-                      :placeholder="column.header"
-                      class="form-control"
-                      :class="[
-                        column.control.cssClass,
-                        { 'is-invalid': column.errors.length }
-                      ]"
-                      :style="column.control.style"
-                      @input="
-                        _onEditControlModelChange($event.target.value, column)
-                      "
-                    ></textarea>
-                  </template>
-                </div>
+                  @model-change="_onEditControlModelChange"
+                />
                 <div class="invalid-feedback">
                   {{ column.errors.join(column.errorsSeparator || ', ') }}
                 </div>
@@ -503,9 +357,7 @@ author: jzwang
 
 <script>
 import MyPaginator from '../MyPaginator';
-import MyRadioButtonList from '../controls/MyRadioButtonList';
-import MyCheckBox from '../controls/MyCheckBox';
-import MyCheckBoxList from '../controls/MyCheckBoxList';
+import ColumnEditControl from './components/_ColumnEditControl.vue';
 import _normalizeColumn from './_normalizeColumn';
 import {
   defaultFiltering,
@@ -523,9 +375,7 @@ export default {
 
   components: {
     MyPaginator,
-    MyRadioButtonList,
-    MyCheckBox,
-    MyCheckBoxList
+    ColumnEditControl
   },
 
   filters: {
@@ -927,7 +777,7 @@ export default {
         clearTimeout(this.filteringTimeoutId);
       }
       this.filteringTimeoutId = setTimeout(() => {
-        console.log('_onFilteringChange:_processItems');
+        //console.log('_onFilteringChange:_processItems');
         this._processItems();
       }, 500);
     },
@@ -1203,7 +1053,7 @@ export default {
     },
 
     _onEditControlModelChange(value, column) {
-      console.log('_onEditControlModelChange', value);
+      //console.log('_onEditControlModelChange', value);
 
       if (column.validationMode.lazy !== true) {
         this._validateInlineEditItemField(value, column);
@@ -1288,7 +1138,7 @@ export default {
               items;
         }
 
-        console.log('items:_processItems');
+        //console.log('items:_processItems');
         this._processItems();
       }
     },
@@ -1302,6 +1152,7 @@ export default {
     },
 
     columns: {
+      deep: true,
       handler() {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this._normalized_columns();
@@ -1397,7 +1248,7 @@ export default {
         //   this.inner.selected = [];
         // }
 
-        console.log('inner.sorting:_processItems');
+        //console.log('inner.sorting:_processItems');
         this._processItems();
         this.$emit('update:sorting', this.inner.sorting);
       }
@@ -1419,7 +1270,7 @@ export default {
 
     'inner.paging.page': {
       handler() {
-        console.log('inner.paging.page:_processItems');
+        //console.log('inner.paging.page:_processItems');
         this._processItems();
       }
     },
@@ -1434,7 +1285,7 @@ export default {
         //   this.inner.selected = [];
         // }
 
-        console.log('inner.paging.itemsPerPage:_processItems');
+        //console.log('inner.paging.itemsPerPage:_processItems');
         this._processItems();
       }
     },
