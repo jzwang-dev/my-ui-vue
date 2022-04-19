@@ -249,7 +249,10 @@ author: jzwang
                     :column="column"
                     :editItem.sync="inner.inlineEditItem"
                     :idPrefix="'inline-edit-'"
-                    @model-change="_onColumnEditControlModelChange"
+                    @model-change="
+                      (value, column) =>
+                        _onColumnEditControlModelChange(value, column)
+                    "
                     :disabled="column.editable === false"
                   />
                 </div>
