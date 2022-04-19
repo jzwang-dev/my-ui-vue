@@ -46,4 +46,4 @@ import { validators } from 'my-ui-vue';
 ```
 
 ## Docs
-[MyTable Doc](./docs/MyTable_Doc.pdf)
+[MyTable Doc](https://www.notion.so/MyTable-Doc-58d0e805b757475cb536a8b642182bd7)
