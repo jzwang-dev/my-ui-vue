@@ -959,6 +959,8 @@ export default {
             value = item[column.key] ?? '';
           }
 
+          value = value ?? '';
+
           if (Object.prototype.toString.call(value) !== '[object String]') {
             value = JSON.stringify(value);
           }

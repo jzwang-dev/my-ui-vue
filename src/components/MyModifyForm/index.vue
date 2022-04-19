@@ -1,31 +1,34 @@
 <template>
   <form :id="id" @submit.prevent v-if="inner.modifyItem">
-    <div class="form-group" v-for="column in _modifyColumns" :key="column.key">
+    <template v-for="column in _modifyColumns">
       <slot
         :name="`edit-${column.key}`"
         :item="inner.modifyItem"
         :column="column"
       >
-        <label :for="`modify-${column.key}`"
-          >{{ column.header }}{{ _isColumnRequired(column) ? '*' : '' }}</label
-        >
-        <div
-          class="modify-item"
-          :class="{ 'is-invalid': column.errors.length }"
-        >
-          <column-edit-control
-            :column="column"
-            :editItem.sync="inner.modifyItem"
-            :idPrefix="'`modify-'"
-            @model-change="_onColumnEditControlModelChange"
-            :disabled="column.editable === false"
-          />
-        </div>
-        <div class="invalid-feedback">
-          {{ column.errors.join(column.errorsSeparator || ', ') }}
+        <div class="form-group" :key="column.key">
+          <label :for="`modify-${column.key}`"
+            >{{ column.header
+            }}{{ _isColumnRequired(column) ? '*' : '' }}</label
+          >
+          <div
+            class="modify-item"
+            :class="{ 'is-invalid': column.errors.length }"
+          >
+            <column-edit-control
+              :column="column"
+              :editItem.sync="inner.modifyItem"
+              :idPrefix="'`modify-'"
+              @model-change="_onColumnEditControlModelChange"
+              :disabled="column.editable === false"
+            />
+          </div>
+          <div class="invalid-feedback">
+            {{ column.errors.join(column.errorsSeparator || ', ') }}
+          </div>
         </div>
       </slot>
-    </div>
+    </template>
     <div v-if="showActions">
       <button type="button" class="btn btn-primary" @click="save">儲存</button>
       <button type="button" class="btn btn-secondary" @click="cancel">
