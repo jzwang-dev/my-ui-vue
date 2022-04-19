@@ -69,6 +69,7 @@
     :inline="column.control.inline"
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
+    :inputClass="{ 'is-invalid': column.errors.length }"
     @change="_onModelChange($event, column)"
   />
 
@@ -86,6 +87,7 @@
     :label="column.header"
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
+    :inputClass="{ 'is-invalid': column.errors.length }"
     @change="_onModelChange($event, column)"
   />
 
@@ -104,6 +106,7 @@
     :inline="column.control.inline"
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
+    :inputClass="{ 'is-invalid': column.errors.length }"
     @change="_onModelChange($event, column)"
   />
 

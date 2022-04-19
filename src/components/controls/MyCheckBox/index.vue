@@ -9,6 +9,8 @@
       :checked="checked === trueValue"
       @change="$emit('change', $event.target.checked ? trueValue : falseValue)"
       class="custom-control-input"
+      :class="inputClass"
+      :style="inputStyle"
     />
     <label class="custom-control-label" :for="_id">{{ label }}</label>
   </div>
@@ -53,7 +55,11 @@ export default {
     label: {
       type: String,
       default: ''
-    }
+    },
+
+    inputClass: null,
+
+    inputStyle: null
   },
 
   computed: {

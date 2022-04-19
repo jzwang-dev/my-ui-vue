@@ -1,10 +1,6 @@
 <template>
   <form :id="id" @submit.prevent v-if="inner.modifyItem">
-    <div
-      class="form-group"
-      v-for="column in displayableColumns"
-      :key="column.key"
-    >
+    <div class="form-group" v-for="column in _modifyColumns" :key="column.key">
       <slot
         :name="`edit-${column.key}`"
         :item="inner.modifyItem"
@@ -29,6 +25,14 @@
           {{ column.errors.join(column.errorsSeparator || ', ') }}
         </div>
       </slot>
+    </div>
+    <div>
+      <button type="button" class="btn btn-primary" @click="_onSave">
+        儲存
+      </button>
+      <button type="button" class="btn btn-secondary" @click="_onCancel">
+        取消
+      </button>
     </div>
   </form>
 </template>
@@ -55,9 +59,20 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
+    visibleColumnKeys: {
+      type: Array
+    },
+
     modifyMode: {
       type: String,
       default: 'update'
+    },
+
+    updateOnlyKeys: {
+      type: Array,
+      default() {
+        return [];
+      }
     },
 
     id: {
@@ -70,7 +85,8 @@ export default {
     return {
       inner: {
         modifyItem: this._normalized_modifyItem(),
-        columns: this._normalized_columns()
+        columns: this._normalized_columns(),
+        visibleColumnKeys: this._normalized_visibleColumnKeys()
       }
     };
   },
@@ -80,6 +96,22 @@ export default {
       return this.inner.columns.filter(
         (column) => column.displayable !== false
       );
+    },
+
+    visibleColumns() {
+      return this.displayableColumns.filter((column) =>
+        this.inner.visibleColumnKeys.includes(column.key)
+      );
+    },
+
+    _modifyColumns() {
+      if (this.modifyMode === 'create') {
+        return this.visibleColumns.filter(
+          (column) => !this.updateOnlyKeys.includes(column.key)
+        );
+      } else {
+        return this.visibleColumns;
+      }
     }
   },
 
@@ -107,6 +139,15 @@ export default {
 
     _normalized_columns() {
       return this.columns.map(_normalizeColumn);
+    },
+
+    _normalized_visibleColumnKeys() {
+      const keys = this._normalized_columns()
+        .filter((column) => column.displayable !== false)
+        .map((column) => column.key);
+      return (
+        this.visibleColumnKeys?.filter((key) => keys.includes(key)) ?? keys
+      );
     },
 
     _isColumnRequired(column) {
@@ -171,10 +212,55 @@ export default {
       if (column.validationMode.lazy !== true) {
         this._validateModifyItemField(value, column);
       }
+    },
+
+    _onSave() {
+      if (!this.validateModifyItem()) {
+        this.$emit('validate-item-failed', {
+          errors: this.getErrors(),
+          item: this.inner.modifyMode
+        });
+        return;
+      }
+
+      const modifyItem = Object.assign({}, this.inner.modifyItem);
+
+      if (this.modifyMode === 'create') {
+        delete modifyItem._itemIndex;
+        this.$emit('save-create-item', modifyItem);
+      } else {
+        this.$emit('save-update-item', modifyItem);
+      }
+    },
+
+    _onCancel() {
+      this.clearErrors();
+      const modifyItem = Object.assign({}, this.inner.modifyItem);
+      if (modifyItem._itemIndex != null) {
+        delete modifyItem._itemIndex;
+      }
+      this.$emit('cancel-item', modifyItem);
+      this.inner.modifyItem = null;
     }
   },
 
   watch: {
+    'inner.modifyItem': {
+      deep: true,
+      handler() {
+        this.$emit('update:modifyItem', this.inner.modifyItem);
+      },
+      immediate: true
+    },
+
+    modifyItem: {
+      handler() {
+        if (this.inner.modifyItem !== this.modifyItem) {
+          this.inner.modifyItem = this._normalized_modifyItem();
+        }
+      }
+    },
+
     'inner.columns': {
       deep: true,
       handler() {
@@ -192,18 +278,17 @@ export default {
       }
     },
 
-    'inner.modifyItem': {
-      deep: true,
+    'inner.visibleColumnKeys': {
       handler() {
-        this.$emit('update:modifyItem', this.inner.modifyItem);
+        this.$emit('update:visibleColumnKeys', this.inner.visibleColumnKeys);
       },
       immediate: true
     },
 
-    modifyItem: {
+    visibleColumnKeys: {
       handler() {
-        if (this.inner.modifyItem !== this.modifyItem) {
-          this.inner.modifyItem = this._normalized_modifyItem();
+        if (this.inner.visibleColumnKeys !== this.visibleColumnKeys) {
+          this.inner.visibleColumnKeys = this._normalized_visibleColumnKeys();
         }
       }
     }

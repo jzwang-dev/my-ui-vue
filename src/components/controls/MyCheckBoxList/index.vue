@@ -14,6 +14,8 @@
         :value="item[dataValueField]"
         v-model="innerChecked"
         class="custom-control-input"
+        :class="inputClass"
+        :style="inputStyle"
         :disabled="item.disabled === true || $attrs.disabled"
       />
       <label
@@ -59,7 +61,11 @@ export default {
 
     inline: {
       type: Boolean
-    }
+    },
+
+    inputClass: null,
+
+    inputStyle: null
   },
 
   data() {
