@@ -363,6 +363,7 @@ author: jzwang
 import MyPaginator from '../MyPaginator';
 import ColumnEditControl from './components/_ColumnEditControl.vue';
 import _normalizeColumn from './_normalizeColumn';
+import columnsUtil from './utils/columnsUtil';
 import {
   defaultFiltering,
   defaultSorting,
@@ -1009,61 +1010,36 @@ export default {
     },
 
     _validateInlineEditItemField(value, column) {
-      column.errors = [];
-      for (let validator of column.validators ?? []) {
-        const result = validator(value, this.inner.inlineEditItem);
-        if (result !== true) {
-          column.errors.push(result);
-          if (column.validationMode.greedy !== true) {
-            break;
-          }
-        }
-      }
-      return column.errors.length === 0;
+      return columnsUtil.validateItemField(
+        value,
+        column,
+        this.inner.inlineEditItem
+      );
     },
 
     validateInlineEditItem() {
-      this.clearErrors();
-      if (!this.inner.inlineEditItem) {
-        return true;
-      }
-      let valid = true;
-      for (let column of this.inner.columns) {
-        if (
-          !this._validateInlineEditItemField(
-            this.inner.inlineEditItem[column.key],
-            column
-          )
-        ) {
-          valid = false;
-        }
-      }
-      return valid;
+      return columnsUtil.validateItem(
+        this.inner.columns,
+        this.inner.inlineEditItem
+      );
     },
 
     clearErrors() {
-      for (let column of this.inner.columns) {
-        column.errors = [];
-      }
+      columnsUtil.clearErrors(this.inner.columns);
     },
 
     getErrors() {
-      return this.inner.columns.map((column) => {
-        const errors = column.errors ?? [];
-        return {
-          key: column.key,
-          errors,
-          errMsg: errors.join(column.errorsSeparator || ', ')
-        };
-      });
+      return columnsUtil.getErrors(this.inner.columns);
     },
 
     _onColumnEditControlModelChange(value, column) {
       //console.log('_onColumnEditControlModelChange', value);
 
-      if (column.validationMode.lazy !== true) {
-        this._validateInlineEditItemField(value, column);
-      }
+      columnsUtil.handleColumnModelChange(
+        value,
+        column,
+        this.inner.inlineEditItem
+      );
     },
 
     _onSave() {

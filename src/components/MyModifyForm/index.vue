@@ -41,6 +41,7 @@
 <script>
 import ColumnEditControl from '../MyTable/components/_ColumnEditControl.vue';
 import _normalizeColumn from '../MyTable/_normalizeColumn';
+import columnsUtil from '../MyTable/utils/columnsUtil';
 
 export default {
   name: 'MyModifyForm',
@@ -163,61 +164,32 @@ export default {
     },
 
     _validateModifyItemField(value, column) {
-      column.errors = [];
-      for (let validator of column.validators ?? []) {
-        const result = validator(value, this.inner.modifyItem);
-        if (result !== true) {
-          column.errors.push(result);
-          if (column.validationMode.greedy !== true) {
-            break;
-          }
-        }
-      }
-      return column.errors.length === 0;
+      return columnsUtil.validateItemField(
+        value,
+        column,
+        this.inner.modifyItem
+      );
     },
 
     validateModifyItem() {
-      this.clearErrors();
-      if (!this.inner.modifyItem) {
-        return true;
-      }
-      let valid = true;
-      for (let column of this.inner.columns) {
-        if (
-          !this._validateModifyItemField(
-            this.inner.modifyItem[column.key],
-            column
-          )
-        ) {
-          valid = false;
-        }
-      }
-      return valid;
+      return columnsUtil.validateItem(
+        this.inner.columns,
+        this.inner.modifyItem
+      );
     },
 
     clearErrors() {
-      for (let column of this.inner.columns) {
-        column.errors = [];
-      }
+      columnsUtil.clearErrors(this.inner.columns);
     },
 
     getErrors() {
-      return this.inner.columns.map((column) => {
-        const errors = column.errors ?? [];
-        return {
-          key: column.key,
-          errors,
-          errMsg: errors.join(column.errorsSeparator || ', ')
-        };
-      });
+      return columnsUtil.getErrors(this.inner.columns);
     },
 
     _onColumnEditControlModelChange(value, column) {
       //console.log('_onColumnEditControlModelChange', value);
 
-      if (column.validationMode.lazy !== true) {
-        this._validateModifyItemField(value, column);
-      }
+      columnsUtil.handleColumnModelChange(value, column, this.inner.modifyItem);
     },
 
     save() {
