@@ -26,11 +26,9 @@
         </div>
       </slot>
     </div>
-    <div>
-      <button type="button" class="btn btn-primary" @click="_onSave">
-        儲存
-      </button>
-      <button type="button" class="btn btn-secondary" @click="_onCancel">
+    <div v-if="showActions">
+      <button type="button" class="btn btn-primary" @click="save">儲存</button>
+      <button type="button" class="btn btn-secondary" @click="cancel">
         取消
       </button>
     </div>
@@ -63,16 +61,21 @@ export default {
       type: Array
     },
 
-    modifyMode: {
-      type: String,
-      default: 'update'
-    },
-
     updateOnlyKeys: {
       type: Array,
       default() {
         return [];
       }
+    },
+
+    modifyMode: {
+      type: String,
+      default: 'update'
+    },
+
+    showActions: {
+      type: Boolean,
+      default: true
     },
 
     id: {
@@ -214,11 +217,11 @@ export default {
       }
     },
 
-    _onSave() {
+    save() {
       if (!this.validateModifyItem()) {
         this.$emit('validate-item-failed', {
           errors: this.getErrors(),
-          item: this.inner.modifyMode
+          item: this.inner.modifyItem
         });
         return;
       }
@@ -233,7 +236,7 @@ export default {
       }
     },
 
-    _onCancel() {
+    cancel() {
       this.clearErrors();
       const modifyItem = Object.assign({}, this.inner.modifyItem);
       if (modifyItem._itemIndex != null) {
