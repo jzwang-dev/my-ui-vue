@@ -6,6 +6,8 @@ export { default as MyCheckBox } from './components/controls/MyCheckBox';
 export { default as MyCheckBoxList } from './components/controls/MyCheckBoxList';
 export { default as MyModifyForm } from './components/MyModifyForm';
 export { default as MyModifyModal } from './components/MyModifyModal';
+export { default as MyDetailTable } from './components/MyDetailTable';
+export { default as MyDetailModal } from './components/MyDetailModal';
 
 export { default as myUtil } from './utils/myUtil';
 export { default as exportUtil } from './utils/exportUtil';

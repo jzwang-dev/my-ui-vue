@@ -759,12 +759,12 @@ export default {
       const inlineEditItem = { ...this.inlineEditItem };
       for (let column of this._normalized_columns()) {
         if (inlineEditItem[column.key] === undefined) {
-          inlineEditItem[column.key] = column.defaultValue;
+          inlineEditItem[column.key] = column.defaultValue ?? null;
         } else {
           const valueToEdit = column.valueToEdit(inlineEditItem);
           if (inlineEditItem[column.key] !== valueToEdit) {
             inlineEditItem[`_${column.key}`] = inlineEditItem[column.key];
-            inlineEditItem[column.key] = valueToEdit;
+            inlineEditItem[column.key] = valueToEdit ?? null;
           }
         }
       }

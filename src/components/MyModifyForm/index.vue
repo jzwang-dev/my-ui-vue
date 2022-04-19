@@ -134,12 +134,12 @@ export default {
       const modifyItem = { ...this.modifyItem };
       for (let column of this._normalized_columns()) {
         if (modifyItem[column.key] === undefined) {
-          modifyItem[column.key] = column.defaultValue;
+          modifyItem[column.key] = column.defaultValue ?? null;
         } else {
           const valueToEdit = column.valueToEdit(modifyItem);
           if (modifyItem[column.key] !== valueToEdit) {
             modifyItem[`_${column.key}`] = modifyItem[column.key];
-            modifyItem[column.key] = valueToEdit;
+            modifyItem[column.key] = valueToEdit ?? null;
           }
         }
       }
