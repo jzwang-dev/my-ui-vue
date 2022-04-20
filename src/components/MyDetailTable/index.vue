@@ -51,7 +51,9 @@ export default {
 
   computed: {
     visibleColumns() {
-      return this.inner.columns.filter((column) => column.visible !== false);
+      return this.inner.columns.filter(
+        (column) => column.detailVisible !== false
+      );
     }
   },
 
@@ -73,6 +75,10 @@ export default {
 
     _normalized_columns() {
       return this.columns.map(_normalizeColumn);
+    },
+
+    _formatValue(format, value) {
+      return myUtil.formatValue(format, value);
     }
   },
 

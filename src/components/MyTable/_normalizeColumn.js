@@ -21,6 +21,7 @@ function _normalizeColumn(column) {
       editable: true,
       editVisible: column.visible ?? true,
       valueToEdit: (item) => item[column.key],
+      detailVisible: column.visible ?? true,
       dataType: String,
       validators: [],
       errors: [],
