@@ -97,19 +97,17 @@ export default {
   },
 
   computed: {
-    editVisibleColumns() {
-      return this.inner.columns.filter(
-        (column) => column.editVisible !== false
-      );
+    visibleColumns() {
+      return this.inner.columns.filter((column) => column.visible !== false);
     },
 
     _modifyColumns() {
       if (this.modifyMode === 'create') {
-        return this.editVisibleColumns.filter(
+        return this.visibleColumns.filter(
           (column) => !this.updateOnlyKeys.includes(column.key)
         );
       } else {
-        return this.editVisibleColumns;
+        return this.visibleColumns;
       }
     }
   },

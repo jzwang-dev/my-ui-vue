@@ -51,9 +51,7 @@ export default {
 
   computed: {
     visibleColumns() {
-      return this.inner.columns.filter(
-        (column) => column.detailVisible !== false
-      );
+      return this.inner.columns.filter((column) => column.visible !== false);
     }
   },
 

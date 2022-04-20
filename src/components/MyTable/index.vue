@@ -949,13 +949,9 @@ export default {
     },
 
     getExportParams() {
-      const exportVisibleColumns = this.displayingColumns.filter(
-        (column) => column.exportVisible !== false
-      );
-
       const exportItems = this.processedItems.map((item) => {
         const tmpItem = {};
-        exportVisibleColumns.forEach((column) => {
+        this.displayingColumns.forEach((column) => {
           let value = '';
 
           if (column.valueToExport) {
@@ -978,7 +974,7 @@ export default {
         return tmpItem;
       });
 
-      const exportColumns = exportVisibleColumns.map((column) => ({
+      const exportColumns = this.displayingColumns.map((column) => ({
         key: column.key,
         header: column.header ?? column.key
       }));
