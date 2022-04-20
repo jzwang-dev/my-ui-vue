@@ -21,7 +21,7 @@
           <my-detail-table
             :detailItem.sync="inner.detailItem"
             :columns="columns"
-            :invisibleKeys="invisibleKeys"
+            :invisibleColumnKeys="invisibleColumnKeys"
           >
             <template
               v-for="(_, slot) in $scopedSlots"
@@ -62,7 +62,7 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    invisibleKeys: {
+    invisibleColumnKeys: {
       type: Array,
       default() {
         return [];

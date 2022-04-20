@@ -39,7 +39,7 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    invisibleKeys: {
+    invisibleColumnKeys: {
       type: Array,
       default() {
         return [];
@@ -60,7 +60,8 @@ export default {
     visibleColumns() {
       return this.inner.columns.filter(
         (column) =>
-          column.visible !== false && !this.invisibleKeys.includes(column.key)
+          column.visible !== false &&
+          !this.invisibleColumnKeys.includes(column.key)
       );
     }
   },

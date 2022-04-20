@@ -24,8 +24,8 @@
             ref="modifyForm"
             :modifyItem.sync="inner.modifyItem"
             :columns="columns"
-            :invisibleKeys="invisibleKeys"
-            :updateOnlyKeys="updateOnlyKeys"
+            :invisibleColumnKeys="invisibleColumnKeys"
+            :updateOnlyColumnKeys="updateOnlyColumnKeys"
             :modifyMode="modifyMode"
             :showActions="false"
             @validate-item-failed="
@@ -78,14 +78,14 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    invisibleKeys: {
+    invisibleColumnKeys: {
       type: Array,
       default() {
         return [];
       }
     },
 
-    updateOnlyKeys: {
+    updateOnlyColumnKeys: {
       type: Array,
       default() {
         return [];

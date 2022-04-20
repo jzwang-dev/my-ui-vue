@@ -64,14 +64,14 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    invisibleKeys: {
+    invisibleColumnKeys: {
       type: Array,
       default() {
         return [];
       }
     },
 
-    updateOnlyKeys: {
+    updateOnlyColumnKeys: {
       type: Array,
       default() {
         return [];
@@ -107,14 +107,15 @@ export default {
     visibleColumns() {
       return this.inner.columns.filter(
         (column) =>
-          column.visible !== false && !this.invisibleKeys.includes(column.key)
+          column.visible !== false &&
+          !this.invisibleColumnKeys.includes(column.key)
       );
     },
 
     _modifyColumns() {
       if (this.modifyMode === 'create') {
         return this.visibleColumns.filter(
-          (column) => !this.updateOnlyKeys.includes(column.key)
+          (column) => !this.updateOnlyColumnKeys.includes(column.key)
         );
       } else {
         return this.visibleColumns;
