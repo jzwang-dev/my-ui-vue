@@ -21,7 +21,6 @@
           <my-detail-table
             :detailItem.sync="inner.detailItem"
             :columns="columns"
-            :displayingColumnKeys="displayingColumnKeys"
           >
             <template
               v-for="(_, slot) in $scopedSlots"
@@ -62,10 +61,6 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    displayingColumnKeys: {
-      type: Array
-    },
-
     title: {
       type: String
     },
@@ -98,8 +93,7 @@ export default {
     return {
       inner: {
         detailItem: this.detailItem,
-        columns: this.columns,
-        displayingColumnKeys: this.displayingColumnKeys
+        columns: this.columns
       }
     };
   },
@@ -167,21 +161,6 @@ export default {
       handler() {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this.columns;
-        }
-      }
-    },
-
-    'inner.displayingColumnKeys': {
-      handler() {
-        this.$emit('update:displayingColumnKeys', this.inner.displayingColumnKeys);
-      },
-      immediate: true
-    },
-
-    displayingColumnKeys: {
-      handler() {
-        if (this.inner.displayingColumnKeys !== this.displayingColumnKeys) {
-          this.inner.displayingColumnKeys = this.displayingColumnKeys;
         }
       }
     }

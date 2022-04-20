@@ -623,9 +623,7 @@ export default {
 
   computed: {
     visibleColumns() {
-      return this.inner.columns.filter(
-        (column) => column.visible !== false
-      );
+      return this.inner.columns.filter((column) => column.visible !== false);
     },
 
     displayingColumns() {
@@ -1152,7 +1150,10 @@ export default {
 
     'inner.displayingColumnKeys': {
       handler() {
-        this.$emit('update:displayingColumnKeys', this.inner.displayingColumnKeys);
+        this.$emit(
+          'update:displayingColumnKeys',
+          this.inner.displayingColumnKeys
+        );
       },
       immediate: true
     },
@@ -1160,7 +1161,8 @@ export default {
     displayingColumnKeys: {
       handler() {
         if (this.inner.displayingColumnKeys !== this.displayingColumnKeys) {
-          this.inner.displayingColumnKeys = this._normalized_displayingColumnKeys();
+          this.inner.displayingColumnKeys =
+            this._normalized_displayingColumnKeys();
         }
       }
     },

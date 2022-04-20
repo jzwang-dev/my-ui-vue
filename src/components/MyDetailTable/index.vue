@@ -37,10 +37,6 @@ export default {
       type: Array,
       required: true,
       validator: (columns) => columns.every((column) => column.key)
-    },
-
-    displayingColumnKeys: {
-      type: Array
     }
   },
 
@@ -48,23 +44,14 @@ export default {
     return {
       inner: {
         detailItem: this._normalized_detailItem(),
-        columns: this._normalized_columns(),
-        displayingColumnKeys: this._normalized_displayingColumnKeys()
+        columns: this._normalized_columns()
       }
     };
   },
 
   computed: {
     visibleColumns() {
-      return this.inner.columns.filter(
-        (column) => column.visible !== false
-      );
-    },
-
-    displayingColumns() {
-      return this.visibleColumns.filter((column) =>
-        this.inner.displayingColumnKeys.includes(column.key)
-      );
+      return this.inner.columns.filter((column) => column.visible !== false);
     }
   },
 
@@ -86,19 +73,6 @@ export default {
 
     _normalized_columns() {
       return this.columns.map(_normalizeColumn);
-    },
-
-    _normalized_displayingColumnKeys() {
-      const keys = this._normalized_columns()
-        .filter((column) => column.visible !== false)
-        .map((column) => column.key);
-      return (
-        this.displayingColumnKeys?.filter((key) => keys.includes(key)) ?? keys
-      );
-    },
-
-    _formatValue(format, value) {
-      return myUtil.formatValue(format, value);
     }
   },
 
@@ -132,21 +106,6 @@ export default {
       handler() {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this._normalized_columns();
-        }
-      }
-    },
-
-    'inner.displayingColumnKeys': {
-      handler() {
-        this.$emit('update:displayingColumnKeys', this.inner.displayingColumnKeys);
-      },
-      immediate: true
-    },
-
-    displayingColumnKeys: {
-      handler() {
-        if (this.inner.displayingColumnKeys !== this.displayingColumnKeys) {
-          this.inner.displayingColumnKeys = this._normalized_displayingColumnKeys();
         }
       }
     }

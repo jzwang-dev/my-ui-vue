@@ -64,10 +64,6 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    displayingColumnKeys: {
-      type: Array
-    },
-
     updateOnlyKeys: {
       type: Array,
       default() {
@@ -95,32 +91,25 @@ export default {
     return {
       inner: {
         modifyItem: this._normalized_modifyItem(),
-        columns: this._normalized_columns(),
-        displayingColumnKeys: this._normalized_displayingColumnKeys()
+        columns: this._normalized_columns()
       }
     };
   },
 
   computed: {
-    visibleColumns() {
+    editVisibleColumns() {
       return this.inner.columns.filter(
-        (column) => column.visible !== false
-      );
-    },
-
-    displayingColumns() {
-      return this.visibleColumns.filter((column) =>
-        this.inner.displayingColumnKeys.includes(column.key)
+        (column) => column.editVisible !== false
       );
     },
 
     _modifyColumns() {
       if (this.modifyMode === 'create') {
-        return this.displayingColumns.filter(
+        return this.editVisibleColumns.filter(
           (column) => !this.updateOnlyKeys.includes(column.key)
         );
       } else {
-        return this.displayingColumns;
+        return this.editVisibleColumns;
       }
     }
   },
@@ -149,15 +138,6 @@ export default {
 
     _normalized_columns() {
       return this.columns.map(_normalizeColumn);
-    },
-
-    _normalized_displayingColumnKeys() {
-      const keys = this._normalized_columns()
-        .filter((column) => column.visible !== false)
-        .map((column) => column.key);
-      return (
-        this.displayingColumnKeys?.filter((key) => keys.includes(key)) ?? keys
-      );
     },
 
     _isColumnRequired(column) {
@@ -255,21 +235,6 @@ export default {
       handler() {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this._normalized_columns();
-        }
-      }
-    },
-
-    'inner.displayingColumnKeys': {
-      handler() {
-        this.$emit('update:displayingColumnKeys', this.inner.displayingColumnKeys);
-      },
-      immediate: true
-    },
-
-    displayingColumnKeys: {
-      handler() {
-        if (this.inner.displayingColumnKeys !== this.displayingColumnKeys) {
-          this.inner.displayingColumnKeys = this._normalized_displayingColumnKeys();
         }
       }
     }
