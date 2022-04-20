@@ -45,6 +45,7 @@
 import ColumnEditControl from '../MyTable/components/_ColumnEditControl.vue';
 import _normalizeColumn from '../MyTable/_normalizeColumn';
 import columnsUtil from '../MyTable/utils/columnsUtil';
+import messageUtil from '../../utils/messageUtil';
 
 export default {
   name: 'MyModifyForm',
@@ -190,6 +191,13 @@ export default {
           errors: this.getErrors(),
           item: this.inner.modifyItem
         });
+
+        this.$nextTick(() => {
+          const el = document.querySelector('.is-invalid:first-of-type');
+          el?.scrollIntoView();
+          messageUtil.toast('請確認輸入是否有誤！？', 'error');
+        });
+
         return;
       }
 

@@ -18,7 +18,10 @@ function _prompt(message, _default) {
 }
 
 function toast(message, type = 'warning') {
-  console.log(`${type}: ${message}`);
+  return new Promise((resolve) => {
+    console.log(`${type}: ${message}`);
+    resolve();
+  });
 }
 
 export default {

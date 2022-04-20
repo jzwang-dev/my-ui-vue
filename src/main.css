@@ -5,11 +5,13 @@
 .was-validated .form-control:invalid,
 .form-control.is-invalid {
   background-image: none;
+  padding-right: 0.75rem !important;
 }
 
 .was-validated .form-control:valid,
 .form-control.is-valid {
   background-image: none;
+  padding-right: 0.75rem !important;
 }
 
 .input-icon-left,
