@@ -5,7 +5,7 @@ function _normalizeColumn(column) {
   const normalizedColumn = Object.assign(
     {
       header: column.key,
-      displayable: true,
+      visible: true,
       value: (item) => item[column.key],
       defaultValue: null,
       format: (value) => value,
@@ -16,9 +16,10 @@ function _normalizeColumn(column) {
       thStyle: null,
       tdClass: null,
       tdStyle: null,
-      exportable: true,
+      exportVisible: column.visible ?? true,
       valueToExport: (item) => item[column.key],
       editable: true,
+      editVisible: column.visible ?? true,
       valueToEdit: (item) => item[column.key],
       dataType: String,
       validators: [],

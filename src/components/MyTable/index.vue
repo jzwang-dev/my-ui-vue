@@ -98,7 +98,7 @@ author: jzwang
           </select>
           項結果
         </template>
-        <div class="dropdown ml-1" v-if="showVisibleColumns">
+        <div class="dropdown ml-1" v-if="showDisplayingColumns">
           <button
             class="btn btn-outline-secondary dropdown-toggle"
             type="button"
@@ -110,19 +110,19 @@ author: jzwang
             <form class="px-4 py-3">
               <div
                 class="custom-control custom-checkbox"
-                v-for="column in displayableColumns"
+                v-for="column in visibleColumns"
                 :key="column.key"
               >
                 <input
                   type="checkbox"
                   class="custom-control-input"
-                  :id="`visibleColumnKeys_${column.key}`"
+                  :id="`displayingColumnKeys_${column.key}`"
                   :value="column.key"
-                  v-model="inner.visibleColumnKeys"
+                  v-model="inner.displayingColumnKeys"
                 />
                 <label
                   class="custom-control-label d-inline-block"
-                  :for="`visibleColumnKeys_${column.key}`"
+                  :for="`displayingColumnKeys_${column.key}`"
                   >{{ column.header }}</label
                 >
               </div>
@@ -181,7 +181,7 @@ author: jzwang
             </div>
           </th>
           <th
-            v-for="column in visibleColumns"
+            v-for="column in displayingColumns"
             :key="column.key"
             :class="[{ sortable: column.sortable !== false }, column.thClass]"
             :style="column.thStyle"
@@ -225,7 +225,7 @@ author: jzwang
             </div>
           </td>
           <td
-            v-for="column in visibleColumns"
+            v-for="column in displayingColumns"
             :key="column.key"
             :data-title="column.header"
           >
@@ -403,7 +403,7 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    visibleColumnKeys: {
+    displayingColumnKeys: {
       type: Array
     },
 
@@ -508,7 +508,7 @@ export default {
       default: true
     },
 
-    showVisibleColumns: {
+    showDisplayingColumns: {
       type: Boolean,
       default: true
     },
@@ -603,7 +603,7 @@ export default {
     return {
       inner: {
         columns: this._normalized_columns(),
-        visibleColumnKeys: this._normalized_visibleColumnKeys(),
+        displayingColumnKeys: this._normalized_displayingColumnKeys(),
         selected: this._normalized_selected(),
         searchTerm: this._normalized_searchTerm(),
         searchFilter: this._normalized_searchFilter(),
@@ -622,15 +622,15 @@ export default {
   },
 
   computed: {
-    displayableColumns() {
+    visibleColumns() {
       return this.inner.columns.filter(
-        (column) => column.displayable !== false
+        (column) => column.visible !== false
       );
     },
 
-    visibleColumns() {
-      return this.displayableColumns.filter((column) =>
-        this.inner.visibleColumnKeys.includes(column.key)
+    displayingColumns() {
+      return this.visibleColumns.filter((column) =>
+        this.inner.displayingColumnKeys.includes(column.key)
       );
     },
 
@@ -701,12 +701,12 @@ export default {
       return this.columns.map(_normalizeColumn);
     },
 
-    _normalized_visibleColumnKeys() {
+    _normalized_displayingColumnKeys() {
       const keys = this._normalized_columns()
-        .filter((column) => column.displayable !== false)
+        .filter((column) => column.visible !== false)
         .map((column) => column.key);
       return (
-        this.visibleColumnKeys?.filter((key) => keys.includes(key)) ?? keys
+        this.displayingColumnKeys?.filter((key) => keys.includes(key)) ?? keys
       );
     },
 
@@ -722,7 +722,7 @@ export default {
       return Object.assign(
         {},
         this._normalized_columns()
-          .filter((column) => column.displayable !== false)
+          .filter((column) => column.visible !== false)
           .reduce((prev, curr) => ({ ...prev, [curr.key]: null }), {}),
         this.searchFilter
       );
@@ -841,7 +841,7 @@ export default {
             normalizedSearchTerm = normalizedSearchTerm.toLowerCase();
           }
 
-          for (let column of this.displayableColumns) {
+          for (let column of this.visibleColumns) {
             let passed = false;
             let value = column.value ? column.value(item) : item[column.key];
             if (value != null) {
@@ -901,7 +901,7 @@ export default {
 
       if (this.inner.sorting?.key) {
         items.sort((a, b) => {
-          const column = this.displayableColumns.find(
+          const column = this.visibleColumns.find(
             (column) => column.key === this.inner.sorting.key
           );
 
@@ -951,13 +951,13 @@ export default {
     },
 
     getExportParams() {
-      const exportableColumns = this.visibleColumns.filter(
-        (column) => column.exportable !== false
+      const exportVisibleColumns = this.displayingColumns.filter(
+        (column) => column.exportVisible !== false
       );
 
       const exportItems = this.processedItems.map((item) => {
         const tmpItem = {};
-        exportableColumns.forEach((column) => {
+        exportVisibleColumns.forEach((column) => {
           let value = '';
 
           if (column.valueToExport) {
@@ -980,7 +980,7 @@ export default {
         return tmpItem;
       });
 
-      const exportColumns = exportableColumns.map((column) => ({
+      const exportColumns = exportVisibleColumns.map((column) => ({
         key: column.key,
         header: column.header ?? column.key
       }));
@@ -1150,17 +1150,17 @@ export default {
       }
     },
 
-    'inner.visibleColumnKeys': {
+    'inner.displayingColumnKeys': {
       handler() {
-        this.$emit('update:visibleColumnKeys', this.inner.visibleColumnKeys);
+        this.$emit('update:displayingColumnKeys', this.inner.displayingColumnKeys);
       },
       immediate: true
     },
 
-    visibleColumnKeys: {
+    displayingColumnKeys: {
       handler() {
-        if (this.inner.visibleColumnKeys !== this.visibleColumnKeys) {
-          this.inner.visibleColumnKeys = this._normalized_visibleColumnKeys();
+        if (this.inner.displayingColumnKeys !== this.displayingColumnKeys) {
+          this.inner.displayingColumnKeys = this._normalized_displayingColumnKeys();
         }
       }
     },

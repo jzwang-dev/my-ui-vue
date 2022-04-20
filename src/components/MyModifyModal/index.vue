@@ -24,7 +24,7 @@
             ref="modifyForm"
             :modifyItem.sync="inner.modifyItem"
             :columns="columns"
-            :visibleColumnKeys="visibleColumnKeys"
+            :displayingColumnKeys="displayingColumnKeys"
             :updateOnlyKeys="updateOnlyKeys"
             :modifyMode="modifyMode"
             :showActions="false"
@@ -78,7 +78,7 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    visibleColumnKeys: {
+    displayingColumnKeys: {
       type: Array
     },
 
@@ -122,7 +122,7 @@ export default {
       inner: {
         modifyItem: this.modifyItem,
         columns: this.columns,
-        visibleColumnKeys: this.visibleColumnKeys
+        displayingColumnKeys: this.displayingColumnKeys
       }
     };
   },
@@ -204,17 +204,17 @@ export default {
       }
     },
 
-    'inner.visibleColumnKeys': {
+    'inner.displayingColumnKeys': {
       handler() {
-        this.$emit('update:visibleColumnKeys', this.inner.visibleColumnKeys);
+        this.$emit('update:displayingColumnKeys', this.inner.displayingColumnKeys);
       },
       immediate: true
     },
 
-    visibleColumnKeys: {
+    displayingColumnKeys: {
       handler() {
-        if (this.inner.visibleColumnKeys !== this.visibleColumnKeys) {
-          this.inner.visibleColumnKeys = this.visibleColumnKeys;
+        if (this.inner.displayingColumnKeys !== this.displayingColumnKeys) {
+          this.inner.displayingColumnKeys = this.displayingColumnKeys;
         }
       }
     }

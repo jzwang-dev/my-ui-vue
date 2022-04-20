@@ -64,7 +64,7 @@ export default {
       validator: (columns) => columns.every((column) => column.key)
     },
 
-    visibleColumnKeys: {
+    displayingColumnKeys: {
       type: Array
     },
 
@@ -96,31 +96,31 @@ export default {
       inner: {
         modifyItem: this._normalized_modifyItem(),
         columns: this._normalized_columns(),
-        visibleColumnKeys: this._normalized_visibleColumnKeys()
+        displayingColumnKeys: this._normalized_displayingColumnKeys()
       }
     };
   },
 
   computed: {
-    displayableColumns() {
+    visibleColumns() {
       return this.inner.columns.filter(
-        (column) => column.displayable !== false
+        (column) => column.visible !== false
       );
     },
 
-    visibleColumns() {
-      return this.displayableColumns.filter((column) =>
-        this.inner.visibleColumnKeys.includes(column.key)
+    displayingColumns() {
+      return this.visibleColumns.filter((column) =>
+        this.inner.displayingColumnKeys.includes(column.key)
       );
     },
 
     _modifyColumns() {
       if (this.modifyMode === 'create') {
-        return this.visibleColumns.filter(
+        return this.displayingColumns.filter(
           (column) => !this.updateOnlyKeys.includes(column.key)
         );
       } else {
-        return this.visibleColumns;
+        return this.displayingColumns;
       }
     }
   },
@@ -151,12 +151,12 @@ export default {
       return this.columns.map(_normalizeColumn);
     },
 
-    _normalized_visibleColumnKeys() {
+    _normalized_displayingColumnKeys() {
       const keys = this._normalized_columns()
-        .filter((column) => column.displayable !== false)
+        .filter((column) => column.visible !== false)
         .map((column) => column.key);
       return (
-        this.visibleColumnKeys?.filter((key) => keys.includes(key)) ?? keys
+        this.displayingColumnKeys?.filter((key) => keys.includes(key)) ?? keys
       );
     },
 
@@ -259,17 +259,17 @@ export default {
       }
     },
 
-    'inner.visibleColumnKeys': {
+    'inner.displayingColumnKeys': {
       handler() {
-        this.$emit('update:visibleColumnKeys', this.inner.visibleColumnKeys);
+        this.$emit('update:displayingColumnKeys', this.inner.displayingColumnKeys);
       },
       immediate: true
     },
 
-    visibleColumnKeys: {
+    displayingColumnKeys: {
       handler() {
-        if (this.inner.visibleColumnKeys !== this.visibleColumnKeys) {
-          this.inner.visibleColumnKeys = this._normalized_visibleColumnKeys();
+        if (this.inner.displayingColumnKeys !== this.displayingColumnKeys) {
+          this.inner.displayingColumnKeys = this._normalized_displayingColumnKeys();
         }
       }
     }
