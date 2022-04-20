@@ -18,6 +18,7 @@ author: jzwang
           class="btn btn-primary"
           @click="_onCreate"
           v-if="showCreate"
+          :disabled="_inlineCreating"
         >
           <i class="fas fa-plus"></i> 新增
         </button>
@@ -688,6 +689,10 @@ export default {
         this.inner.paging.page * this.inner.paging.itemsPerPage - 1,
         this.totalItems - 1
       );
+    },
+
+    _inlineCreating() {
+      return this.items?.some((item) => item._itemIndex != null) ?? false;
     }
   },
 
