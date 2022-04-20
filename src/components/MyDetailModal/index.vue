@@ -21,6 +21,7 @@
           <my-detail-table
             :detailItem.sync="inner.detailItem"
             :columns="columns"
+            :invisibleKeys="invisibleKeys"
           >
             <template
               v-for="(_, slot) in $scopedSlots"
@@ -59,6 +60,13 @@ export default {
       type: Array,
       required: true,
       validator: (columns) => columns.every((column) => column.key)
+    },
+
+    invisibleKeys: {
+      type: Array,
+      default() {
+        return [];
+      }
     },
 
     title: {

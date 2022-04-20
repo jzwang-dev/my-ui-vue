@@ -37,6 +37,13 @@ export default {
       type: Array,
       required: true,
       validator: (columns) => columns.every((column) => column.key)
+    },
+
+    invisibleKeys: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
 
@@ -51,7 +58,10 @@ export default {
 
   computed: {
     visibleColumns() {
-      return this.inner.columns.filter((column) => column.visible !== false);
+      return this.inner.columns.filter(
+        (column) =>
+          column.visible !== false && !this.invisibleKeys.includes(column.key)
+      );
     }
   },
 

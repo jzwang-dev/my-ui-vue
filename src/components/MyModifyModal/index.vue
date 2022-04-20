@@ -24,6 +24,7 @@
             ref="modifyForm"
             :modifyItem.sync="inner.modifyItem"
             :columns="columns"
+            :invisibleKeys="invisibleKeys"
             :updateOnlyKeys="updateOnlyKeys"
             :modifyMode="modifyMode"
             :showActions="false"
@@ -75,6 +76,13 @@ export default {
       type: Array,
       required: true,
       validator: (columns) => columns.every((column) => column.key)
+    },
+
+    invisibleKeys: {
+      type: Array,
+      default() {
+        return [];
+      }
     },
 
     updateOnlyKeys: {
