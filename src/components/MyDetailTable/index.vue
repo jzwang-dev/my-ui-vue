@@ -1,18 +1,30 @@
 <template>
   <table class="detail condensed" v-if="inner.detailItem">
-    <tr v-for="column in visibleColumns" :key="column.key">
-      <th>{{ column.header }}</th>
-      <td>
-        <slot
-          :name="`item-${column.key}`"
-          :item="inner.detailItem"
-          :column="column"
-        >
-          <!-- prettier-ignore -->
-          <div class="pre-line">{{ _formatValue(column.format, column.value(inner.detailItem)) | nulltext(column.nullText) }}</div>
-        </slot>
-      </td>
-    </tr>
+    <template v-for="column in visibleColumns">
+      <slot
+        :name="`before-${column.key}`"
+        :item="inner.detailItem"
+        :column="column"
+      ></slot>
+      <tr :key="column.key">
+        <th>{{ column.header }}</th>
+        <td>
+          <slot
+            :name="`item-${column.key}`"
+            :item="inner.detailItem"
+            :column="column"
+          >
+            <!-- prettier-ignore -->
+            <div class="pre-line">{{ _formatValue(column.format, column.value(inner.detailItem)) | nulltext(column.nullText) }}</div>
+          </slot>
+        </td>
+      </tr>
+      <slot
+        :name="`after-${column.key}`"
+        :item="inner.detailItem"
+        :column="column"
+      ></slot>
+    </template>
   </table>
 </template>
 

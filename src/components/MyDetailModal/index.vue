@@ -18,6 +18,7 @@
           </button>
         </div>
         <div class="modal-body">
+          <slot name="body-begin" :item="inner.detailItem"></slot>
           <my-detail-table
             :detailItem.sync="inner.detailItem"
             :columns="columns"
@@ -30,6 +31,7 @@
               <slot :name="slot" v-bind="slotProps" />
             </template>
           </my-detail-table>
+          <slot name="body-end" :item="inner.detailItem"></slot>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">

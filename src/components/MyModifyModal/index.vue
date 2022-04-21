@@ -20,6 +20,7 @@
           </button>
         </div>
         <div class="modal-body">
+          <slot name="body-begin" :item="inner.modifyItem"></slot>
           <my-modify-form
             ref="modifyForm"
             :modifyItem.sync="inner.modifyItem"
@@ -43,6 +44,7 @@
               <slot :name="slot" v-bind="slotProps" />
             </template>
           </my-modify-form>
+          <slot name="body-end" :item="inner.modifyItem"></slot>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">

@@ -2,6 +2,11 @@
   <form :id="id" @submit.prevent v-if="inner.modifyItem">
     <template v-for="column in _modifyColumns">
       <slot
+        :name="`before-${column.key}`"
+        :item="inner.modifyItem"
+        :column="column"
+      ></slot>
+      <slot
         :name="`edit-${column.key}`"
         :item="inner.modifyItem"
         :column="column"
@@ -18,7 +23,7 @@
             <column-edit-control
               :column="column"
               :editItem.sync="inner.modifyItem"
-              :idPrefix="'`modify-'"
+              :idPrefix="'modify-'"
               @model-change="
                 (value, column) =>
                   _onColumnEditControlModelChange(value, column)
@@ -31,6 +36,11 @@
           </div>
         </div>
       </slot>
+      <slot
+        :name="`after-${column.key}`"
+        :item="inner.modifyItem"
+        :column="column"
+      ></slot>
     </template>
     <div v-if="showActions">
       <button type="button" class="btn btn-primary" @click="save">儲存</button>
