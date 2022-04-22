@@ -27,6 +27,7 @@
             :columns="columns"
             :invisibleColumnKeys="invisibleColumnKeys"
             :updateOnlyColumnKeys="updateOnlyColumnKeys"
+            :hideHeaderColumnKeys="hideHeaderColumnKeys"
             :modifyMode="modifyMode"
             :showActions="false"
             @validate-item-failed="
@@ -88,6 +89,13 @@ export default {
     },
 
     updateOnlyColumnKeys: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+
+    hideHeaderColumnKeys: {
       type: Array,
       default() {
         return [];

@@ -21,6 +21,7 @@ function requiredIf(testFunc, errMsg = '此為必填欄位') {
   const validator = (value, item) =>
     !testFunc(value, item) || required(errMsg)(value);
   validator.validatorName = 'requiredIf';
+  validator.testFunc = testFunc;
   return validator;
 }
 

@@ -12,7 +12,9 @@
         :column="column"
       >
         <div class="form-group" :key="column.key">
-          <label :for="`modify-${column.key}`"
+          <label
+            :for="`modify-${column.key}`"
+            v-if="!hideHeaderColumnKeys.includes(column.key)"
             >{{ column.header
             }}{{ _isColumnRequired(column) ? '*' : '' }}</label
           >
@@ -83,6 +85,13 @@ export default {
     },
 
     updateOnlyColumnKeys: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+
+    hideHeaderColumnKeys: {
       type: Array,
       default() {
         return [];
@@ -161,9 +170,16 @@ export default {
     },
 
     _isColumnRequired(column) {
-      return column.validators
-        ?.map((validator) => validator.validatorName)
-        .includes('required');
+      const isRequired = column.validators?.some(
+        (validator) =>
+          validator.validatorName === 'required' ||
+          (validator.validatorName === 'requiredIf' &&
+            validator.testFunc(
+              this.inner.modifyItem[column.key],
+              this.inner.modifyItem
+            ))
+      );
+      return isRequired;
     },
 
     _validateModifyItemField(value, column) {
