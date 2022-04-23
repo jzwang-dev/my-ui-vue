@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import MyDetailTable from '../MyDetailTable';
 
 export default {

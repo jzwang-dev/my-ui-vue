@@ -365,9 +365,8 @@ author: jzwang
 
 <script>
 import MyPaginator from '../MyPaginator';
-import ColumnEditControl from './components/_ColumnEditControl.vue';
+import ColumnEditControl from '../MyColumnEditControl';
 import _normalizeColumn from './_normalizeColumn';
-import columnsUtil from './utils/columnsUtil';
 import {
   defaultFiltering,
   defaultSorting,
@@ -377,6 +376,7 @@ import {
 } from '../../configs';
 import myUtil from '../../utils/myUtil';
 import exportUtil from '../../utils/exportUtil';
+import columnsUtil from '../../utils/columnsUtil';
 import { nulltext } from '../../filters';
 
 export default {
@@ -1027,9 +1027,11 @@ export default {
     },
 
     _onColumnEditControlModelChange(value, column, event) {
-      console.log('(MyTable)_onColumnEditControlModelChange', value, event);
+      //console.log('(MyTable)_onColumnEditControlModelChange', value, event);
 
-      columnsUtil.validateColumn(value, column, this.inner.inlineEditItem);
+      if (event) {
+        columnsUtil.validateColumn(value, column, this.inner.inlineEditItem);
+      }
     },
 
     _onSave() {

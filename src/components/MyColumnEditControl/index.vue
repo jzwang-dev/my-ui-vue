@@ -132,12 +132,12 @@
 </template>
 
 <script>
-import MyRadioButtonList from '../../MyRadioButtonList';
-import MyCheckBox from '../../MyCheckBox';
-import MyCheckBoxList from '../../MyCheckBoxList';
+import MyRadioButtonList from '../MyRadioButtonList';
+import MyCheckBox from '../MyCheckBox';
+import MyCheckBoxList from '../MyCheckBoxList';
 
 export default {
-  name: 'ColumnEditControl',
+  name: 'MyColumnEditControl',
 
   inheritAttrs: false,
 

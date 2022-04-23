@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import ColumnEditControl from '../MyTable/components/_ColumnEditControl.vue';
+import ColumnEditControl from '../MyColumnEditControl';
 import _normalizeColumn from '../MyTable/_normalizeColumn';
-import columnsUtil from '../MyTable/utils/columnsUtil';
+import columnsUtil from '../../utils/columnsUtil';
 import messageUtil from '../../utils/messageUtil';
 
 export default {
@@ -189,13 +189,15 @@ export default {
     },
 
     _onColumnEditControlModelChange(value, column, event) {
-      console.log(
-        '(MyModifyForm)_onColumnEditControlModelChange',
-        value,
-        event
-      );
+      // console.log(
+      //   '(MyModifyForm)_onColumnEditControlModelChange',
+      //   value,
+      //   event
+      // );
 
-      columnsUtil.validateColumn(value, column, this.inner.modifyItem);
+      if (event) {
+        columnsUtil.validateColumn(value, column, this.inner.modifyItem);
+      }
     },
 
     save() {

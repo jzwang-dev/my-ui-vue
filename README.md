@@ -22,6 +22,10 @@ cd sampleapp
 ```
 npm install git+https://github.com/jianzhong-wang/my-ui-vue.git
 ```
+#### Install peerDependencies
+```
+npm install "bootstrap@^4.6.1" "@fortawesome/fontawesome-free@^5.15.4" "jquery@^3.6.0" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
+```
 ### yarn
 #### Install my-ui-vue
 ```

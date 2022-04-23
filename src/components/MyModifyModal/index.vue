@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import MyModifyForm from '../MyModifyForm';
 
 export default {
