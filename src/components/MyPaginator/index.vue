@@ -11,14 +11,14 @@ author: jzwang
           :class="{ disabled: !totalPages }"
           v-if="inner.paginator.showFirst"
         >
-          <a class="page-link" href="#" @click.prevent="_doPage(1)">首頁</a>
+          <a class="page-link" href="#" @click.prevent="doPage(1)">首頁</a>
         </li>
         <li
           class="page-item"
           :class="{ disabled: prevPage == 0 }"
           v-if="inner.paginator.showPrev"
         >
-          <a class="page-link" href="#" @click.prevent="_doPage(prevPage)"
+          <a class="page-link" href="#" @click.prevent="doPage(prevPage)"
             >上頁</a
           >
         </li>
@@ -26,7 +26,7 @@ author: jzwang
           class="page-item"
           v-if="prevGrpPage != 0 && inner.paginator.showPrevGrp"
         >
-          <a class="page-link" href="#" @click.prevent="_doPage(prevGrpPage)"
+          <a class="page-link" href="#" @click.prevent="doPage(prevGrpPage)"
             >...</a
           >
         </li>
@@ -37,7 +37,7 @@ author: jzwang
             v-for="page in pages"
             :key="page"
           >
-            <a class="page-link" href="#" @click.prevent="_doPage(page)">{{
+            <a class="page-link" href="#" @click.prevent="doPage(page)">{{
               page
             }}</a>
           </li>
@@ -46,7 +46,7 @@ author: jzwang
           class="page-item"
           v-if="nextGrpPage != 0 && inner.paginator.showNextGrp"
         >
-          <a class="page-link" href="#" @click.prevent="_doPage(nextGrpPage)"
+          <a class="page-link" href="#" @click.prevent="doPage(nextGrpPage)"
             >...</a
           >
         </li>
@@ -55,7 +55,7 @@ author: jzwang
           :class="{ disabled: nextPage == 0 }"
           v-if="inner.paginator.showNext"
         >
-          <a class="page-link" href="#" @click.prevent="_doPage(nextPage)"
+          <a class="page-link" href="#" @click.prevent="doPage(nextPage)"
             >下頁</a
           >
         </li>
@@ -64,7 +64,7 @@ author: jzwang
           :class="{ disabled: !totalPages }"
           v-if="inner.paginator.showLast"
         >
-          <a class="page-link" href="#" @click.prevent="_doPage(totalPages)"
+          <a class="page-link" href="#" @click.prevent="doPage(totalPages)"
             >末頁</a
           >
         </li>
@@ -235,9 +235,12 @@ export default {
       return Object.assign({}, defaultPaginator, this.paginator);
     },
 
-    _doPage(page) {
+    doPage(page, itemsPerPage) {
       this.inner.paging.page = page;
-      this.$emit('change-page', page);
+      if (itemsPerPage != null) {
+        this.inner.paging.itemsPerPage = itemsPerPage;
+      }
+      this.$emit('change-paging', this.inner.paging);
     }
   },
 

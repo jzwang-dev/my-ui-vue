@@ -136,6 +136,7 @@ author: jzwang
 
     <!-- pagebar(top) (begin) -->
     <div
+      ref="paginator"
       class="pagebar border d-sm-flex align-items-center justify-content-between p-2"
       :class="pagebarClass"
       :style="pagebarStyle"
@@ -185,7 +186,7 @@ author: jzwang
             :key="column.key"
             :class="[{ sortable: column.sortable !== false }, column.thClass]"
             :style="column.thStyle"
-            @click="column.sortable !== false && _doSort(column.key)"
+            @click="column.sortable !== false && doSort(column.key)"
           >
             {{ column.header }}
             <i
@@ -333,6 +334,7 @@ author: jzwang
 
     <!-- pagebar(bottom) (begin) -->
     <div
+      ref="paginator"
       class="pagebar border d-sm-flex align-items-center justify-content-between p-2"
       :class="pagebarClass"
       :style="pagebarStyle"
@@ -344,7 +346,10 @@ author: jzwang
           :paging.sync="inner.paging"
           :paginator.sync="inner.paginator"
           :totalItems="totalItems"
-          @change-page="(page) => $emit('change-page', page)"
+          @change-paging="
+            ({ page, itemsPerPage }) =>
+              $emit('change-paging', { page, itemsPerPage })
+          "
           v-if="showPaginator && inner.paging.itemsPerPage > 0"
         ></my-paginator>
         <slot name="pagebar-left-after" :vmData="$data"></slot>
@@ -793,10 +798,29 @@ export default {
       }, 500);
     },
 
-    _doSort(key) {
+    doFilter(searchTerm, searchFilter) {
+      this.inner.searchTerm = searchTerm ?? '';
+      Object.assign(this.inner.searchFilter, searchFilter);
+      this.$emit('change-filtering', {
+        searchTerm: this.inner.searchTerm,
+        searchFilter: this.inner.searchFilter
+      });
+    },
+
+    doSort(key, direction) {
+      if (direction != null) {
+        this.inner.sorting = {
+          key,
+          direction
+        };
+        this.$emit('change-sorting', this.inner.sorting);
+        return;
+      }
+
       if (this.inner.sorting.key !== key) {
         this.inner.sorting.direction = 'asc';
         this.inner.sorting.key = key;
+        this.$emit('change-sorting', this.inner.sorting);
         return;
       }
 
@@ -806,6 +830,11 @@ export default {
         this.inner.sorting.key = '';
         this.inner.sorting.direction = 'asc';
       }
+      this.$emit('change-sorting', this.inner.sorting);
+    },
+
+    doPage(page, itemsPerPage) {
+      this.$refs.paginator.doPage(page, itemsPerPage);
     },
 
     _processItems() {
