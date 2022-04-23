@@ -1,22 +1,14 @@
 <template>
-  <div class="my-test-comp">
+  <div class="my-dummy-button">
     <button type="button" class="btn btn-primary" @click="count++">
-      click
+      clicked {{ count }} time(s)
     </button>
-    <div>clicked {{ count }} time(s).</div>
   </div>
 </template>
 
-<style scoped>
-.my-test-comp {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-</style>
-
 <script>
 export default {
-  name: 'MyTestComp',
+  name: 'MyDummyButton',
 
   data() {
     return {

@@ -20,7 +20,7 @@
     class="form-control"
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
-    @input="_onModelChange($event.target.value, column)"
+    @input="_onModelChange($event.target.value, $event)"
   />
 
   <select
@@ -36,7 +36,7 @@
     class="form-control"
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
-    @change="_onModelChange($event.target.value, column)"
+    @change="_onModelChange($event.target.value, $event)"
   >
     <option
       :value="column.control.emptyOptionValue"
@@ -70,7 +70,8 @@
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
     :inputClass="{ 'is-invalid': column.errors.length }"
-    @change="_onModelChange($event, column)"
+    @change="_onModelChange($event)"
+    @change.native="_onModelChange(inner.editItem[column.key], $event)"
   />
 
   <my-check-box
@@ -88,7 +89,8 @@
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
     :inputClass="{ 'is-invalid': column.errors.length }"
-    @change="_onModelChange($event, column)"
+    @change="_onModelChange($event)"
+    @change.native="_onModelChange(inner.editItem[column.key], $event)"
   />
 
   <my-check-box-list
@@ -107,7 +109,8 @@
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
     :inputClass="{ 'is-invalid': column.errors.length }"
-    @change="_onModelChange($event, column)"
+    @change="_onModelChange($event)"
+    @change.native="_onModelChange(inner.editItem[column.key], $event)"
   />
 
   <textarea
@@ -124,14 +127,14 @@
     class="form-control"
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
-    @input="_onModelChange($event.target.value, column)"
+    @input="_onModelChange($event.target.value, $event)"
   ></textarea>
 </template>
 
 <script>
-import MyRadioButtonList from '../../controls/MyRadioButtonList';
-import MyCheckBox from '../../controls/MyCheckBox';
-import MyCheckBoxList from '../../controls/MyCheckBoxList';
+import MyRadioButtonList from '../../MyRadioButtonList';
+import MyCheckBox from '../../MyCheckBox';
+import MyCheckBoxList from '../../MyCheckBoxList';
 
 export default {
   name: 'ColumnEditControl',
@@ -170,8 +173,8 @@ export default {
   },
 
   methods: {
-    _onModelChange(value, column) {
-      this.$emit('model-change', value, column);
+    _onModelChange(value, event) {
+      this.$emit('model-change', value, event);
     }
   },
 

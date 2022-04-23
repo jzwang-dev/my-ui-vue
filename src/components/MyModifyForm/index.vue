@@ -27,8 +27,8 @@
               :editItem.sync="inner.modifyItem"
               :idPrefix="'modify-'"
               @model-change="
-                (value, column) =>
-                  _onColumnEditControlModelChange(value, column)
+                (value, event) =>
+                  _onColumnEditControlModelChange(value, column, event)
               "
               :disabled="column.editable === false"
             />
@@ -173,14 +173,6 @@ export default {
       return columnsUtil.isColumnRequired(column, this.inner.modifyItem);
     },
 
-    _validateModifyItemField(value, column) {
-      return columnsUtil.validateItemField(
-        value,
-        column,
-        this.inner.modifyItem
-      );
-    },
-
     validateModifyItem() {
       return columnsUtil.validateItem(
         this.inner.columns,
@@ -196,10 +188,14 @@ export default {
       return columnsUtil.getErrors(this.inner.columns);
     },
 
-    _onColumnEditControlModelChange(value, column) {
-      //console.log('_onColumnEditControlModelChange', value);
+    _onColumnEditControlModelChange(value, column, event) {
+      console.log(
+        '(MyModifyForm)_onColumnEditControlModelChange',
+        value,
+        event
+      );
 
-      columnsUtil.handleColumnModelChange(value, column, this.inner.modifyItem);
+      columnsUtil.validateColumn(value, column, this.inner.modifyItem);
     },
 
     save() {

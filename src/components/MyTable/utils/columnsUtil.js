@@ -46,7 +46,7 @@ function getErrors(columns) {
   });
 }
 
-function handleColumnModelChange(value, column, item) {
+function validateColumn(value, column, item) {
   if (column.validationMode?.lazy !== true) {
     validateItemField(value, column, item);
   }
@@ -67,6 +67,6 @@ export default {
   validateItem,
   clearErrors,
   getErrors,
-  handleColumnModelChange,
+  validateColumn,
   isColumnRequired
 };
