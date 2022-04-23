@@ -45,6 +45,7 @@
 
 <script>
 import $ from 'jquery';
+import 'bootstrap/js/dist/modal';
 import MyDetailTable from '../MyDetailTable';
 
 export default {

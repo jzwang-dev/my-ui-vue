@@ -62,6 +62,7 @@
 
 <script>
 import $ from 'jquery';
+import 'bootstrap/js/dist/modal';
 import MyModifyForm from '../MyModifyForm';
 
 export default {
