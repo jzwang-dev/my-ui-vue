@@ -170,16 +170,7 @@ export default {
     },
 
     _isColumnRequired(column) {
-      const isRequired = column.validators?.some(
-        (validator) =>
-          validator.validatorName === 'required' ||
-          (validator.validatorName === 'requiredIf' &&
-            validator.testFunc(
-              this.inner.modifyItem[column.key],
-              this.inner.modifyItem
-            ))
-      );
-      return isRequired;
+      return columnsUtil.isColumnRequired(column, this.inner.modifyItem);
     },
 
     _validateModifyItemField(value, column) {

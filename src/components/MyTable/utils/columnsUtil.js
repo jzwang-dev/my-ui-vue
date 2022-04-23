@@ -52,10 +52,21 @@ function handleColumnModelChange(value, column, item) {
   }
 }
 
+function isColumnRequired(column, item) {
+  const isRequired = column.validators?.some(
+    (validator) =>
+      validator.validatorName === 'required' ||
+      (validator.validatorName === 'requiredIf' &&
+        validator.testFunc(item[column.key], item))
+  );
+  return isRequired;
+}
+
 export default {
   validateItemField,
   validateItem,
   clearErrors,
   getErrors,
-  handleColumnModelChange
+  handleColumnModelChange,
+  isColumnRequired
 };
