@@ -47,6 +47,15 @@
 import $ from 'jquery';
 import 'bootstrap/js/dist/modal';
 import MyDetailTable from '../MyDetailTable';
+import '../../configs/bootstrapDefaultSettings';
+
+const events = [
+  'show.bs.modal',
+  'shown.bs.modal',
+  'hide.bs.modal',
+  'hidden.bs.modal',
+  'hidePrevented.bs.modal'
+];
 
 export default {
   name: 'MyDetailModal',
@@ -126,10 +135,16 @@ export default {
       .on('hidden.bs.modal', () => {
         this._onHidden();
       });
+
+    events.forEach((event) => {
+      $(this.$el).on(event, (...args) => {
+        this.$emit(event.replace(/[.|:]/g, '-'), ...args);
+      });
+    });
   },
 
   beforeDestroy() {
-    $(this.$el).off('hidden.bs.modal');
+    $(this.$el).off('').modal('dispose');
   },
 
   watch: {
