@@ -70,7 +70,7 @@
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
     :inputClass="{ 'is-invalid': column.errors.length }"
-    @change="_onModelChange($event)"
+    @change="(checked) => _onModelChange(checked)"
     @change.native="_onModelChange(inner.editItem[column.key], $event)"
   />
 
@@ -89,7 +89,7 @@
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
     :inputClass="{ 'is-invalid': column.errors.length }"
-    @change="_onModelChange($event)"
+    @change="(checked) => _onModelChange(checked)"
     @change.native="_onModelChange(inner.editItem[column.key], $event)"
   />
 
@@ -109,7 +109,7 @@
     :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
     :style="column.control.style"
     :inputClass="{ 'is-invalid': column.errors.length }"
-    @change="_onModelChange($event)"
+    @change="(checked) => _onModelChange(checked)"
     @change.native="_onModelChange(inner.editItem[column.key], $event)"
   />
 

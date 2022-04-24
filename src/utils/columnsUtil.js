@@ -48,7 +48,7 @@ function getErrors(columns) {
 
 function validateColumn(value, column, item) {
   if (column.validationMode?.lazy !== true) {
-    validateItemField(value, column, item);
+    return validateItemField(value, column, item);
   }
 }
 
