@@ -138,7 +138,9 @@ export default {
 
     events.forEach((event) => {
       $(this.$el).on(event, (...args) => {
-        this.$emit(event.replace(/[.|:]/g, '-'), ...args);
+        const eventName = event.replace(/[.|:]/g, '-');
+        this.$emit(eventName, ...args);
+        this.$root.$emit(eventName, ...args);
       });
     });
   },
