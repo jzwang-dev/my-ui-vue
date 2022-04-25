@@ -73,41 +73,24 @@ function range(
   return validator;
 }
 
-function compareTo(valueToCompare, operator = '==', errMsg = '比較結果不成立') {
-  const validator = (value) => {
-    switch (operator) {
-      case '<':
-        return value < valueToCompare || errMsg;
-      case '>':
-        return value > valueToCompare || errMsg;
-      case '<=':
-        return value <= valueToCompare || errMsg;
-      case '>=':
-        return value >= valueToCompare || errMsg;
-      case '==':
-        return value == valueToCompare || errMsg;
-      case '!=':
-        return value != valueToCompare || errMsg;
-      case '===':
-        return value === valueToCompare || errMsg;
-      case '!==':
-        return value !== valueToCompare || errMsg;
-      default:
-        return errMsg;
+function compareTo(compareOptions, errMsg = '比較結果不成立') {
+  const { valueToCompare, keyToCompare, operator = '==' } = compareOptions;
+
+  const operators = ['<', '>', '<=', '>=', '==', '!=', '===', '!=='];
+  if (operators.indexOf(operator) === -1) {
+    throw `不允許的運算子「${operator}」！`;
+  }
+
+  const validator = (value, item) => {
+    let _valueToCompare = valueToCompare;
+    if (keyToCompare != null) {
+      _valueToCompare = item?.[keyToCompare];
     }
+    const compare = new Function('v1', 'v2', 'return v1 ' + operator + ' v2');
+
+    return compare(value, _valueToCompare) || errMsg;
   };
   validator.validatorName = 'compareTo';
-  return validator;
-}
-
-function compareByKey(
-  compareToItemKey,
-  operator = '==',
-  errMsg = '比較結果不成立'
-) {
-  const validator = (value, item) =>
-    compareTo(item[compareToItemKey], operator, errMsg)(value);
-  validator.validatorName = 'compareByKey';
   return validator;
 }
 
@@ -140,7 +123,6 @@ export {
   max,
   range,
   compareTo,
-  compareByKey,
   regex,
   email
 };
