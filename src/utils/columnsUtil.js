@@ -22,6 +22,13 @@ function validateItem(columns, item) {
   }
   let valid = true;
   for (let column of columns) {
+    if (
+      column.modifyVisible === false ||
+      !column.visibleInModifyFormIf?.(item)
+    ) {
+      continue;
+    }
+
     if (!validateItemField(item[column.key], column, item)) {
       valid = false;
     }

@@ -13,9 +13,17 @@
             :name="`item-${column.key}`"
             :item="inner.detailItem"
             :column="column"
+            v-if="
+              column.visibleInDetailTableIf
+                ? column.visibleInDetailTableIf(inner.detailItem)
+                : true
+            "
           >
             <!-- prettier-ignore -->
-            <div class="pre-line">{{ _formatValue(column.format, column.value(inner.detailItem)) | nulltext(column.nullText) }}</div>
+            <div
+              class="pre-line"
+              :key="column.key"
+            >{{ _formatValue(column.format, column.value(inner.detailItem)) | nulltext(column.nullText) }}</div>
           </slot>
         </td>
       </tr>
@@ -72,7 +80,7 @@ export default {
     visibleColumns() {
       return this.inner.columns.filter(
         (column) =>
-          column.visible !== false &&
+          column.visibleInDetailTable !== false &&
           !this.invisibleColumnKeys.includes(column.key)
       );
     }

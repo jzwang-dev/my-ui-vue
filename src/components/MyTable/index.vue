@@ -568,6 +568,10 @@ export default {
       default: 'export_data'
     },
 
+    exportColumnKeys: {
+      type: Array
+    },
+
     showSelection: {
       type: Boolean,
       default: true
@@ -619,6 +623,7 @@ export default {
         paging: Object.assign({}, defaultPaging, this.paging),
         paginator: Object.assign({}, defaultPaginator, this.paginator),
         itemsPerPageOptions: this._normalized_itemsPerPageOptions(),
+        exportColumnKeys: this._normalized_exportColumnKeys(),
         inlineEditItem: this._normalized_inlineEditItem()
       },
       processedItems: [],
@@ -759,6 +764,13 @@ export default {
       options.sort((a, b) => a - b);
 
       return options;
+    },
+
+    _normalized_exportColumnKeys() {
+      const keys = this._normalized_columns()
+        .filter((column) => column.visible !== false)
+        .map((column) => column.key);
+      return this.exportColumnKeys?.filter((key) => keys.includes(key)) ?? keys;
     },
 
     _normalized_inlineEditItem() {
@@ -980,9 +992,13 @@ export default {
     },
 
     getExportParams() {
+      const exportColumns = this.displayingColumns.filter((column) =>
+        this.inner.exportColumnKeys.includes(column.key)
+      );
+
       const exportItems = this.processedItems.map((item) => {
         const tmpItem = {};
-        this.displayingColumns.forEach((column) => {
+        exportColumns.forEach((column) => {
           let value = '';
 
           if (column.valueToExport) {
@@ -999,20 +1015,20 @@ export default {
             value = JSON.stringify(value);
           }
 
-          tmpItem[column.key] = value;
+          tmpItem[column.key] = this._formatValue(column.format, value);
         });
 
         return tmpItem;
       });
 
-      const exportColumns = this.displayingColumns.map((column) => ({
+      const _exportColumns = exportColumns.map((column) => ({
         key: column.key,
         header: column.header ?? column.key
       }));
 
       return {
         exportItems,
-        exportColumns
+        exportColumns: _exportColumns
       };
     },
 
@@ -1321,6 +1337,21 @@ export default {
         if (this.inner.itemsPerPageOptions !== this.itemsPerPageOptions) {
           this.inner.itemsPerPageOptions =
             this._normalized_itemsPerPageOptions();
+        }
+      }
+    },
+
+    'inner.exportColumnKeys': {
+      handler() {
+        this.$emit('update:exportColumnKeys', this.inner.exportColumnKeys);
+      },
+      immediate: true
+    },
+
+    exportColumnKeys: {
+      handler() {
+        if (this.inner.exportColumnKeys !== this.exportColumnKeys) {
+          this.inner.exportColumnKeys = this._normalized_exportColumnKeys();
         }
       }
     },

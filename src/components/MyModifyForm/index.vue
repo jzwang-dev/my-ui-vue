@@ -10,6 +10,11 @@
         :name="`edit-${column.key}`"
         :item="inner.modifyItem"
         :column="column"
+        v-if="
+          column.visibleInModifyFormIf
+            ? column.visibleInModifyFormIf(inner.modifyItem)
+            : true
+        "
       >
         <div class="form-group" :key="column.key">
           <label
@@ -127,7 +132,7 @@ export default {
     visibleColumns() {
       return this.inner.columns.filter(
         (column) =>
-          column.visible !== false &&
+          column.visibleInModifyForm !== false &&
           !this.invisibleColumnKeys.includes(column.key)
       );
     },

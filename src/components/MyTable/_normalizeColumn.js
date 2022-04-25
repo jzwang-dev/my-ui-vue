@@ -16,13 +16,17 @@ function _normalizeColumn(column) {
       thStyle: null,
       tdClass: null,
       tdStyle: null,
-      valueToExport: (item) => item[column.key],
+      valueToExport: column.value ?? ((item) => item[column.key]),
       editable: true,
       valueToEdit: (item) => item[column.key],
       dataType: String,
       validators: [],
       errors: [],
-      errorsSeparator: ', '
+      errorsSeparator: ', ',
+      visibleInModifyForm: column.visible ?? true,
+      visibleInModifyFormIf: null,
+      visibleInDetailTable: column.visible ?? true,
+      visibleInDetailTableIf: null
     },
     column,
     {

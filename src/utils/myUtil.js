@@ -27,6 +27,10 @@ function setLoading(loading) {
 }
 
 function formatValue(format, value) {
+  if (format == null) {
+    return value;
+  }
+
   if (Object.prototype.toString.call(format) === '[object Function]') {
     value = format(value);
   } else if (Array.isArray(format)) {
