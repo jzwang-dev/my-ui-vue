@@ -1145,7 +1145,8 @@ export default {
 
         //console.log('items:_processItems');
         this._processItems();
-      }
+      },
+      immediate: true
     },
 
     'inner.columns': {

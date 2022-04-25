@@ -46,7 +46,7 @@ import 'bootstrap';
 import 'my-ui-vue/src/main.css';
 import MyTable from 'my-ui-vue/src/components/MyTable';
 import 'my-ui-vue/src/components/MyTable/style.css';
-import { * as validators } from 'my-ui-vue/src/validators';
+import * as validators from 'my-ui-vue/src/validators';
 ```
 
 ## Docs
