@@ -1,3 +1,10 @@
+/*
+file: main.js
+author: Wang, Jian-Zhong
+email: jason@gms.ndhu.edu.tw
+description: Package entry point.
+*/
+
 export { default as MyDummyButton } from './components/MyDummyButton';
 export { default as MyTable } from './components/MyTable';
 export { default as MyPaginator } from './components/MyPaginator';

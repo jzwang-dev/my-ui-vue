@@ -1,6 +1,7 @@
 <!--
-MyTable
-author: jzwang
+file: MyTable/index.vue
+author: Wang, Jian-Zhong
+email: jason@gms.ndhu.edu.tw
 -->
 <template>
   <div class="my-table">
@@ -370,6 +371,7 @@ author: jzwang
 
 <script>
 import MyPaginator from '../MyPaginator';
+import '../MyPaginator/style.css';
 import ColumnEditControl from '../MyColumnEditControl';
 import _normalizeColumn from './_normalizeColumn';
 import {

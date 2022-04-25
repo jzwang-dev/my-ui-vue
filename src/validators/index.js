@@ -1,3 +1,10 @@
+/*
+file: validator/index.js
+author: Wang, Jian-Zhong
+email: jason@gms.ndhu.edu.tw
+description: Client-side validators.
+*/
+
 function required(errMsg = '此為必填欄位') {
   const validator = (value) => {
     if (Array.isArray(value) && value.length === 0) {

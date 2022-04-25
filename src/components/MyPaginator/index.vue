@@ -1,6 +1,7 @@
 <!--
-MyPaginator
-author: jzwang
+file: MyPaginator/index.vue
+author: Wang, Jian-Zhong
+email: jason@gms.ndhu.edu.tw
 -->
 <template>
   <div class="my-paginator">

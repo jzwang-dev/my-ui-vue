@@ -47,6 +47,7 @@
 import $ from 'jquery';
 import 'bootstrap/js/dist/modal';
 import MyDetailTable from '../MyDetailTable';
+import '../MyDetailTable/style.css';
 import '../../configs/bootstrapDefaultSettings';
 
 const events = [
