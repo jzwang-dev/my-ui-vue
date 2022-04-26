@@ -4,7 +4,7 @@ author: Wang, Jian-Zhong
 email: jason@gms.ndhu.edu.tw
 -->
 <template>
-  <div class="my-table">
+  <div class="my-table" :id="_id">
     <!-- toolbar (begin) -->
     <div
       class="toolbar d-sm-flex align-items-center justify-content-between"
@@ -107,8 +107,28 @@ email: jason@gms.ndhu.edu.tw
           >
             顯示欄位
           </button>
-          <div class="dropdown-menu">
-            <form class="px-4 py-3">
+          <div class="dropdown-menu displaying-columns">
+            <form class="px-2 py-1">
+              <div class="mb-2">
+                <button
+                  type="button"
+                  class="btn btn-info btn-sm"
+                  @click="
+                    inner.displayingColumnKeys = visibleColumns.map(
+                      (column) => column.key
+                    )
+                  "
+                >
+                  全選
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-info btn-sm"
+                  @click="inner.displayingColumnKeys = []"
+                >
+                  清除
+                </button>
+              </div>
               <div
                 class="custom-control custom-checkbox"
                 v-for="column in visibleColumns"
@@ -117,13 +137,13 @@ email: jason@gms.ndhu.edu.tw
                 <input
                   type="checkbox"
                   class="custom-control-input"
-                  :id="`displayingColumnKeys_${column.key}`"
+                  :id="`${_id}_displayingColumnKeys_${column.key}`"
                   :value="column.key"
                   v-model="inner.displayingColumnKeys"
                 />
                 <label
                   class="custom-control-label d-inline-block"
-                  :for="`displayingColumnKeys_${column.key}`"
+                  :for="`${_id}_displayingColumnKeys_${column.key}`"
                   >{{ column.header }}</label
                 >
               </div>
@@ -176,10 +196,13 @@ email: jason@gms.ndhu.edu.tw
               <input
                 type="checkbox"
                 class="custom-control-input"
-                id="checkAll"
+                :id="`${_id}_checkAll`"
                 v-model="_checkAll"
               />
-              <label class="custom-control-label" for="checkAll"></label>
+              <label
+                class="custom-control-label"
+                :for="`${_id}_checkAll`"
+              ></label>
             </div>
           </th>
           <th
@@ -215,13 +238,13 @@ email: jason@gms.ndhu.edu.tw
                 <input
                   type="checkbox"
                   class="custom-control-input"
-                  :id="`selected_${item[rowKey]}`"
+                  :id="`${_id}_selected_${item[rowKey]}`"
                   :value="item[rowKey]"
                   v-model="inner.selected"
                 />
                 <label
                   class="custom-control-label"
-                  :for="`selected_${item[rowKey]}`"
+                  :for="`${_id}_selected_${item[rowKey]}`"
                 ></label>
               </div>
             </div>
@@ -634,6 +657,10 @@ export default {
   },
 
   computed: {
+    _id() {
+      return this.$attrs.id ?? myUtil.randomId();
+    },
+
     visibleColumns() {
       return this.inner.columns.filter((column) => column.visible !== false);
     },

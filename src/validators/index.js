@@ -26,7 +26,7 @@ function requiredIf(testFunc, errMsg = '此為必填欄位') {
   }
 
   const validator = (value, item) =>
-    !testFunc(value, item) || required(errMsg)(value);
+    !testFunc(item) || required(errMsg)(value, item);
   validator.validatorName = 'requiredIf';
   validator.testFunc = testFunc;
   return validator;
@@ -107,6 +107,43 @@ function regex(regex, errMsg = '格式不正確') {
   return validator;
 }
 
+function regexIf(testFunc, regex, errMsg = '格式不正確') {
+  if (
+    !testFunc ||
+    Object.prototype.toString.call(testFunc) !== '[object Function]'
+  ) {
+    testFunc = () => true;
+  }
+
+  const validator = (value, item) =>
+    !testFunc(item) || regex(regex, errMsg)(value, item);
+  validator.validatorName = 'regexIf';
+  validator.testFunc = testFunc;
+  return validator;
+}
+
+function dynamicRegex(regexFunc, errMsg = '格式不正確') {
+  if (
+    !regexFunc ||
+    Object.prototype.toString.call(regexFunc) !== '[object Function]'
+  ) {
+    regexFunc = () => /.*/;
+  }
+
+  const validator = (value, item) => {
+    const _regex = regexFunc(item);
+
+    if (_regex == null) {
+      return true;
+    }
+
+    return regex(_regex, errMsg)(value, item);
+  };
+  validator.validatorName = 'dynamicRegex';
+  validator.regexFunc = regexFunc;
+  return validator;
+}
+
 function email(errMsg = '請輸入正確的Email格式') {
   const validator = (value) =>
     regex(/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4})*$/, errMsg)(value);
@@ -124,5 +161,7 @@ export {
   range,
   compareTo,
   regex,
+  regexIf,
+  dynamicRegex,
   email
 };

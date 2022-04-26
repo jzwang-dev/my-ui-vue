@@ -1,5 +1,9 @@
 <template>
-  <table class="detail condensed" v-if="inner.detailItem">
+  <table
+    class="my-detail-table detail condensed"
+    :id="_id"
+    v-if="inner.detailItem"
+  >
     <template v-for="column in visibleColumns">
       <slot
         :name="`before-${column.key}`"
@@ -77,6 +81,10 @@ export default {
   },
 
   computed: {
+    _id() {
+      return this.$attrs.id ?? myUtil.randomId();
+    },
+
     visibleColumns() {
       return this.inner.columns.filter(
         (column) =>

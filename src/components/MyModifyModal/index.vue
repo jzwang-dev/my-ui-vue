@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" :id="id" tabindex="-1">
+  <div class="my-modify-modal modal fade" :id="_id" tabindex="-1">
     <div
       class="modal-dialog"
       :class="[
@@ -65,6 +65,7 @@ import $ from 'jquery';
 import 'bootstrap/js/dist/modal';
 import MyModifyForm from '../MyModifyForm';
 import '../../configs/bootstrapDefaultSettings';
+import myUtil from '../../utils/myUtil';
 
 const events = [
   'show.bs.modal',
@@ -113,13 +114,13 @@ export default {
       }
     },
 
-    title: {
-      type: String
+    rowKey: {
+      type: String,
+      default: 'id'
     },
 
-    id: {
-      type: String,
-      default: 'modifyModal'
+    title: {
+      type: String
     },
 
     size: {
@@ -151,8 +152,12 @@ export default {
   },
 
   computed: {
+    _id() {
+      return this.$attrs.id ?? myUtil.randomId();
+    },
+
     modifyMode() {
-      return !this.modifyItem?.id ? 'create' : 'update';
+      return !this.modifyItem?.[this.rowKey] ? 'create' : 'update';
     }
   },
 

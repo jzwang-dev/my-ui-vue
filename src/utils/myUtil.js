@@ -44,6 +44,14 @@ function formatValue(format, value) {
   return value;
 }
 
+function randomId(randomLength = 5, prefix = 'id_') {
+  const min = 10 ** randomLength;
+  const max = 9 * min;
+  return (
+    prefix + (Math.random() * max + min).toString().substring(0, randomLength)
+  );
+}
+
 export default {
   getEnv,
   isEnv,
@@ -51,5 +59,6 @@ export default {
   devLog,
   typeToString,
   setLoading,
-  formatValue
+  formatValue,
+  randomId
 };

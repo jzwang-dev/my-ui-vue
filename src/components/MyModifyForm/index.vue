@@ -1,5 +1,10 @@
 <template>
-  <form :id="id" @submit.prevent v-if="inner.modifyItem">
+  <form
+    class="my-modify-form"
+    :id="_id"
+    @submit.prevent
+    v-if="inner.modifyItem"
+  >
     <template v-for="column in _modifyColumns">
       <slot
         :name="`before-${column.key}`"
@@ -18,7 +23,7 @@
       >
         <div class="form-group" :key="column.key">
           <label
-            :for="`modify-${column.key}`"
+            :for="`${_id}_modify-${column.key}`"
             v-if="!hideHeaderColumnKeys.includes(column.key)"
             >{{ column.header
             }}{{ _isColumnRequired(column) ? '*' : '' }}</label
@@ -30,7 +35,7 @@
             <column-edit-control
               :column="column"
               :editItem.sync="inner.modifyItem"
-              :idPrefix="'modify-'"
+              :idPrefix="`${_id}_modify-`"
               @model-change="
                 (value, event) =>
                   _onColumnEditControlModelChange(value, column, event)
@@ -63,6 +68,7 @@ import ColumnEditControl from '../MyColumnEditControl';
 import _normalizeColumn from '../MyTable/_normalizeColumn';
 import columnsUtil from '../../utils/columnsUtil';
 import messageUtil from '../../utils/messageUtil';
+import myUtil from '../../utils/myUtil';
 
 export default {
   name: 'MyModifyForm',
@@ -111,11 +117,6 @@ export default {
     showActions: {
       type: Boolean,
       default: true
-    },
-
-    id: {
-      type: String,
-      default: 'modifyForm'
     }
   },
 
@@ -129,6 +130,10 @@ export default {
   },
 
   computed: {
+    _id() {
+      return this.$attrs.id ?? myUtil.randomId();
+    },
+
     visibleColumns() {
       return this.inner.columns.filter(
         (column) =>

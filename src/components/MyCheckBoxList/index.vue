@@ -1,5 +1,5 @@
 <template>
-  <div class="my-check-box-list">
+  <div class="my-check-box-list" :id="_id">
     <div
       class="custom-control custom-checkbox"
       :class="{ 'custom-control-inline': inline }"
@@ -55,10 +55,6 @@ export default {
       required: true
     },
 
-    id: {
-      type: String
-    },
-
     inline: {
       type: Boolean
     },
@@ -76,7 +72,7 @@ export default {
 
   computed: {
     _id() {
-      return this.id ?? this.name;
+      return this.$attrs.id ?? this.name;
     }
   },
 

@@ -38,10 +38,6 @@ export default {
       required: true
     },
 
-    id: {
-      type: String
-    },
-
     trueValue: {
       type: [Boolean, String, Number],
       default: true
@@ -64,7 +60,7 @@ export default {
 
   computed: {
     _id() {
-      return this.id ?? this.name;
+      return this.$attrs.id ?? this.name;
     }
   }
 };

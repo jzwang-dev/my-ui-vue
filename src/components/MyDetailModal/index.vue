@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" :id="id" tabindex="-1">
+  <div class="my-detail-modal modal fade" :id="_id" tabindex="-1">
     <div
       class="modal-dialog"
       :class="[
@@ -49,6 +49,7 @@ import 'bootstrap/js/dist/modal';
 import MyDetailTable from '../MyDetailTable';
 import '../MyDetailTable/style.css';
 import '../../configs/bootstrapDefaultSettings';
+import myUtil from '../../utils/myUtil';
 
 const events = [
   'show.bs.modal',
@@ -87,11 +88,6 @@ export default {
       type: String
     },
 
-    id: {
-      type: String,
-      default: 'detialModal'
-    },
-
     size: {
       type: String,
       default: 'md',
@@ -118,6 +114,12 @@ export default {
         columns: this.columns
       }
     };
+  },
+
+  computed: {
+    _id() {
+      return this.$attrs.id ?? myUtil.randomId();
+    }
   },
 
   methods: {

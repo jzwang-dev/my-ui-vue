@@ -6,6 +6,12 @@ th.sortable {
   min-width: 120px;
 }
 
+.dropdown-menu.displaying-columns {
+  min-width: 180px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
 /* responsive table */
 
 @media screen and (max-width: 576px) {
