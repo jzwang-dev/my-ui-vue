@@ -236,7 +236,12 @@ email: jason@gms.ndhu.edu.tw
               v-show="inner.sorting && inner.sorting.key === column.key"
             ></i>
           </th>
-          <th v-if="showActions"></th>
+          <th
+            v-if="showActions"
+            class="actions"
+            :class="actionsThClass"
+            :style="actionsThStyle"
+          ></th>
         </tr>
       </thead>
       <tbody>
@@ -309,13 +314,19 @@ email: jason@gms.ndhu.edu.tw
               </slot>
             </div>
           </td>
-          <td v-if="showActions" class="actions">
+          <td
+            v-if="showActions"
+            class="actions"
+            :class="actionsTdClass"
+            :style="actionsTdStyle"
+          >
             <div>
               <div
                 v-if="
                   inner.inlineEditItem &&
                   inner.inlineEditItem[rowKey] === item[rowKey]
                 "
+                class="text-center"
               >
                 <button
                   type="button"
@@ -332,7 +343,7 @@ email: jason@gms.ndhu.edu.tw
                   取消
                 </button>
               </div>
-              <div v-else>
+              <div v-else class="text-center">
                 <button
                   type="button"
                   class="btn btn-primary btn-sm"
@@ -617,6 +628,14 @@ export default {
       type: Boolean,
       default: true
     },
+
+    actionsThClass: null,
+
+    actionsThStyle: null,
+
+    actionsTdClass: null,
+
+    actionsTdStyle: null,
 
     showRead: {
       type: Boolean,

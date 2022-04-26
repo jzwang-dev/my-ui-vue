@@ -50,3 +50,132 @@ description: Shared styles.
 .input-icon-right > i:last-of-type {
   right: 0.5rem;
 }
+
+table.table > tbody > tr > td,
+table.table > tr > td {
+  vertical-align: middle;
+}
+
+/* 詳細資料(table) */
+
+table.detail {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+table.detail caption {
+  caption-side: top;
+}
+
+table.detail > tbody > tr > th,
+table.detail > tr > th {
+  border: 1px solid #ccc;
+  width: 30%;
+  max-width: 160px;
+  padding: 5px 8px;
+  text-align: right;
+  background: #f3f3f3;
+}
+
+table.detail > tbody > tr > td,
+table.detail > tr > td {
+  border: 1px solid #ccc;
+  padding: 5px 8px;
+  word-break: break-all;
+}
+
+table.detail.condensed > tbody > tr > th,
+table.detail.condensed > tbody > tr > td,
+table.detail.condensed > tr > th,
+table.detail.condensed > tr > td {
+  padding: 3px 5px;
+}
+
+@media screen and (max-width: 576px) {
+  table.detail > tbody > tr,
+  table.detail > tr {
+    display: block;
+    margin-bottom: 3px;
+    border: 1px solid #ccc;
+  }
+
+  table.detail.condensed > tbody > tr,
+  table.detail.condensed > tr {
+    margin-bottom: 0;
+    border-bottom-width: 0;
+  }
+
+  table.detail.condensed > tbody > tr:last-child,
+  table.detail.condensed > tr:last-child {
+    border-bottom-width: 1px;
+  }
+
+  table.detail > tbody > tr > th,
+  table.detail > tr > th {
+    display: block;
+    width: auto;
+    text-align: left;
+    border: none;
+    max-width: unset;
+  }
+
+  table.detail > tbody > tr > td,
+  table.detail > tr > td {
+    display: block;
+    border: none;
+  }
+}
+
+/* responsive table */
+
+@media screen and (max-width: 576px) {
+  table.responsive {
+    border: none;
+  }
+
+  table.responsive > thead {
+    display: none;
+  }
+
+  table.responsive > tbody > tr,
+  table.responsive > tr {
+    display: block;
+    margin-bottom: 10px;
+    background: #fff !important;
+  }
+
+  table.responsive > tbody > tr:nth-of-type(odd),
+  table.responsive > tr:nth-of-type(odd) {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  table.responsive > tbody > tr:last-child,
+  table.responsive > tr:last-child {
+    margin-bottom: 0;
+  }
+
+  table.responsive > tbody > tr > td,
+  table.responsive > tr > td {
+    display: flex;
+    justify-content: space-between;
+    border-bottom-width: 0;
+    padding: 5px;
+  }
+
+  table.responsive > tbody > tr > td.actions,
+  table.responsive > tr > td.actions {
+    justify-content: flex-start;
+  }
+
+  table.responsive > tbody > tr > td:last-child,
+  table.responsive > tr > td:last-child {
+    border-bottom-width: 1px;
+  }
+
+  table.responsive > tbody > tr > td::before,
+  table.responsive > tr > td::before {
+    content: attr(data-title);
+    font-weight: bold;
+    min-width: 2rem;
+  }
+}

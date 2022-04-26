@@ -24,7 +24,7 @@ function validateItem(columns, item) {
   for (let column of columns) {
     if (
       column.modifyVisible === false ||
-      !column.visibleInModifyFormIf?.(item)
+      (column.visibleInModifyFormIf && !column.visibleInModifyFormIf(item))
     ) {
       continue;
     }

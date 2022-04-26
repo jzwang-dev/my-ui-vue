@@ -1,12 +1,23 @@
-th.sortable {
+.my-table table.table > tbody > tr > td,
+.my-table table.table > tr > td {
+  vertical-align: middle;
+}
+
+.my-table table.table > thead > tr > th.sortable,
+.my-table table.table > tr > th.sortable {
   cursor: pointer;
 }
 
-.inline-edit-item {
+.my-table table.table > thead > tr > th.actions,
+.my-table table.table > tr > th.actions {
+  width: 150px;
+}
+
+.my-table .inline-edit-item {
   min-width: 120px;
 }
 
-.dropdown-menu.displaying-columns {
+.my-table .dropdown-menu.displaying-columns {
   min-width: 180px;
   max-height: 280px;
   overflow-y: auto;
@@ -15,50 +26,57 @@ th.sortable {
 /* responsive table */
 
 @media screen and (max-width: 576px) {
-  table.responsive {
+  .my-table table.responsive {
     border: none;
   }
 
-  table.responsive > thead {
+  .my-table table.responsive > thead {
     display: none;
   }
 
-  table.responsive > tbody > tr {
+  .my-table table.responsive > tbody > tr,
+  .my-table table.responsive > tr {
     display: block;
     margin-bottom: 10px;
     background: #fff !important;
   }
 
-  table.responsive > tbody > tr:nth-of-type(odd) {
+  .my-table table.responsive > tbody > tr:nth-of-type(odd),
+  .my-table table.responsive > tr:nth-of-type(odd) {
     background: rgba(0, 0, 0, 0.05) !important;
   }
 
-  table.responsive > tbody > tr:last-child {
+  .my-table table.responsive > tbody > tr:last-child,
+  .my-table table.responsive > tr:last-child {
     margin-bottom: 0;
   }
 
-  table.responsive > tbody > tr > td {
+  .my-table table.responsive > tbody > tr > td,
+  .my-table table.responsive > tr > td {
     display: flex;
     justify-content: space-between;
     border-bottom-width: 0;
     padding: 5px;
   }
 
-  table.responsive > tbody > tr > td.actions {
+  .my-table table.responsive > tbody > tr > td.actions,
+  .my-table table.responsive > tr > td.actions {
     justify-content: flex-start;
   }
 
-  table.responsive > tbody > tr > td:last-child {
+  .my-table table.responsive > tbody > tr > td:last-child,
+  .my-table table.responsive > tr > td:last-child {
     border-bottom-width: 1px;
   }
 
-  table.responsive > tbody > tr > td::before {
+  .my-table table.responsive > tbody > tr > td::before,
+  .my-table table.responsive > tr > td::before {
     content: attr(data-title);
     font-weight: bold;
     min-width: 2rem;
   }
 
-  .inline-edit-item {
+  .my-table .inline-edit-item {
     min-width: unset;
     display: flex;
     flex-direction: column;

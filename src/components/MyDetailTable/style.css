@@ -1,16 +1,16 @@
 /* 詳細資料(table) */
 
-table.detail {
+.my-detail-table table.detail {
   width: 100%;
   margin-bottom: 10px;
 }
 
-table.detail caption {
+.my-detail-table table.detail caption {
   caption-side: top;
 }
 
-table.detail > tbody > tr > th,
-table.detail > tr > th {
+.my-detail-table table.detail > tbody > tr > th,
+.my-detail-table table.detail > tr > th {
   border: 1px solid #ccc;
   width: 30%;
   max-width: 160px;
@@ -19,41 +19,41 @@ table.detail > tr > th {
   background: #f3f3f3;
 }
 
-table.detail > tbody > tr > td,
-table.detail > tr > td {
+.my-detail-table table.detail > tbody > tr > td,
+.my-detail-table table.detail > tr > td {
   border: 1px solid #ccc;
   padding: 5px 8px;
   word-break: break-all;
 }
 
-table.detail.condensed > tbody > tr > th,
-table.detail.condensed > tbody > tr > td,
-table.detail.condensed > tr > th,
-table.detail.condensed > tr > td {
+.my-detail-table table.detail.condensed > tbody > tr > th,
+.my-detail-table table.detail.condensed > tbody > tr > td,
+.my-detail-table table.detail.condensed > tr > th,
+.my-detail-table table.detail.condensed > tr > td {
   padding: 3px 5px;
 }
 
 @media screen and (max-width: 576px) {
-  table.detail > tbody > tr,
-  table.detail > tr {
+  .my-detail-table table.detail > tbody > tr,
+  .my-detail-table table.detail > tr {
     display: block;
     margin-bottom: 3px;
     border: 1px solid #ccc;
   }
 
-  table.detail.condensed > tbody > tr,
-  table.detail.condensed > tr {
+  .my-detail-table table.detail.condensed > tbody > tr,
+  .my-detail-table table.detail.condensed > tr {
     margin-bottom: 0;
     border-bottom-width: 0;
   }
 
-  table.detail.condensed > tbody > tr:last-child,
-  table.detail.condensed > tr:last-child {
+  .my-detail-table table.detail.condensed > tbody > tr:last-child,
+  .my-detail-table table.detail.condensed > tr:last-child {
     border-bottom-width: 1px;
   }
 
-  table.detail > tbody > tr > th,
-  table.detail > tr > th {
+  .my-detail-table table.detail > tbody > tr > th,
+  .my-detail-table table.detail > tr > th {
     display: block;
     width: auto;
     text-align: left;
@@ -61,13 +61,9 @@ table.detail.condensed > tr > td {
     max-width: unset;
   }
 
-  table.detail > tbody > tr > td,
-  table.detail > tr > td {
+  .my-detail-table table.detail > tbody > tr > td,
+  .my-detail-table table.detail > tr > td {
     display: block;
     border: none;
   }
-}
-
-table.table > tbody > tr > td {
-  vertical-align: middle;
 }

@@ -64,6 +64,7 @@
 import $ from 'jquery';
 import 'bootstrap/js/dist/modal';
 import MyModifyForm from '../MyModifyForm';
+import '../MyModifyForm/style.css';
 import '../../configs/bootstrapDefaultSettings';
 import myUtil from '../../utils/myUtil';
 
