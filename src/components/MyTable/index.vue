@@ -815,10 +815,10 @@ export default {
         defaultTableClass[`table-${prop}`] = this[prop];
       }
 
-      const objStr = Object.prototype.toString.call(this.tableClass);
-      if (objStr === '[object Object]') {
+      const tableClassType = Object.prototype.toString.call(this.tableClass);
+      if (tableClassType === '[object Object]') {
         return Object.assign({}, this.tableClass, defaultTableClass);
-      } else if (objStr === '[object Array]') {
+      } else if (tableClassType === '[object Array]') {
         const classArray = [...this.tableClass];
         if (this.smallTable) {
           classArray.push('table-sm');
@@ -829,7 +829,7 @@ export default {
           }
         }
         return classArray;
-      } else if (objStr === '[object String]') {
+      } else if (tableClassType === '[object String]') {
         let classString = this.tableClass;
         if (this.smallTable) {
           classString += ' table-sm';
@@ -1269,7 +1269,23 @@ export default {
       const _itemIndex = 0;
       const item = { _itemIndex };
       for (let column of this.inner.columns) {
-        item[column.key] = column.defaultValue ?? null;
+        if (column.defaultValue == null) {
+          item[column.key] = null;
+          continue;
+        }
+
+        const defaultValueType = Object.prototype.toString.call(
+          column.defaultValue
+        );
+        if (defaultValueType === '[object Function]') {
+          item[column.key] = column.defaultValue();
+        } else if (defaultValueType === '[object Array]') {
+          item[column.key] = [...column.defaultValue];
+        } else if (defaultValueType === '[object Object]') {
+          item[column.key] = { ...column.defaultValue };
+        } else {
+          item[column.key] = column.defaultValue;
+        }
       }
       this.$emit('create-item', item, _itemIndex);
     },
