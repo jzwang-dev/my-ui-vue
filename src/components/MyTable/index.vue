@@ -768,7 +768,7 @@ export default {
         }
       }
 
-      return this.tableClass;
+      return this.tableClass ?? { 'table-sm': this.smallTable };
     }
   },
 

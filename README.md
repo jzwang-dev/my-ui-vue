@@ -24,7 +24,7 @@ npm install git+https://github.com/jianzhong-wang/my-ui-vue.git
 ```
 #### Install peerDependencies
 ```
-npm install "bootstrap@^4.6.1" "@fortawesome/fontawesome-free@^5.15.4" "jquery@^3.6.0" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
+npm install "bootstrap@^4.6.1" "jquery@^3.6.0" "popper.js@^1.16.1" "@fortawesome/fontawesome-free@^5.15.4" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
 ```
 ### yarn
 #### Install my-ui-vue
@@ -33,7 +33,7 @@ yarn add https://github.com/jianzhong-wang/my-ui-vue.git
 ```
 #### Install peerDependencies
 ```
-yarn add "bootstrap@^4.6.1" "@fortawesome/fontawesome-free@^5.15.4" "jquery@^3.6.0" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
+yarn add "bootstrap@^4.6.1" "jquery@^3.6.0" "popper.js@^1.16.1" "@fortawesome/fontawesome-free@^5.15.4" "file-saver@^2.0.5" "exceljs@^4.3.0" "pdfmake@^0.2.5"
 ```
 
 ## Import CSS & JavaScript
