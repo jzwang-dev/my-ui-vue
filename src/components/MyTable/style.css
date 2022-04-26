@@ -13,6 +13,15 @@
   width: 150px;
 }
 
+.my-table table.table > thead > tr > th.selections,
+.my-table table.table > tr > th.selections {
+  width: 16px;
+}
+
+.my-table .selections .custom-control.custom-checkbox {
+  margin-left: 0.5rem;
+}
+
 .my-table .inline-edit-item {
   min-width: 120px;
 }

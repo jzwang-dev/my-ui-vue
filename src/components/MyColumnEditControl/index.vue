@@ -18,7 +18,11 @@
     v-model="inner.editItem[column.key]"
     :placeholder="column.header"
     class="form-control"
-    :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
+    :class="[
+      column.control.cssClass,
+      { 'is-invalid': column.errors.length },
+      `form-control-${size}`
+    ]"
     :style="column.control.style"
     @input="_onModelChange($event.target.value, $event)"
   />
@@ -161,6 +165,14 @@ export default {
     idPrefix: {
       type: String,
       default: 'column-edit-'
+    },
+
+    size: {
+      type: String,
+      default: 'md',
+      validator(value) {
+        return ['sm', 'md', 'lg', 'xl'].indexOf(value) !== -1;
+      }
     }
   },
 

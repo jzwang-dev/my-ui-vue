@@ -197,13 +197,18 @@ email: jason@gms.ndhu.edu.tw
     <!-- pagebar(top) (end) -->
 
     <table
-      class="table table-bordered table-striped table-hover responsive mb-0"
+      class="main-table table responsive mb-0"
       :class="_tableClass"
       :style="tableStyle"
     >
       <thead>
         <tr class="table-active">
-          <th class="text-center align-middle" v-if="showSelection">
+          <th
+            class="selections text-center align-middle"
+            :class="selectionsThClass"
+            :style="selectionsThStyle"
+            v-if="showSelection"
+          >
             <div class="custom-control custom-checkbox">
               <input
                 type="checkbox"
@@ -246,7 +251,12 @@ email: jason@gms.ndhu.edu.tw
       </thead>
       <tbody>
         <tr v-for="(item, itemIndex) in pagedItems" :key="item[rowKey]">
-          <td class="text-center align-middle" v-if="showSelection">
+          <td
+            class="selections text-center align-middle"
+            :class="selectionsTdClass"
+            :style="selectionsTdStyle"
+            v-if="showSelection"
+          >
             <div>
               <div
                 class="custom-control custom-checkbox"
@@ -297,6 +307,7 @@ email: jason@gms.ndhu.edu.tw
                         _onColumnEditControlModelChange(value, column, event)
                     "
                     :disabled="column.editable === false"
+                    :size="smallTable ? 'sm' : 'md'"
                   />
                 </div>
                 <div class="invalid-feedback">
@@ -624,6 +635,14 @@ export default {
       default: true
     },
 
+    selectionsThClass: null,
+
+    selectionsThStyle: null,
+
+    selectionsTdClass: null,
+
+    selectionsTdStyle: null,
+
     showActions: {
       type: Boolean,
       default: true
@@ -671,7 +690,22 @@ export default {
 
     tableClass: null,
 
-    tableStyle: null
+    tableStyle: null,
+
+    bordered: {
+      type: Boolean,
+      default: true
+    },
+
+    striped: {
+      type: Boolean,
+      default: true
+    },
+
+    hover: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data() {
@@ -774,20 +808,42 @@ export default {
     },
 
     _tableClass() {
-      const objStr = Object.prototype.toString.call(this.tableClass);
-      if (objStr === '[object Object]') {
-        return { ...this.tableClass, 'table-sm': this.smallTable };
-      } else if (objStr === '[object Array]') {
-        if (this.smallTable) {
-          return [...this.tableClass, 'table-sm'];
-        }
-      } else if (objStr === '[object String]') {
-        if (this.smallTable) {
-          return `${this.tableClass} table-sm`;
-        }
+      const props = ['bordered', 'striped', 'hover'];
+      const defaultTableClass = {
+        'table-sm': this.smallTable
+      };
+      for (let prop of props) {
+        defaultTableClass[`table-${prop}`] = this[prop];
       }
 
-      return this.tableClass ?? { 'table-sm': this.smallTable };
+      const objStr = Object.prototype.toString.call(this.tableClass);
+      if (objStr === '[object Object]') {
+        return Object.assign({}, this.tableClass, defaultTableClass);
+      } else if (objStr === '[object Array]') {
+        const classArray = [...this.tableClass];
+        if (this.smallTable) {
+          classArray.push('table-sm');
+        }
+        for (let prop of props) {
+          if (this[prop]) {
+            classArray.push(`table-${prop}`);
+          }
+        }
+        return classArray;
+      } else if (objStr === '[object String]') {
+        let classString = this.tableClass;
+        if (this.smallTable) {
+          classString += ' table-sm';
+        }
+        for (let prop of props) {
+          if (this[prop]) {
+            classString += ` table-${prop}`;
+          }
+        }
+        return classString;
+      }
+
+      return this.tableClass ?? defaultTableClass;
     }
   },
 
