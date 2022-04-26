@@ -38,7 +38,11 @@
     :id="`${idPrefix}${column.key}`"
     v-model="inner.editItem[column.key]"
     class="form-control"
-    :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
+    :class="[
+      column.control.cssClass,
+      { 'is-invalid': column.errors.length },
+      `form-control-${size}`
+    ]"
     :style="column.control.style"
     @change="_onModelChange($event.target.value, $event)"
   >
@@ -129,7 +133,11 @@
     v-model="inner.editItem[column.key]"
     :placeholder="column.header"
     class="form-control"
-    :class="[column.control.cssClass, { 'is-invalid': column.errors.length }]"
+    :class="[
+      column.control.cssClass,
+      { 'is-invalid': column.errors.length },
+      `form-control-${size}`
+    ]"
     :style="column.control.style"
     @input="_onModelChange($event.target.value, $event)"
   ></textarea>

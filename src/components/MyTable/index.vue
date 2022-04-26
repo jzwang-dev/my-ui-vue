@@ -307,7 +307,6 @@ email: jason@gms.ndhu.edu.tw
                         _onColumnEditControlModelChange(value, column, event)
                     "
                     :disabled="column.editable === false"
-                    :size="smallTable ? 'sm' : 'md'"
                   />
                 </div>
                 <div class="invalid-feedback">
