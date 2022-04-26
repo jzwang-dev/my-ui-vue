@@ -7,6 +7,7 @@ function _normalizeColumn(column) {
       header: column.key,
       visible: true,
       value: (item) => item[column.key],
+      allowHtml: false,
       defaultValue: null,
       format: (value) => value,
       nullText: '--',
@@ -26,8 +27,7 @@ function _normalizeColumn(column) {
       visibleInModifyForm: column.visible ?? true,
       visibleInModifyFormIf: null,
       visibleInDetailTable: column.visible ?? true,
-      visibleInDetailTableIf: null,
-      allowHtml: false
+      visibleInDetailTableIf: null
     },
     column,
     {
