@@ -6,7 +6,7 @@ email: jason@gms.ndhu.edu.tw
 <template>
   <div class="my-paginator">
     <nav>
-      <ul class="pagination m-0">
+      <ul class="pagination m-0" :class="[`pagination-${size}`]">
         <li
           class="page-item"
           :class="{ disabled: !totalPages }"
@@ -98,6 +98,14 @@ export default {
     totalItems: {
       type: Number,
       default: 0
+    },
+
+    size: {
+      type: String,
+      default: 'md',
+      validator(value) {
+        return ['sm', 'md', 'lg', 'xl'].indexOf(value) !== -1;
+      }
     }
   },
 

@@ -17,6 +17,7 @@ email: jason@gms.ndhu.edu.tw
         <button
           type="button"
           class="btn btn-primary"
+          :class="{ 'btn-sm': smallTable }"
           @click="_onCreate"
           v-if="showCreate"
           :disabled="_inlineCreating"
@@ -30,6 +31,7 @@ email: jason@gms.ndhu.edu.tw
         <div class="input-icon-right" v-if="showSearch">
           <input
             class="form-control"
+            :class="{ 'form-control-sm': smallTable }"
             type="search"
             placeholder="搜尋"
             v-model="inner.searchTerm"
@@ -53,6 +55,7 @@ email: jason@gms.ndhu.edu.tw
         <button
           type="button"
           class="btn btn-danger mr-1"
+          :class="{ 'btn-sm': smallTable }"
           @click="$emit('destroy-items', inner.selected)"
           :disabled="!inner.selected.length"
           v-if="showDestroy"
@@ -62,6 +65,7 @@ email: jason@gms.ndhu.edu.tw
         <div class="dropdown" v-if="showExport">
           <button
             class="btn btn-secondary dropdown-toggle"
+            :class="{ 'btn-sm': smallTable }"
             type="button"
             data-toggle="dropdown"
           >
@@ -88,7 +92,11 @@ email: jason@gms.ndhu.edu.tw
         <slot name="menubar-right-before" :vmData="$data"></slot>
         <template v-if="showItemsPerPage">
           顯示
-          <select class="form-control mx-1" v-model="inner.paging.itemsPerPage">
+          <select
+            class="form-control mx-1"
+            :class="{ 'form-control-sm': smallTable }"
+            v-model="inner.paging.itemsPerPage"
+          >
             <option
               v-for="option in inner.itemsPerPageOptions"
               :key="option"
@@ -102,6 +110,7 @@ email: jason@gms.ndhu.edu.tw
         <div class="dropdown ml-1" v-if="showDisplayingColumns">
           <button
             class="btn btn-outline-secondary dropdown-toggle"
+            :class="{ 'btn-sm': smallTable }"
             type="button"
             data-toggle="dropdown"
           >
@@ -171,6 +180,7 @@ email: jason@gms.ndhu.edu.tw
           :totalItems="totalItems"
           @change-page="(page) => $emit('change-page', page)"
           v-if="showPaginator && inner.paging.itemsPerPage > 0"
+          :size="smallTable ? 'sm' : 'md'"
         ></my-paginator>
         <slot name="pagebar-left-after" :vmData="$data"></slot>
       </div>
@@ -187,7 +197,9 @@ email: jason@gms.ndhu.edu.tw
     <!-- pagebar(top) (end) -->
 
     <table
-      class="table table-bordered table-striped table-hover table-sm responsive mb-0"
+      class="table table-bordered table-striped table-hover responsive mb-0"
+      :class="_tableClass"
+      :style="tableStyle"
     >
       <thead>
         <tr class="table-active">
@@ -375,6 +387,7 @@ email: jason@gms.ndhu.edu.tw
               $emit('change-paging', { page, itemsPerPage })
           "
           v-if="showPaginator && inner.paging.itemsPerPage > 0"
+          :size="smallTable ? 'sm' : 'md'"
         ></my-paginator>
         <slot name="pagebar-left-after" :vmData="$data"></slot>
       </div>
@@ -630,7 +643,16 @@ export default {
       default() {
         return null;
       }
-    }
+    },
+
+    smallTable: {
+      type: Boolean,
+      default: false
+    },
+
+    tableClass: null,
+
+    tableStyle: null
   },
 
   data() {
@@ -730,6 +752,23 @@ export default {
 
     _inlineCreating() {
       return this.items?.some((item) => item._itemIndex != null) ?? false;
+    },
+
+    _tableClass() {
+      const objStr = Object.prototype.toString.call(this.tableClass);
+      if (objStr === '[object Object]') {
+        return { ...this.tableClass, 'table-sm': this.smallTable };
+      } else if (objStr === '[object Array]') {
+        if (this.smallTable) {
+          return [...this.tableClass, 'table-sm'];
+        }
+      } else if (objStr === '[object String]') {
+        if (this.smallTable) {
+          return `${this.tableClass} table-sm`;
+        }
+      }
+
+      return this.tableClass;
     }
   },
 
