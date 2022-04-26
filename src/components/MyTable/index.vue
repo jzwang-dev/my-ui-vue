@@ -319,8 +319,17 @@ email: jason@gms.ndhu.edu.tw
                 :item="item"
                 :column="column"
               >
+                <div
+                  class="pre-line"
+                  v-if="column.allowHtml === true"
+                  v-html="
+                    $options.filters.nulltext(
+                      _formatValue(column.format, column.value(item))
+                    )
+                  "
+                ></div>
                 <!-- prettier-ignore -->
-                <div class="pre-line">{{ _formatValue(column.format, column.value(item)) | nulltext(column.nullText) }}</div>
+                <div class="pre-line" v-else>{{ _formatValue(column.format, column.value(item)) | nulltext(column.nullText) }}</div>
               </slot>
             </div>
           </td>
@@ -367,6 +376,7 @@ email: jason@gms.ndhu.edu.tw
                   class="btn btn-secondary btn-sm"
                   @click="_onUpdate(item)"
                   v-if="showUpdate"
+                  :disabled="_inlineCreating"
                 >
                   編輯
                 </button>
@@ -704,6 +714,18 @@ export default {
     hover: {
       type: Boolean,
       default: true
+    },
+
+    cloneMode: {
+      type: String,
+      default: 'nocopy',
+      validator(value) {
+        return (
+          ['nocopy', 'shallowcopy', 'deepcopy'].indexOf(
+            value?.toLowerCase()
+          ) !== -1
+        );
+      }
     }
   },
 
@@ -847,6 +869,24 @@ export default {
   },
 
   methods: {
+    _cloneObject(source) {
+      try {
+        switch (this.cloneMode?.toLowerCase()) {
+          case 'shallowcopy':
+            return Object.assign({}, source);
+          case 'deepcopy':
+            return structuredClone(source);
+          default:
+            return source;
+        }
+      } catch (err) {
+        console.log(
+          `[debug] MyTable._cloneObject() 錯誤：${err} 來源物件：${source}`
+        );
+        return source;
+      }
+    },
+
     _normalized_columns() {
       return this.columns.map(_normalizeColumn);
     },
@@ -1230,7 +1270,7 @@ export default {
         return;
       }
 
-      const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
+      const inlineEditItem = this._cloneObject(this.inner.inlineEditItem);
 
       if (!inlineEditItem[this.rowKey]) {
         delete inlineEditItem._itemIndex;
@@ -1242,7 +1282,7 @@ export default {
 
     _onCancel() {
       this.clearErrors();
-      const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
+      const inlineEditItem = this._cloneObject(this.inner.inlineEditItem);
       if (inlineEditItem._itemIndex != null) {
         let items = [...this.items];
         items.splice(inlineEditItem._itemIndex, 1);
@@ -1254,15 +1294,18 @@ export default {
     },
 
     _onRead(item) {
-      this.$emit('read-item', item);
+      const _clonedItem = this._cloneObject(item);
+      this.$emit('read-item', _clonedItem);
     },
 
     _onUpdate(item) {
-      this.$emit('update-item', item);
+      const _clonedItem = this._cloneObject(item);
+      this.$emit('update-item', _clonedItem);
     },
 
     _onDelete(item) {
-      this.$emit('delete-item', item);
+      const _clonedItem = this._cloneObject(item);
+      this.$emit('delete-item', _clonedItem);
     },
 
     _onCreate() {

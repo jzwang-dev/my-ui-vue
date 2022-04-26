@@ -23,11 +23,17 @@
                 : true
             "
           >
-            <!-- prettier-ignore -->
             <div
               class="pre-line"
-              :key="column.key"
-            >{{ _formatValue(column.format, column.value(inner.detailItem)) | nulltext(column.nullText) }}</div>
+              v-if="column.allowHtml === true"
+              v-html="
+                $options.filters.nulltext(
+                  _formatValue(column.format, column.value(inner.detailItem))
+                )
+              "
+            ></div>
+            <!-- prettier-ignore -->
+            <div class="pre-line" v-else>{{ _formatValue(column.format, column.value(inner.detailItem)) | nulltext(column.nullText) }}</div>
           </slot>
         </td>
       </tr>
