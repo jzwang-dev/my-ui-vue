@@ -229,7 +229,7 @@ export default {
       const modifyItem = Object.assign({}, this.inner.modifyItem);
 
       if (this.modifyMode === 'create') {
-        delete modifyItem._itemIndex;
+        delete modifyItem._myui_itemIndex;
         this.$emit('save-create-item', modifyItem);
       } else {
         this.$emit('save-update-item', modifyItem);
@@ -239,8 +239,8 @@ export default {
     cancel() {
       this.clearErrors();
       const modifyItem = Object.assign({}, this.inner.modifyItem);
-      if (modifyItem._itemIndex != null) {
-        delete modifyItem._itemIndex;
+      if (modifyItem._myui_itemIndex != null) {
+        delete modifyItem._myui_itemIndex;
       }
       this.$emit('cancel-item', modifyItem);
       this.inner.modifyItem = null;

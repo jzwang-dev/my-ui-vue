@@ -291,7 +291,7 @@ email: jason@gms.ndhu.edu.tw
                   inner.inlineEditItem &&
                   (inner.inlineEditItem[rowKey] === item[rowKey] ||
                     (inner.inlineEditItem[rowKey] == null &&
-                      inner.inlineEditItem._itemIndex === itemIndex))
+                      inner.inlineEditItem._myui_itemIndex === itemIndex))
                 "
               >
                 <div
@@ -825,7 +825,7 @@ export default {
     },
 
     _inlineCreating() {
-      return this.items?.some((item) => item._itemIndex != null) ?? false;
+      return this.items?.some((item) => item._myui_itemIndex != null) ?? false;
     },
 
     _tableClass() {
@@ -1273,7 +1273,7 @@ export default {
       const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
 
       if (!inlineEditItem[this.rowKey]) {
-        delete inlineEditItem._itemIndex;
+        delete inlineEditItem._myui_itemIndex;
         this.$emit('save-create-item', inlineEditItem);
       } else {
         this.$emit('save-update-item', inlineEditItem);
@@ -1283,11 +1283,11 @@ export default {
     _onCancel() {
       this.clearErrors();
       const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
-      if (inlineEditItem._itemIndex != null) {
+      if (inlineEditItem._myui_itemIndex != null) {
         let items = [...this.items];
-        items.splice(inlineEditItem._itemIndex, 1);
+        items.splice(inlineEditItem._myui_itemIndex, 1);
         this.$emit('update:items', items);
-        delete inlineEditItem._itemIndex;
+        delete inlineEditItem._myui_itemIndex;
       }
       this.$emit('cancel-item', inlineEditItem);
       this.inner.inlineEditItem = null;
@@ -1309,8 +1309,8 @@ export default {
     },
 
     _onCreate() {
-      const _itemIndex = 0;
-      const item = { _itemIndex };
+      const _myui_itemIndex = 0;
+      const item = { _myui_itemIndex };
       for (let column of this.inner.columns) {
         if (column.defaultValue == null) {
           item[column.key] = null;
@@ -1330,7 +1330,7 @@ export default {
           item[column.key] = column.defaultValue;
         }
       }
-      this.$emit('create-item', item, _itemIndex);
+      this.$emit('create-item', item, _myui_itemIndex);
     },
 
     _formatValue(format, value) {

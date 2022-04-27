@@ -10,6 +10,11 @@
 
 .my-table table.table > thead > tr > th.actions,
 .my-table table.table > tr > th.actions {
+  width: 160px;
+}
+
+.my-table table.table.table-sm > thead > tr > th.actions,
+.my-table table.table.table-sm > tr > th.actions {
   width: 150px;
 }
 
