@@ -10,17 +10,17 @@
 
 .my-table table.table > thead > tr > th.actions,
 .my-table table.table > tr > th.actions {
-  width: 160px;
+  width: 11rem;
 }
 
 .my-table table.table.table-sm > thead > tr > th.actions,
 .my-table table.table.table-sm > tr > th.actions {
-  width: 150px;
+  width: 10rem;
 }
 
 .my-table table.table > thead > tr > th.selections,
 .my-table table.table > tr > th.selections {
-  width: 16px;
+  width: 1rem;
 }
 
 .my-table .selections .custom-control.custom-checkbox {
