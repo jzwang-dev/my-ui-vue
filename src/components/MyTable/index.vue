@@ -718,7 +718,7 @@ export default {
 
     cloneMode: {
       type: String,
-      default: 'nocopy',
+      default: 'shallowcopy',
       validator(value) {
         return (
           ['nocopy', 'shallowcopy', 'deepcopy'].indexOf(
@@ -1270,7 +1270,7 @@ export default {
         return;
       }
 
-      const inlineEditItem = this._cloneObject(this.inner.inlineEditItem);
+      const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
 
       if (!inlineEditItem[this.rowKey]) {
         delete inlineEditItem._itemIndex;
@@ -1282,7 +1282,7 @@ export default {
 
     _onCancel() {
       this.clearErrors();
-      const inlineEditItem = this._cloneObject(this.inner.inlineEditItem);
+      const inlineEditItem = Object.assign({}, this.inner.inlineEditItem);
       if (inlineEditItem._itemIndex != null) {
         let items = [...this.items];
         items.splice(inlineEditItem._itemIndex, 1);
