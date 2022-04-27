@@ -44,12 +44,47 @@ function formatValue(format, value) {
   return value;
 }
 
-function randomId(randomLength = 5, prefix = 'id_') {
-  const min = 10 ** randomLength;
-  const max = 9 * min;
-  return (
-    prefix + (Math.random() * max + min).toString().substring(0, randomLength)
-  );
+function randomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function randomIntString(length) {
+  const max = 10 ** length - 1;
+  return randomInt(0, max).toString().padStart(length, '0');
+}
+
+function randomId(length = 5, prefix = 'id_') {
+  return `${prefix}${randomIntString(length)}`;
+}
+
+function timestamp() {
+  if (
+    typeof performance !== 'undefined' &&
+    typeof performance.now === 'function'
+  ) {
+    return performance.now();
+  }
+
+  return Date.now();
+}
+
+function uuid() {
+  if (
+    typeof crypto !== 'undefined' &&
+    typeof crypto.randomUUID === 'function'
+  ) {
+    return crypto.randomUUID();
+  }
+
+  let d = timestamp();
+
+  return 'xxxxxxxx-xxxx-4xxx-Nxxx-xxxxxxxxxxxx'.replace(/[xN]/g, function (c) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
 }
 
 export default {
@@ -60,5 +95,8 @@ export default {
   typeToString,
   setLoading,
   formatValue,
-  randomId
+  randomInt,
+  randomId,
+  timestamp,
+  uuid
 };
