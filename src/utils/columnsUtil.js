@@ -43,14 +43,16 @@ function clearErrors(columns) {
 }
 
 function getErrors(columns) {
-  return columns.map((column) => {
-    const errors = column.errors ?? [];
-    return {
-      key: column.key,
-      errors,
-      errMsg: errors.join(column.errorsSeparator || ', ')
-    };
-  });
+  return columns
+    .map((column) => {
+      const errors = column.errors ?? [];
+      return {
+        key: column.key,
+        errors,
+        errMsg: errors.join(column.errorsSeparator || ', ')
+      };
+    })
+    .filter((column) => column.errors.length);
 }
 
 function validateColumn(value, column, item) {
