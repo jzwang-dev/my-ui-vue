@@ -51,4 +51,4 @@ import columnsUtil from 'my-ui-vue/src/utils/columnsUtil';
 ```
 
 ## Docs
-[MyTable Doc](https://www.notion.so/MyTable-Doc-58d0e805b757475cb536a8b642182bd7)
+[MyTable Doc](https://acute-era-955.notion.site/MyTable-Doc-58d0e805b757475cb536a8b642182bd7)
