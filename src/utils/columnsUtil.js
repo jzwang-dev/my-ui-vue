@@ -63,8 +63,7 @@ function isColumnRequired(column, item) {
   const isRequired = column.validators?.some(
     (validator) =>
       validator.validatorName === 'required' ||
-      (validator.validatorName === 'requiredIf' &&
-        validator.testFunc(item[column.key], item))
+      (validator.validatorName === 'requiredIf' && validator.testFunc(item))
   );
   return isRequired;
 }
