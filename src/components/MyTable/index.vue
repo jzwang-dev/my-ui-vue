@@ -466,11 +466,19 @@ export default {
   },
 
   props: {
+    /**
+     * 資料來源。支持.sync，必填。
+     * @type {any[]}
+     */
     items: {
       type: Array,
       required: true
     },
 
+    /**
+     * 欄位定義。支持.sync，必填，驗證：(columns) => columns.every((column) => column.key)。
+     * @type {any[]}
+     */
     columns: {
       type: Array,
       required: true,

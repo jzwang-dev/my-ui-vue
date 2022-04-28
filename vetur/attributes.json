@@ -1,0 +1,285 @@
+{
+  "my-table/zzzzzzzzzzzzzzzzzzzz_props": {
+    "description": "== 分隔屬性，無意義。 =========="
+  },
+  "my-table/items": {
+    "type": "any[]",
+    "description": "資料來源。支持.sync，必填。"
+  },
+  "my-table/columns": {
+    "type": "any[]",
+    "description": "欄位定義。支持.sync，必填，驗證：(columns) => columns.every((column) => column.key)。"
+  },
+  "my-table/displayingColumnKeys": {
+    "type": "string[]",
+    "description": "目前顯示欄位的識別鍵陣列。支持.sync，預設值：columns.filter(col => col.visible).map(col => col.key)。"
+  },
+  "my-table/rowKey": {
+    "type": "string",
+    "description": "資料列識別鍵(通常為主鍵PK)。預設值：'id'。"
+  },
+  "my-table/selected": {
+    "type": "any[]",
+    "description": "已勾選的資料列識別鍵。支持.sync，預設值：[]。"
+  },
+  "my-table/searchTerm": {
+    "type": "string",
+    "description": "搜尋關鍵詞。支持.sync，預設值：''。"
+  },
+  "my-table/searchFilter": {
+    "type": "object",
+    "description": "搜尋篩選欄位物件 ex: { columnKeyA: 'keyASearchTerm', columnKeyB: 'keyBSearchTerm' }。支持.sync，預設值：columns.filter(col => col.visible).reduce((prev, curr) => ({...prev, [curr.key]: null}), {})。"
+  },
+  "my-table/filtering": {
+    "type": "object",
+    "description": "篩選資訊物件 ignoreCase: 搜尋比對時忽略大小寫 logicOperation: 所有搜尋條件的邏輯運算模式(or, and)。支持.sync，預設值：{ ignoreCase: true, logicOperation: 'or' }。"
+  },
+  "my-table/sorting": {
+    "type": "object",
+    "description": "排序資訊物件 key: 排序欄位屬性鍵 direction: 排序方向(asc, desc)。支持.sync，預設值：{ key: '', direction: 'asc' }。"
+  },
+  "my-table/paging": {
+    "type": "object",
+    "description": "分頁資訊物件 page: 頁碼 itemsPerPage: 每頁幾筆(小於等於0者不分頁)。支持.sync，預設值：{ page: 1, itemsPerPage: 100 }。"
+  },
+  "my-table/paginator": {
+    "type": "object",
+    "description": "分頁器資訊物件 showFirst: 顯示首頁連結 showPrev: 顯示上一頁連結 showPrevGrp: 顯示上一頁群連結 showPages: 顯示頁碼連結 showNextGrp: 顯示下一頁群連結 showNext: 顯示下一頁連結 showLast: 顯示末頁連結 pageLinks: 頁碼連結數量。支持.sync，預設值：{ showFirst: false, showPrev: true, showPrevGrp: true, showPages: true, showNextGrp: true, showNext: true, showLast: false, pageLinks: 5 }。"
+  },
+  "my-table/itemsPerPageOptions": {
+    "type": "number[]",
+    "description": "每頁幾筆下拉選單選項。支持.sync，驗證：(options) => options.every((option) => !isNaN(option))，預設值：[10, 25, 50, 100]。"
+  },
+  "my-table/serverTotalItems": {
+    "type": "number",
+    "description": "伺服器資料總筆數，有提供時以伺服器端搜尋、排序、分頁(request事件處理)。"
+  },
+  "my-table/showToolbar": {
+    "type": "boolean",
+    "description": "是否顯示工具列(新增、搜尋)。預設值：true。"
+  },
+  "my-table/showCreate": {
+    "type": "boolean",
+    "description": "是否顯示新增按鈕。預設值：true。"
+  },
+  "my-table/showSearch": {
+    "type": "boolean",
+    "description": "是否顯示搜尋框。預設值：true。"
+  },
+  "my-table/showMenubar": {
+    "type": "boolean",
+    "description": "是否顯示選單列(刪除勾選、匯出、每頁幾筆、顯示欄位)。預設值：true。"
+  },
+  "my-table/showDestroy": {
+    "type": "boolean",
+    "description": "是否顯示刪除勾選按鈕。預設值：true。"
+  },
+  "my-table/showExport": {
+    "type": "boolean",
+    "description": "是否顯示匯出下拉選單。預設值：true。"
+  },
+  "my-table/showItemsPerPage": {
+    "type": "boolean",
+    "description": "是否顯示每頁幾筆下拉選單。預設值：true。"
+  },
+  "my-table/showDisplayingColumns": {
+    "type": "boolean",
+    "description": "是否顯示顯示欄位下拉選單。預設值：true。"
+  },
+  "my-table/showPagebar": {
+    "type": "boolean",
+    "description": "是否顯示分頁列(分頁器、分頁資訊)。預設值：true。"
+  },
+  "my-table/showPaginator": {
+    "type": "boolean",
+    "description": "是否顯示分頁器。預設值：true。"
+  },
+  "my-table/showPageInfo": {
+    "type": "boolean",
+    "description": "是否顯示分頁資訊。預設值：true。"
+  },
+  "my-table/pagebarPosition": {
+    "type": "string",
+    "description": "分頁列位置。選項：'top', 'bottom'，預設值：'top'。"
+  },
+  "my-table/toolbarClass": {
+    "type": "string|object|any[]",
+    "description": "工具列樣式類別。"
+  },
+  "my-table/toolbarStyle": {
+    "type": "object|any[]",
+    "description": "工具列樣式。"
+  },
+  "my-table/menubarClass": {
+    "type": "string|object|any[]",
+    "description": "選單列樣式類別。"
+  },
+  "my-table/menubarStyle": {
+    "type": "object|any[]",
+    "description": "選單列樣式。"
+  },
+  "my-table/pagebarClass": {
+    "type": "string|object|any[]",
+    "description": "分頁列樣式類別。"
+  },
+  "my-table/pagebarStyle": {
+    "type": "object|any[]",
+    "description": "分頁列樣式。"
+  },
+  "my-table/exportExcel": {
+    "type": "function",
+    "description": "自訂匯出Excal函式。"
+  },
+  "my-table/exportPdf": {
+    "type": "function",
+    "description": "自訂匯出Pdf函式。"
+  },
+  "my-table/exportName": {
+    "type": "string",
+    "description": "自訂匯出預設檔案名稱。預設值：'export_data'。"
+  },
+  "my-table/exportColumnKeys": {
+    "type": "string[]",
+    "description": "匯出欄位的識別鍵陣列。預設值：columns.filter(col => col.visible).map(col => col.key)。"
+  },
+  "my-table/showSelection": {
+    "type": "boolean",
+    "description": "是否顯示資料列選取方塊。預設值：true。"
+  },
+  "my-table/selectionsThClass": {
+    "type": "string|object|any[]",
+    "description": "資料列選取方塊表頭樣式類別。"
+  },
+  "my-table/selectionsThStyle": {
+    "type": "object|any[]",
+    "description": "資料列選取方塊表頭樣式。"
+  },
+  "my-table/selectionsTdClass": {
+    "type": "string|object|any[]",
+    "description": "資料列選取方塊儲存格樣式類別。"
+  },
+  "my-table/selectionsTdStyle": {
+    "type": "object|any[]",
+    "description": "資料列選取方塊儲存格樣式。"
+  },
+  "my-table/showActions": {
+    "type": "boolean",
+    "description": "是否顯示資料列操作動作儲存格。預設值：true。"
+  },
+  "my-table/actionsThClass": {
+    "type": "string|object|any[]",
+    "description": "資料列操作動作表頭樣式類別。"
+  },
+  "my-table/actionsThStyle": {
+    "type": "object|any[]",
+    "description": "資料列操作動作表頭樣式。"
+  },
+  "my-table/actionsTdClass": {
+    "type": "string|object|any[]",
+    "description": "資料列操作動作儲存格樣式類別。"
+  },
+  "my-table/actionsTdStyle": {
+    "type": "object|any[]",
+    "description": "資料列操作動作儲存格樣式。"
+  },
+  "my-table/showRead": {
+    "type": "boolean",
+    "description": "是否顯示資料列檢視按鈕。預設值：true。"
+  },
+  "my-table/showUpdate": {
+    "type": "boolean",
+    "description": "是否顯示資料列編輯按鈕。預設值：true。"
+  },
+  "my-table/showDelete": {
+    "type": "boolean",
+    "description": "是否顯示資料列刪除按鈕。預設值：true。"
+  },
+  "my-table/emptyText": {
+    "type": "string",
+    "description": "查無資料訊息文字。預設值：'查無資料！'。"
+  },
+  "my-table/inlineEditItem": {
+    "type": "object",
+    "description": "行內編輯項目。支持.sync，預設值：null。"
+  },
+  "my-table/smallTable": {
+    "type": "boolean",
+    "description": "是否為小型表格(按鈕樣式類別加上btn-sm，表單控制項樣式類別加上form-control-sm，表格樣式類別加上table-sm)。預設值：false。"
+  },
+  "my-table/tableClass": {
+    "type": "string|object|any[]",
+    "description": "表格樣式類別"
+  },
+  "my-table/tableStyle": { "type": "object|any[]", "description": "表格樣式" },
+  "my-table/bordered": {
+    "type": "boolean",
+    "description": "表格是否加上table-bordered樣式類別。預設值：true。"
+  },
+  "my-table/striped": {
+    "type": "boolean",
+    "description": "表格是否加上table-striped樣式類別。預設值：true。"
+  },
+  "my-table/hover": {
+    "type": "boolean",
+    "description": "表格是否加上table-hover樣式類別。預設值：true。"
+  },
+  "my-table/cloneMode": {
+    "type": "string",
+    "description": "物件克隆模式(不拷貝、淺拷貝、深拷貝)。選項：'nocopy', 'shallowcopy', 'deepcopy'，預設值：'shallowcopy'。"
+  },
+  "my-table/zzzzzzzzzzzzzzzzzzzz_events": {
+    "description": "== 分隔屬性，無意義。 =========="
+  },
+  "my-table/request": {
+    "type": "event",
+    "description": "觸發伺服器請求時發出。處理函式原型：@request=\"({ searchTerm, searchFilter, filtering, sorting, paging }) => onRequest({ searchTerm, searchFilter, filtering, sorting, paging })\" 事件參數： searchTerm: 搜尋關鍵詞 searchFilter: 搜尋篩選欄位物件 filtering: 篩選資訊物件 sorting: 排序資訊物件 paging: 分頁資訊物件。"
+  },
+  "my-table/create-item": {
+    "type": "event",
+    "description": "於新增資料來源項目時觸發。處理函式原型：@create-item=\"(item, itemIndex) => onCreateItem(item, itemIndex)\" 事件參數： item: 資料來源項目 itemIndex: 新增資料來源的索引位置。"
+  },
+  "my-table/destroy-items": {
+    "type": "event",
+    "description": "於刪除勾選時觸發。處理函式原型：@destroy-items=\"(selected) => onDestroyItems(selected)\" 事件參數： selected: 已勾選的資料列識別鍵。"
+  },
+  "my-table/change-filtering": {
+    "type": "event",
+    "description": "於篩選時觸發。處理函式原型：@change-filtering=\"({ searchTerm, searchFilter }) => onChangeFiltering({ searchTerm, searchFilter })\" 事件參數： searchTerm: 搜尋關鍵詞 searchFilter: 搜尋篩選欄位物件。"
+  },
+  "my-table/change-sorting": {
+    "type": "event",
+    "description": "於排序時觸發。處理函式原型：@change-sorting=\"({ key, direction }) => onChangeSorting({ key, direction })\" 事件參數： key: 排序欄位屬性鍵 direction: 排序方向(asc, desc)。"
+  },
+  "my-table/change-paging": {
+    "type": "event",
+    "description": "於分頁時觸發。處理函式原型：@change-paging=\"({ page, itemsPerPage }) => onChangePaging({ page, itemsPerPage })\" 事件參數： page: 頁碼 itemsPerPage: 每頁幾筆(小於等於0者不分頁)。"
+  },
+  "my-table/validate-item-failed": {
+    "type": "event",
+    "description": "於驗證行內編輯項目失敗時觸發。處理函式原型：@validate-item-failed=\"({ errors, item }) => onValidateItemFailed({ errors, item })\" 事件參數： { errors, item } errors: 錯誤資訊物件({ key: (欄位識別鍵), errors: (錯誤訊息陣列), errMsg: (以分隔符號串接之錯誤訊息) }) item: 行內編輯項目。"
+  },
+  "my-table/save-create-item": {
+    "type": "event",
+    "description": "於儲存新增行內編輯項目時觸發(已通過驗證)。處理函式原型：@save-create-item=\"(item) => onSaveCreateItem(item)\" 事件參數： item: 行內編輯項目。"
+  },
+  "my-table/save-update-item": {
+    "type": "event",
+    "description": "於儲存編輯行內編輯項目時觸發(已通過驗證)。處理函式原型：@save-update-item=\"(item) => onSaveUpdateItem(item)\" 事件參數： item: 行內編輯項目。"
+  },
+  "my-table/cancel-item": {
+    "type": "event",
+    "description": "於取消行內編輯項目時觸發。處理函式原型：@cancel-item=\"(item) => onCancelItem(item)\" 事件參數： item: 行內編輯項目。"
+  },
+  "my-table/read-item": {
+    "type": "event",
+    "description": "。處理函式原型：@read-item=\"(item) => onReadItem(item)\" 事件參數： item: 資料來源項目。"
+  },
+  "my-table/update-item": {
+    "type": "event",
+    "description": "於編輯資料來源項目時觸發。處理函式原型：@update-item=\"(item) => onUpdateItem(item)\" 事件參數： item: 資料來源項目。"
+  },
+  "my-table/delete-item": {
+    "type": "event",
+    "description": "於刪除資料來源項目時觸發。處理函式原型：@delete-item=\"(item) => onDeleteItem(item)\" 事件參數： item: 資料來源項目。"
+  }
+}
