@@ -1,6 +1,6 @@
 export const defaultFiltering = {
   ignoreCase: true,
-  logicOperation: 'or'
+  logicOperation: 'and'
 };
 
 export const defaultSorting = {

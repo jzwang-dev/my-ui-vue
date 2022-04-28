@@ -32,7 +32,7 @@
   },
   "my-table/filtering": {
     "type": "object",
-    "description": "篩選資訊物件 ignoreCase: 搜尋比對時忽略大小寫 logicOperation: 所有搜尋條件的邏輯運算模式(or, and)。支持.sync，預設值：{ ignoreCase: true, logicOperation: 'or' }。"
+    "description": "篩選資訊物件 ignoreCase: 搜尋比對時忽略大小寫 logicOperation: 所有搜尋條件的邏輯運算模式(or, and)。支持.sync，預設值：{ ignoreCase: true, logicOperation: 'and' }。"
   },
   "my-table/sorting": {
     "type": "object",
