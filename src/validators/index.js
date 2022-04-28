@@ -127,15 +127,11 @@ function dynamicRegex(regexFunc, errMsg = '格式不正確') {
     !regexFunc ||
     Object.prototype.toString.call(regexFunc) !== '[object Function]'
   ) {
-    regexFunc = () => /.*/;
+    regexFunc = () => undefined;
   }
 
   const validator = (value, item) => {
-    const _regex = regexFunc(item);
-
-    if (_regex == null) {
-      return true;
-    }
+    const _regex = regexFunc(item) || /(.*)/g;
 
     return regex(_regex, errMsg)(value, item);
   };
