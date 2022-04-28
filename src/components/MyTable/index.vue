@@ -1064,64 +1064,67 @@ export default {
         Object.values(this.inner.searchFilter ?? {}).some((val) => val != null)
       ) {
         items = items.filter((item) => {
-          const passeds = [];
+          const passedInfos = [];
+
           let normalizedSearchTerm = this.inner.searchTerm;
           if (this.inner.filtering.ignoreCase) {
             normalizedSearchTerm = normalizedSearchTerm.toLowerCase();
           }
 
           for (let column of this.visibleColumns) {
-            let passed = false;
+            let searchTermPassed = false,
+              searchFilterPassed = false;
             let value = column.value ? column.value(item) : item[column.key];
+
             if (value != null) {
-              let valueType = Object.prototype.toString.call(value);
-              let valueString = '';
-              if (
-                valueType === '[object Object]' ||
-                valueType === '[object Array]'
-              ) {
-                valueString = JSON.stringify(value);
-              } else {
-                valueString = value.toString();
-              }
+              const valueString = myUtil.valueToString(value);
 
               let normalizedValueString = valueString;
               if (this.inner.filtering.ignoreCase) {
                 normalizedValueString = normalizedValueString.toLowerCase();
               }
 
-              let filterTerm =
-                (this.inner.searchFilter ?? {})[column.key]?.toString() ?? '';
+              searchTermPassed =
+                normalizedValueString.indexOf(normalizedSearchTerm) !== -1;
+
+              let filterTerm = myUtil.valueToString(
+                (this.inner.searchFilter ?? {})[column.key]
+              );
 
               let normalizedFilterTerm = filterTerm;
               if (this.inner.filtering.ignoreCase) {
                 normalizedFilterTerm = normalizedFilterTerm.toLowerCase();
               }
 
-              passed =
-                normalizedValueString.indexOf(normalizedSearchTerm) !== -1;
-
               if (normalizedFilterTerm) {
-                if (
-                  this.inner.filtering.logicOperation?.toLowerCase() === 'and'
-                ) {
-                  passed =
-                    passed &&
-                    normalizedValueString.indexOf(normalizedFilterTerm) !== -1;
-                } else {
-                  passed =
-                    passed ||
-                    normalizedValueString.indexOf(normalizedFilterTerm) !== -1;
-                }
+                searchFilterPassed =
+                  normalizedValueString.indexOf(normalizedFilterTerm) !== -1;
+              } else {
+                searchFilterPassed = true;
               }
             }
-            passeds.push(passed);
+            passedInfos.push({
+              key: column.key,
+              searchTermPassed,
+              searchFilterPassed
+            });
           }
 
-          if (this.inner.filtering.logicOperation?.toLowerCase() === 'and') {
-            return passeds.every((passed) => passed);
+          //console.log(passedInfos);
+          const itemSearchTermPassed = passedInfos.some(
+            (info) => info.searchTermPassed
+          );
+
+          if (this.inner.filtering.logicOperation?.toLowerCase() === 'or') {
+            return (
+              itemSearchTermPassed ||
+              passedInfos.some((info) => info.searchFilterPassed)
+            );
           } else {
-            return passeds.some((passed) => passed);
+            return (
+              itemSearchTermPassed &&
+              passedInfos.every((info) => info.searchFilterPassed)
+            );
           }
         });
       }

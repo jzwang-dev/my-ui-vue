@@ -87,6 +87,17 @@ function uuid() {
   });
 }
 
+function valueToString(value) {
+  const valueType = Object.prototype.toString.call(value);
+  let valueString = '';
+  if (valueType === '[object Object]' || valueType === '[object Array]') {
+    valueString = JSON.stringify(value);
+  } else {
+    valueString = value?.toString();
+  }
+  return valueString ?? '';
+}
+
 export default {
   getEnv,
   isEnv,
@@ -96,7 +107,9 @@ export default {
   setLoading,
   formatValue,
   randomInt,
+  randomIntString,
   randomId,
   timestamp,
-  uuid
+  uuid,
+  valueToString
 };
