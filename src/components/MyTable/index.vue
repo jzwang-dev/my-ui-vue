@@ -1068,41 +1068,49 @@ export default {
 
           let normalizedSearchTerm = this.inner.searchTerm;
           if (this.inner.filtering.ignoreCase) {
-            normalizedSearchTerm = normalizedSearchTerm.toLowerCase();
+            normalizedSearchTerm = normalizedSearchTerm?.toLowerCase();
           }
 
           for (let column of this.visibleColumns) {
             let searchTermPassed = false,
               searchFilterPassed = false;
             let value = column.value ? column.value(item) : item[column.key];
+            let valueString = null;
 
             if (value != null) {
-              const valueString = myUtil.valueToString(value);
-
-              let normalizedValueString = valueString;
-              if (this.inner.filtering.ignoreCase) {
-                normalizedValueString = normalizedValueString.toLowerCase();
-              }
-
-              searchTermPassed =
-                normalizedValueString.indexOf(normalizedSearchTerm) !== -1;
-
-              let filterTerm = myUtil.valueToString(
-                (this.inner.searchFilter ?? {})[column.key]
-              );
-
-              let normalizedFilterTerm = filterTerm;
-              if (this.inner.filtering.ignoreCase) {
-                normalizedFilterTerm = normalizedFilterTerm.toLowerCase();
-              }
-
-              if (normalizedFilterTerm) {
-                searchFilterPassed =
-                  normalizedValueString.indexOf(normalizedFilterTerm) !== -1;
-              } else {
-                searchFilterPassed = true;
-              }
+              valueString = myUtil.valueToString(value);
             }
+
+            let normalizedValueString = valueString;
+            if (this.inner.filtering.ignoreCase) {
+              normalizedValueString = normalizedValueString?.toLowerCase();
+            }
+
+            if (normalizedSearchTerm) {
+              searchTermPassed = normalizedValueString
+                ? normalizedValueString.indexOf(normalizedSearchTerm) !== -1
+                : false;
+            } else {
+              searchTermPassed = true;
+            }
+
+            let filterTerm = myUtil.valueToString(
+              (this.inner.searchFilter ?? {})[column.key]
+            );
+
+            let normalizedFilterTerm = filterTerm;
+            if (this.inner.filtering.ignoreCase) {
+              normalizedFilterTerm = normalizedFilterTerm?.toLowerCase();
+            }
+
+            if (normalizedFilterTerm) {
+              searchFilterPassed = normalizedValueString
+                ? normalizedValueString.indexOf(normalizedFilterTerm) !== -1
+                : false;
+            } else {
+              searchFilterPassed = true;
+            }
+
             passedInfos.push({
               key: column.key,
               searchTermPassed,
@@ -1111,6 +1119,7 @@ export default {
           }
 
           //console.log(passedInfos);
+
           const itemSearchTermPassed = passedInfos.some(
             (info) => info.searchTermPassed
           );
