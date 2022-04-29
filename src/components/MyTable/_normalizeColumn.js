@@ -41,7 +41,7 @@ function _normalizeColumn(column) {
           dataValueField: 'value',
           dataTextField: 'text',
           showEmptyOption: true,
-          emptyOptionValue: '',
+          emptyOptionValue: null,
           emptyOptionText: '-請選擇-',
           inline: false,
           trueValue: true,

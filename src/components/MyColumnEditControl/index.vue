@@ -53,12 +53,12 @@
       {{ column.control.emptyOptionText }}
     </option>
     <option
-      v-for="item in column.control.dataSource"
-      :key="item[column.control.dataValueField]"
-      :value="item[column.control.dataValueField]"
-      :disabled="item.disabled === true"
+      v-for="dataItem in normalizeDataSource(column)"
+      :key="dataItem[column.control.dataValueField]"
+      :value="dataItem[column.control.dataValueField]"
+      :disabled="dataItem.disabled === true"
     >
-      {{ item[column.control.dataTextField] }}
+      {{ dataItem[column.control.dataTextField] }}
     </option>
   </select>
 
@@ -147,6 +147,7 @@
 import MyRadioButtonList from '../MyRadioButtonList';
 import MyCheckBox from '../MyCheckBox';
 import MyCheckBoxList from '../MyCheckBoxList';
+import columnUtil from '../../utils/columnsUtil';
 
 export default {
   name: 'MyColumnEditControl',
@@ -195,6 +196,14 @@ export default {
   methods: {
     _onModelChange(value, event) {
       this.$emit('model-change', value, event);
+    },
+
+    normalizeDataSource(column) {
+      return columnUtil.normalizeDataSource(
+        column.control.dataSource,
+        column.control.dataValueField,
+        column.control.dataTextField
+      );
     }
   },
 

@@ -3,25 +3,25 @@
     <div
       class="custom-control custom-radio"
       :class="{ 'custom-control-inline': inline }"
-      v-for="item in dataSource"
-      :key="item[dataValueField]"
+      v-for="dataItem in normalizedDataSource"
+      :key="dataItem[dataValueField]"
     >
       <input
         v-bind="$attrs"
         type="radio"
         :name="name"
-        :id="`${_id}_${item[dataValueField]}`"
-        :value="item[dataValueField]"
+        :id="`${_id}_${dataItem[dataValueField]}`"
+        :value="dataItem[dataValueField]"
         v-model="innerChecked"
         class="custom-control-input"
         :class="inputClass"
         :style="inputStyle"
-        :disabled="item.disabled === true || $attrs.disabled"
+        :disabled="dataItem.disabled === true || $attrs.disabled"
       />
       <label
         class="custom-control-label"
-        :for="`${_id}_${item[dataValueField]}`"
-        >{{ item[dataTextField] }}</label
+        :for="`${_id}_${dataItem[dataValueField]}`"
+        >{{ dataItem[dataTextField] }}</label
       >
     </div>
   </div>

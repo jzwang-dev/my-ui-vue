@@ -70,11 +70,33 @@ function isColumnRequired(column, item) {
   return isRequired;
 }
 
+function normalizeDataSource(
+  dataSource,
+  dataValueField = 'value',
+  dataTextField = 'text'
+) {
+  if (
+    dataSource.every((dataItem) =>
+      [dataValueField, dataTextField].every((p) =>
+        Object.prototype.hasOwnProperty.call(dataItem, p)
+      )
+    )
+  ) {
+    return dataSource;
+  }
+
+  return dataSource.map((dataItem) => ({
+    [dataValueField]: dataItem?.toString(),
+    [dataTextField]: dataItem?.toString()
+  }));
+}
+
 export default {
   validateItemField,
   validateItem,
   clearErrors,
   getErrors,
   validateColumn,
-  isColumnRequired
+  isColumnRequired,
+  normalizeDataSource
 };

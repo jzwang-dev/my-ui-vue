@@ -1,3 +1,5 @@
+import columnsUtil from '../utils/columnsUtil';
+
 export default {
   props: {
     dataSource: {
@@ -15,6 +17,16 @@ export default {
     dataTextField: {
       type: String,
       default: 'text'
+    }
+  },
+
+  computed: {
+    normalizedDataSource() {
+      return columnsUtil.normalizeDataSource(
+        this.dataSource,
+        this.dataValueField,
+        this.dataTextField
+      );
     }
   }
 };
