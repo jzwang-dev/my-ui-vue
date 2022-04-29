@@ -37,6 +37,45 @@
   overflow-y: auto;
 }
 
+.my-table .hbox,
+.my-table [class*='hbox-'] {
+  align-items: center !important;
+  gap: 0.25rem;
+}
+
+.my-table .hbox[class*='-right'],
+.my-table [class*='hbox-'][class*='-right'] {
+  justify-content: flex-end;
+}
+
+.my-table .hbox {
+  display: flex !important;
+}
+
+@media (min-width: 576px) {
+  .my-table .hbox-sm {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .my-table .hbox-md {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .my-table .hbox-lg {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .my-table .hbox-xl {
+    display: flex !important;
+  }
+}
+
 /* responsive table */
 
 @media screen and (max-width: 576px) {

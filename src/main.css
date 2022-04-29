@@ -24,7 +24,16 @@ description: Shared styles.
 .input-icon-left,
 .input-icon-right {
   position: relative;
-  display: inline-block;
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .form-inline [class*='input-icon-'] {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }
 }
 
 .input-icon-left > i,

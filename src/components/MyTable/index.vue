@@ -7,12 +7,12 @@ email: jason@gms.ndhu.edu.tw
   <div class="my-table" :id="_id">
     <!-- toolbar (begin) -->
     <div
-      class="toolbar d-sm-flex align-items-center justify-content-between"
+      class="toolbar row no-gutters"
       :class="toolbarClass"
       :style="toolbarStyle"
       v-if="showToolbar"
     >
-      <div class="toolbar-left">
+      <div class="toolbar-left col-sm hbox-sm">
         <slot name="toolbar-left-before" :vmData="$data"></slot>
         <button
           type="button"
@@ -26,17 +26,19 @@ email: jason@gms.ndhu.edu.tw
         </button>
         <slot name="toolbar-left-after" :vmData="$data"></slot>
       </div>
-      <div class="toolbar-right">
+      <div class="toolbar-right col-sm hbox-sm">
         <slot name="toolbar-right-before" :vmData="$data"></slot>
-        <div class="input-icon-right" v-if="showSearch">
-          <input
-            class="form-control"
-            :class="{ 'form-control-sm': smallTable }"
-            type="search"
-            placeholder="搜尋"
-            v-model="inner.searchTerm"
-          />
-          <i class="fas fa-search"></i>
+        <div class="form-inline">
+          <div class="input-icon-right" v-if="showSearch">
+            <input
+              class="form-control"
+              :class="{ 'form-control-sm': smallTable }"
+              type="search"
+              placeholder="搜尋"
+              v-model="inner.searchTerm"
+            />
+            <i class="fas fa-search"></i>
+          </div>
         </div>
         <slot name="toolbar-right-after" :vmData="$data"></slot>
       </div>
@@ -45,16 +47,16 @@ email: jason@gms.ndhu.edu.tw
 
     <!-- menubar (begin) -->
     <div
-      class="menubar border d-sm-flex align-items-center justify-content-between p-2"
+      class="menubar row no-gutters border p-2"
       :class="menubarClass"
       :style="menubarStyle"
       v-if="showMenubar"
     >
-      <div class="menubar-left d-sm-flex align-items-center">
+      <div class="menubar-left col-sm hbox-sm">
         <slot name="menubar-left-before" :vmData="$data"></slot>
         <button
           type="button"
-          class="btn btn-danger mr-1"
+          class="btn btn-danger"
           :class="{ 'btn-sm': smallTable }"
           @click="$emit('destroy-items', inner.selected)"
           :disabled="!inner.selected.length"
@@ -88,75 +90,77 @@ email: jason@gms.ndhu.edu.tw
         </div>
         <slot name="menubar-left-after" :vmData="$data"></slot>
       </div>
-      <div class="menubar-right form-inline">
+      <div class="menubar-right col-sm hbox-sm">
         <slot name="menubar-right-before" :vmData="$data"></slot>
-        <template v-if="showItemsPerPage">
-          顯示
-          <select
-            class="form-control mx-1"
-            :class="{ 'form-control-sm': smallTable }"
-            v-model="inner.paging.itemsPerPage"
-          >
-            <option
-              v-for="option in inner.itemsPerPageOptions"
-              :key="option"
-              :value="option"
+        <div class="form-inline">
+          <template v-if="showItemsPerPage">
+            顯示
+            <select
+              class="form-control mx-1"
+              :class="{ 'form-control-sm': smallTable }"
+              v-model="inner.paging.itemsPerPage"
             >
-              {{ option === 0 ? '-不限-' : option }}
-            </option>
-          </select>
-          項結果
-        </template>
-        <div class="dropdown ml-1" v-if="showDisplayingColumns">
-          <button
-            class="btn btn-outline-secondary dropdown-toggle"
-            :class="{ 'btn-sm': smallTable }"
-            type="button"
-            data-toggle="dropdown"
-          >
-            顯示欄位
-          </button>
-          <div class="dropdown-menu displaying-columns">
-            <form class="px-2 py-1">
-              <div class="mb-2">
-                <button
-                  type="button"
-                  class="btn btn-info btn-sm"
-                  @click="
-                    inner.displayingColumnKeys = visibleColumns.map(
-                      (column) => column.key
-                    )
-                  "
-                >
-                  全選
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-info btn-sm"
-                  @click="inner.displayingColumnKeys = []"
-                >
-                  清除
-                </button>
-              </div>
-              <div
-                class="custom-control custom-checkbox"
-                v-for="column in visibleColumns"
-                :key="column.key"
+              <option
+                v-for="option in inner.itemsPerPageOptions"
+                :key="option"
+                :value="option"
               >
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  :id="`${_id}_displayingColumnKeys_${column.key}`"
-                  :value="column.key"
-                  v-model="inner.displayingColumnKeys"
-                />
-                <label
-                  class="custom-control-label d-inline-block"
-                  :for="`${_id}_displayingColumnKeys_${column.key}`"
-                  >{{ column.header }}</label
+                {{ option === 0 ? '-不限-' : option }}
+              </option>
+            </select>
+            項結果
+          </template>
+          <div class="dropdown ml-2" v-if="showDisplayingColumns">
+            <button
+              class="btn btn-outline-secondary dropdown-toggle"
+              :class="{ 'btn-sm': smallTable }"
+              type="button"
+              data-toggle="dropdown"
+            >
+              顯示欄位
+            </button>
+            <div class="dropdown-menu displaying-columns">
+              <form class="px-2 py-1">
+                <div class="mb-2">
+                  <button
+                    type="button"
+                    class="btn btn-info btn-sm"
+                    @click="
+                      inner.displayingColumnKeys = visibleColumns.map(
+                        (column) => column.key
+                      )
+                    "
+                  >
+                    全選
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-info btn-sm"
+                    @click="inner.displayingColumnKeys = []"
+                  >
+                    清除
+                  </button>
+                </div>
+                <div
+                  class="custom-control custom-checkbox"
+                  v-for="column in visibleColumns"
+                  :key="column.key"
                 >
-              </div>
-            </form>
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    :id="`${_id}_displayingColumnKeys_${column.key}`"
+                    :value="column.key"
+                    v-model="inner.displayingColumnKeys"
+                  />
+                  <label
+                    class="custom-control-label d-inline-block"
+                    :for="`${_id}_displayingColumnKeys_${column.key}`"
+                    >{{ column.header }}</label
+                  >
+                </div>
+              </form>
+            </div>
           </div>
         </div>
         <slot name="menubar-right-after" :vmData="$data"></slot>
@@ -167,12 +171,12 @@ email: jason@gms.ndhu.edu.tw
     <!-- pagebar(top) (begin) -->
     <div
       ref="paginator"
-      class="pagebar border d-sm-flex align-items-center justify-content-between p-2"
+      class="pagebar row no-gutters border p-2"
       :class="pagebarClass"
       :style="pagebarStyle"
       v-if="showPagebar && pagebarPosition !== 'bottom'"
     >
-      <div class="pagebar-left">
+      <div class="pagebar-left col-sm hbox-sm">
         <slot name="pagebar-left-before" :vmData="$data"></slot>
         <my-paginator
           :paging.sync="inner.paging"
@@ -184,7 +188,7 @@ email: jason@gms.ndhu.edu.tw
         ></my-paginator>
         <slot name="pagebar-left-after" :vmData="$data"></slot>
       </div>
-      <div class="pagebar-right">
+      <div class="pagebar-right col-sm hbox-sm">
         <slot name="pagebar-right-before" :vmData="$data"></slot>
         <span v-if="showPageInfo"
           >顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
