@@ -1071,7 +1071,11 @@ export default {
             normalizedSearchTerm = normalizedSearchTerm?.toLowerCase();
           }
 
-          for (let column of this.visibleColumns) {
+          const filterableColumns = this.visibleColumns.filter(
+            (column) => column.filterable !== false
+          );
+
+          for (let column of filterableColumns) {
             let searchTermPassed = false,
               searchFilterPassed = false;
             let value = column.value ? column.value(item) : item[column.key];
