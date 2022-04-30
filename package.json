@@ -1,6 +1,6 @@
 {
   "name": "@myweblab/my-ui-vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "一個以欄位定義為中心的Vue2 UI組合。",
   "license": "MIT",
   "author": {
