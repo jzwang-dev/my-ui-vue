@@ -1,7 +1,13 @@
 {
-  "name": "my-ui-vue",
+  "name": "@myweblab/my-ui-vue",
   "version": "0.1.0",
-  "private": true,
+  "description": "一個以欄位定義為中心的Vue2 UI組合。",
+  "license": "MIT",
+  "author": {
+    "name": "Wang, Jian-Zhong",
+    "email": "jzwang.dev@gmail.com",
+    "url": "https://jianzhong-wang.github.io"
+  },
   "main": "./dist/my-ui-vue.common.js",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -53,5 +59,15 @@
   "vetur": {
     "tags": "vetur/tags.json",
     "attributes": "vetur/attributes.json"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jianzhong-wang/my-ui-vue"
+  },
+  "homepage": "https://github.com/jianzhong-wang/my-ui-vue",
+  "keywords": [
+    "vue",
+    "bootstrap",
+    "ui"
+  ]
 }

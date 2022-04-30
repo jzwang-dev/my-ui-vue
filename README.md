@@ -1,5 +1,7 @@
 # my-ui-vue
 
+一個以欄位定義為中心的Vue2 UI組合。
+
 ## Install Vue cli
 ### npm
 ```
@@ -20,7 +22,7 @@ cd sampleapp
 ### npm
 #### Install my-ui-vue
 ```
-npm install git+https://github.com/jianzhong-wang/my-ui-vue.git
+npm install @myweblab/my-ui-vue
 ```
 #### Install peerDependencies
 ```
@@ -29,7 +31,7 @@ npm install "bootstrap@^4.6.1" "jquery@^3.6.0" "popper.js@^1.16.1" "@fortawesome
 ### yarn
 #### Install my-ui-vue
 ```
-yarn add https://github.com/jianzhong-wang/my-ui-vue.git
+yarn add @myweblab/my-ui-vue
 ```
 #### Install peerDependencies
 ```
