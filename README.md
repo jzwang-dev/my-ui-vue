@@ -12,7 +12,7 @@ npm install -g @vue/cli
 yarn global add @vue/cli
 ```
 
-## Create a Vue 2 project
+## Create a Vue2 project
 ```
 vue create sampleapp
 cd sampleapp
