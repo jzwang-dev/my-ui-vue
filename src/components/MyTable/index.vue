@@ -13,7 +13,7 @@ email: jason@gms.ndhu.edu.tw
       v-if="showToolbar"
     >
       <div class="toolbar-left col-sm hbox-sm">
-        <slot name="toolbar-left-before" :vmData="$data"></slot>
+        <slot name="toolbar-left-before" :compData="$data"></slot>
         <button
           type="button"
           class="btn btn-primary"
@@ -24,10 +24,10 @@ email: jason@gms.ndhu.edu.tw
         >
           <i class="fas fa-plus"></i> 新增
         </button>
-        <slot name="toolbar-left-after" :vmData="$data"></slot>
+        <slot name="toolbar-left-after" :compData="$data"></slot>
       </div>
       <div class="toolbar-right col-sm hbox-sm">
-        <slot name="toolbar-right-before" :vmData="$data"></slot>
+        <slot name="toolbar-right-before" :compData="$data"></slot>
         <div class="form-inline">
           <div class="input-icon-right" v-if="showSearch">
             <input
@@ -40,7 +40,7 @@ email: jason@gms.ndhu.edu.tw
             <i class="fas fa-search"></i>
           </div>
         </div>
-        <slot name="toolbar-right-after" :vmData="$data"></slot>
+        <slot name="toolbar-right-after" :compData="$data"></slot>
       </div>
     </div>
     <!-- toolbar (end) -->
@@ -53,7 +53,7 @@ email: jason@gms.ndhu.edu.tw
       v-if="showMenubar"
     >
       <div class="menubar-left col-sm hbox-sm">
-        <slot name="menubar-left-before" :vmData="$data"></slot>
+        <slot name="menubar-left-before" :compData="$data"></slot>
         <button
           type="button"
           class="btn btn-danger"
@@ -88,10 +88,10 @@ email: jason@gms.ndhu.edu.tw
             >
           </div>
         </div>
-        <slot name="menubar-left-after" :vmData="$data"></slot>
+        <slot name="menubar-left-after" :compData="$data"></slot>
       </div>
       <div class="menubar-right col-sm hbox-sm">
-        <slot name="menubar-right-before" :vmData="$data"></slot>
+        <slot name="menubar-right-before" :compData="$data"></slot>
         <div class="form-inline">
           <template v-if="showItemsPerPage">
             顯示
@@ -163,7 +163,7 @@ email: jason@gms.ndhu.edu.tw
             </div>
           </div>
         </div>
-        <slot name="menubar-right-after" :vmData="$data"></slot>
+        <slot name="menubar-right-after" :compData="$data"></slot>
       </div>
     </div>
     <!-- menubar (end) -->
@@ -177,7 +177,7 @@ email: jason@gms.ndhu.edu.tw
       v-if="showPagebar && pagebarPosition !== 'bottom'"
     >
       <div class="pagebar-left col-sm hbox-sm">
-        <slot name="pagebar-left-before" :vmData="$data"></slot>
+        <slot name="pagebar-left-before" :compData="$data"></slot>
         <my-paginator
           :paging.sync="inner.paging"
           :paginator.sync="inner.paginator"
@@ -186,16 +186,16 @@ email: jason@gms.ndhu.edu.tw
           v-if="showPaginator && inner.paging.itemsPerPage > 0"
           :size="smallTable ? 'sm' : 'md'"
         ></my-paginator>
-        <slot name="pagebar-left-after" :vmData="$data"></slot>
+        <slot name="pagebar-left-after" :compData="$data"></slot>
       </div>
       <div class="pagebar-right col-sm hbox-sm">
-        <slot name="pagebar-right-before" :vmData="$data"></slot>
+        <slot name="pagebar-right-before" :compData="$data"></slot>
         <span v-if="showPageInfo"
           >顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
           {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共
           {{ totalItems }} 項。</span
         >
-        <slot name="pagebar-right-after" :vmData="$data"></slot>
+        <slot name="pagebar-right-after" :compData="$data"></slot>
       </div>
     </div>
     <!-- pagebar(top) (end) -->
@@ -412,7 +412,7 @@ email: jason@gms.ndhu.edu.tw
       v-if="showPagebar && pagebarPosition === 'bottom'"
     >
       <div class="pagebar-left">
-        <slot name="pagebar-left-before" :vmData="$data"></slot>
+        <slot name="pagebar-left-before" :compData="$data"></slot>
         <my-paginator
           :paging.sync="inner.paging"
           :paginator.sync="inner.paginator"
@@ -424,16 +424,16 @@ email: jason@gms.ndhu.edu.tw
           v-if="showPaginator && inner.paging.itemsPerPage > 0"
           :size="smallTable ? 'sm' : 'md'"
         ></my-paginator>
-        <slot name="pagebar-left-after" :vmData="$data"></slot>
+        <slot name="pagebar-left-after" :compData="$data"></slot>
       </div>
       <div class="pagebar-right">
-        <slot name="pagebar-right-before" :vmData="$data"></slot>
+        <slot name="pagebar-right-before" :compData="$data"></slot>
         <span v-if="showPageInfo"
           >顯示第 {{ totalItems ? pageFromIndex + 1 : 0 }} 到
           {{ totalItems ? pageToIndex + 1 : 0 }} 項結果，共
           {{ totalItems }} 項。</span
         >
-        <slot name="pagebar-right-after" :vmData="$data"></slot>
+        <slot name="pagebar-right-after" :compData="$data"></slot>
       </div>
     </div>
     <!-- pagebar(bottom) (end) -->
