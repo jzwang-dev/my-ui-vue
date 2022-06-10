@@ -29,6 +29,8 @@ function _normalizeColumn(column) {
       visibleInModifyFormIf: null,
       visibleInDetailTable: column.visible ?? true,
       visibleInDetailTableIf: null,
+      modifyFormGroupClass: null,
+      modifyFormGroupStyle: null,
     },
     column,
     {

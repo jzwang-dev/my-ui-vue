@@ -24,8 +24,8 @@
         >
           <div
             class="form-group"
-            :class="formGroupClass"
-            :style="formGroupStyle"
+            :class="[formGroupClass, column.modifyFormGroupClass]"
+            :style="[formGroupStyle, column.modifyFormGroupStyle]"
             :key="column.key"
           >
             <label
