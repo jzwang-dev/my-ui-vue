@@ -6,8 +6,8 @@
         `modal-${size}`,
         {
           'modal-dialog-centered': centered,
-          'modal-dialog-scrollable': scrollable
-        }
+          'modal-dialog-scrollable': scrollable,
+        },
       ]"
     >
       <div class="modal-content">
@@ -44,104 +44,104 @@
 </template>
 
 <script>
-import $ from 'jquery';
-import 'bootstrap/js/dist/modal';
-import MyDetailTable from '../MyDetailTable';
-import '../MyDetailTable/style.css';
-import '../../configs/bootstrapDefaultSettings';
-import myUtil from '../../utils/myUtil';
+import $ from "jquery";
+import "bootstrap/js/dist/modal";
+import MyDetailTable from "../MyDetailTable";
+import "../MyDetailTable/style.css";
+import "../../configs/bootstrapDefaultSettings";
+import myUtil from "../../utils/myUtil";
 
 const events = [
-  'show.bs.modal',
-  'shown.bs.modal',
-  'hide.bs.modal',
-  'hidden.bs.modal',
-  'hidePrevented.bs.modal'
+  "show.bs.modal",
+  "shown.bs.modal",
+  "hide.bs.modal",
+  "hidden.bs.modal",
+  "hidePrevented.bs.modal",
 ];
 
 export default {
-  name: 'MyDetailModal',
+  name: "MyDetailModal",
 
   components: {
-    MyDetailTable
+    MyDetailTable,
   },
 
   props: {
     detailItem: {
-      type: Object
+      type: Object,
     },
 
     columns: {
       type: Array,
       required: true,
-      validator: (columns) => columns.every((column) => column.key)
+      validator: (columns) => columns.every((column) => column.key),
     },
 
     invisibleColumnKeys: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
 
     title: {
-      type: String
+      type: String,
     },
 
     size: {
       type: String,
-      default: 'md',
+      default: "md",
       validator(value) {
-        return ['sm', 'md', 'lg', 'xl'].indexOf(value) !== -1;
-      }
+        return ["sm", "md", "lg", "xl"].indexOf(value) !== -1;
+      },
     },
 
     centered: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     scrollable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
     return {
       inner: {
         detailItem: this.detailItem,
-        columns: this.columns
-      }
+        columns: this.columns,
+      },
     };
   },
 
   computed: {
     _id() {
       return this.$attrs.id ?? myUtil.randomId();
-    }
+    },
   },
 
   methods: {
     close() {
-      $(this.$el).modal('hide');
+      $(this.$el).modal("hide");
     },
 
     _onHidden() {
       this.inner.detailItem = null;
-    }
+    },
   },
 
   mounted() {
     $(this.$el)
       .modal({ show: false })
-      .on('hidden.bs.modal', () => {
+      .on("hidden.bs.modal", () => {
         this._onHidden();
       });
 
     events.forEach((event) => {
       $(this.$el).on(event, (...args) => {
-        const eventName = event.replace(/[.|:]/g, '-');
+        const eventName = event.replace(/[.|:]/g, "-");
         this.$emit(eventName, ...args);
         this.$root.$emit(eventName, ...args);
       });
@@ -149,16 +149,16 @@ export default {
   },
 
   beforeDestroy() {
-    $(this.$el).off('').modal('dispose');
+    $(this.$el).off("").modal("dispose");
   },
 
   watch: {
-    'inner.detailItem': {
+    "inner.detailItem": {
       deep: true,
       handler() {
-        this.$emit('update:detailItem', this.inner.detailItem);
+        this.$emit("update:detailItem", this.inner.detailItem);
       },
-      immediate: true
+      immediate: true,
     },
 
     detailItem: [
@@ -167,25 +167,25 @@ export default {
           if (this.inner.detailItem !== this.detailItem) {
             this.inner.detailItem = this.detailItem;
           }
-        }
+        },
       },
       {
         handler(detailItem, old) {
           if (detailItem && !old) {
-            $(this.$el).modal('show');
+            $(this.$el).modal("show");
           } else if (!detailItem) {
-            $(this.$el).modal('hide');
+            $(this.$el).modal("hide");
           }
-        }
-      }
+        },
+      },
     ],
 
-    'inner.columns': {
+    "inner.columns": {
       deep: true,
       handler() {
-        this.$emit('update:columns', this.inner.columns);
+        this.$emit("update:columns", this.inner.columns);
       },
-      immediate: true
+      immediate: true,
     },
 
     columns: {
@@ -194,8 +194,8 @@ export default {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this.columns;
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>

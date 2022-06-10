@@ -5,7 +5,7 @@ email: jason@gms.ndhu.edu.tw
 description: Client-side validators.
 */
 
-function required(errMsg = '此為必填欄位') {
+function required(errMsg = "此為必填欄位") {
   const validator = (value) => {
     if (Array.isArray(value) && value.length === 0) {
       return errMsg;
@@ -13,21 +13,21 @@ function required(errMsg = '此為必填欄位') {
 
     return value === 0 || !!value || errMsg;
   };
-  validator.validatorName = 'required';
+  validator.validatorName = "required";
   return validator;
 }
 
-function requiredIf(testFunc, errMsg = '此為必填欄位') {
+function requiredIf(testFunc, errMsg = "此為必填欄位") {
   if (
     !testFunc ||
-    Object.prototype.toString.call(testFunc) !== '[object Function]'
+    Object.prototype.toString.call(testFunc) !== "[object Function]"
   ) {
     testFunc = () => true;
   }
 
   const validator = (value, item) =>
     !testFunc(item) || required(errMsg)(value, item);
-  validator.validatorName = 'requiredIf';
+  validator.validatorName = "requiredIf";
   validator.testFunc = testFunc;
   return validator;
 }
@@ -37,7 +37,7 @@ function minlength(length, errMsg = `字數至少為 ${length} 字`) {
     value = value?.toString();
     return !value || value.length >= length || errMsg;
   };
-  validator.validatorName = 'minlength';
+  validator.validatorName = "minlength";
   return validator;
 }
 
@@ -46,19 +46,19 @@ function maxlength(length, errMsg = `字數至多為 ${length} 字`) {
     value = value?.toString();
     return !value || value.length <= length || errMsg;
   };
-  validator.validatorName = 'maxlength';
+  validator.validatorName = "maxlength";
   return validator;
 }
 
 function min(minimal, errMsg = `最小值為 ${minimal}`) {
   const validator = (value) => !value || value >= minimal || errMsg;
-  validator.validatorName = 'min';
+  validator.validatorName = "min";
   return validator;
 }
 
 function max(maximal, errMsg = `最大值為 ${maximal}`) {
   const validator = (value) => !value || value <= maximal || errMsg;
-  validator.validatorName = 'max';
+  validator.validatorName = "max";
   return validator;
 }
 
@@ -69,14 +69,14 @@ function range(
 ) {
   const validator = (value) =>
     !value || (minimal <= value && value <= maximal) || errMsg;
-  validator.validatorName = 'range';
+  validator.validatorName = "range";
   return validator;
 }
 
-function compareTo(compareOptions, errMsg = '比較結果不成立') {
-  const { valueToCompare, keyToCompare, operator = '==' } = compareOptions;
+function compareTo(compareOptions, errMsg = "比較結果不成立") {
+  const { valueToCompare, keyToCompare, operator = "==" } = compareOptions;
 
-  const operators = ['<', '>', '<=', '>=', '==', '!=', '===', '!=='];
+  const operators = ["<", ">", "<=", ">=", "==", "!=", "===", "!=="];
   if (operators.indexOf(operator) === -1) {
     throw `不允許的運算子「${operator}」！`;
   }
@@ -86,16 +86,16 @@ function compareTo(compareOptions, errMsg = '比較結果不成立') {
     if (keyToCompare != null) {
       _valueToCompare = item?.[keyToCompare];
     }
-    const compare = new Function('v1', 'v2', 'return v1 ' + operator + ' v2');
+    const compare = new Function("v1", "v2", "return v1 " + operator + " v2");
 
     return compare(value, _valueToCompare) || errMsg;
   };
-  validator.validatorName = 'compareTo';
+  validator.validatorName = "compareTo";
   return validator;
 }
 
-function regex(regex, errMsg = '格式不正確') {
-  if (Object.prototype.toString.call(regex) !== '[object RegExp]') {
+function regex(regex, errMsg = "格式不正確") {
+  if (Object.prototype.toString.call(regex) !== "[object RegExp]") {
     regex = new RegExp(regex);
   }
 
@@ -103,29 +103,29 @@ function regex(regex, errMsg = '格式不正確') {
     value = value?.toString();
     return !value || regex.test(value) || errMsg;
   };
-  validator.validatorName = 'regex';
+  validator.validatorName = "regex";
   return validator;
 }
 
-function regexIf(testFunc, regex, errMsg = '格式不正確') {
+function regexIf(testFunc, regex, errMsg = "格式不正確") {
   if (
     !testFunc ||
-    Object.prototype.toString.call(testFunc) !== '[object Function]'
+    Object.prototype.toString.call(testFunc) !== "[object Function]"
   ) {
     testFunc = () => true;
   }
 
   const validator = (value, item) =>
     !testFunc(item) || regex(regex, errMsg)(value, item);
-  validator.validatorName = 'regexIf';
+  validator.validatorName = "regexIf";
   validator.testFunc = testFunc;
   return validator;
 }
 
-function dynamicRegex(regexFunc, errMsg = '格式不正確') {
+function dynamicRegex(regexFunc, errMsg = "格式不正確") {
   if (
     !regexFunc ||
-    Object.prototype.toString.call(regexFunc) !== '[object Function]'
+    Object.prototype.toString.call(regexFunc) !== "[object Function]"
   ) {
     regexFunc = () => undefined;
   }
@@ -135,15 +135,15 @@ function dynamicRegex(regexFunc, errMsg = '格式不正確') {
 
     return regex(_regex, errMsg)(value, item);
   };
-  validator.validatorName = 'dynamicRegex';
+  validator.validatorName = "dynamicRegex";
   validator.regexFunc = regexFunc;
   return validator;
 }
 
-function email(errMsg = '請輸入正確的Email格式') {
+function email(errMsg = "請輸入正確的Email格式") {
   const validator = (value) =>
     regex(/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4})*$/, errMsg)(value);
-  validator.validatorName = 'email';
+  validator.validatorName = "email";
   return validator;
 }
 
@@ -159,5 +159,5 @@ export {
   regex,
   regexIf,
   dynamicRegex,
-  email
+  email,
 };

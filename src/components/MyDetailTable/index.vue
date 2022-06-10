@@ -47,42 +47,42 @@
 </template>
 
 <script>
-import _normalizeColumn from '../MyTable/_normalizeColumn';
-import myUtil from '../../utils/myUtil';
-import { nulltext } from '../../filters';
+import _normalizeColumn from "../MyTable/_normalizeColumn";
+import myUtil from "../../utils/myUtil";
+import { nulltext } from "../../filters";
 
 export default {
-  name: 'MyDetailTable',
+  name: "MyDetailTable",
 
   filters: {
-    nulltext
+    nulltext,
   },
 
   props: {
     detailItem: {
-      type: Object
+      type: Object,
     },
 
     columns: {
       type: Array,
       required: true,
-      validator: (columns) => columns.every((column) => column.key)
+      validator: (columns) => columns.every((column) => column.key),
     },
 
     invisibleColumnKeys: {
       type: Array,
       default() {
         return [];
-      }
-    }
+      },
+    },
   },
 
   data() {
     return {
       inner: {
         detailItem: this._normalized_detailItem(),
-        columns: this._normalized_columns()
-      }
+        columns: this._normalized_columns(),
+      },
     };
   },
 
@@ -97,7 +97,7 @@ export default {
           column.visibleInDetailTable !== false &&
           !this.invisibleColumnKeys.includes(column.key)
       );
-    }
+    },
   },
 
   methods: {
@@ -122,16 +122,16 @@ export default {
 
     _formatValue(format, value) {
       return myUtil.formatValue(format, value);
-    }
+    },
   },
 
   watch: {
-    'inner.detailItem': {
+    "inner.detailItem": {
       deep: true,
       handler() {
-        this.$emit('update:detailItem', this.inner.detailItem);
+        this.$emit("update:detailItem", this.inner.detailItem);
       },
-      immediate: true
+      immediate: true,
     },
 
     detailItem: {
@@ -139,15 +139,15 @@ export default {
         if (this.inner.detailItem !== this.detailItem) {
           this.inner.detailItem = this._normalized_detailItem();
         }
-      }
+      },
     },
 
-    'inner.columns': {
+    "inner.columns": {
       deep: true,
       handler() {
-        this.$emit('update:columns', this.inner.columns);
+        this.$emit("update:columns", this.inner.columns);
       },
-      immediate: true
+      immediate: true,
     },
 
     columns: {
@@ -156,8 +156,8 @@ export default {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this._normalized_columns();
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>

@@ -8,12 +8,12 @@
 
 <script>
 export default {
-  name: 'MyDummyButton',
+  name: "MyDummyButton",
 
   data() {
     return {
-      count: 0
+      count: 0,
     };
-  }
+  },
 };
 </script>

@@ -1,4 +1,4 @@
-import columnsUtil from '../utils/columnsUtil';
+import columnsUtil from "../utils/columnsUtil";
 
 export default {
   props: {
@@ -6,18 +6,18 @@ export default {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
 
     dataValueField: {
       type: String,
-      default: 'value'
+      default: "value",
     },
 
     dataTextField: {
       type: String,
-      default: 'text'
-    }
+      default: "text",
+    },
   },
 
   computed: {
@@ -27,6 +27,6 @@ export default {
         this.dataValueField,
         this.dataTextField
       );
-    }
-  }
+    },
+  },
 };

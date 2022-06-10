@@ -1,26 +1,26 @@
-import messageUtil from '../utils/messageUtil';
-import myUtil from '../utils/myUtil';
-import { saveAs } from 'file-saver';
+import messageUtil from "../utils/messageUtil";
+import myUtil from "../utils/myUtil";
+import { saveAs } from "file-saver";
 
 async function exportExcel(
   exportItems,
   exportColumns,
-  exportName = 'export_data',
+  exportName = "export_data",
   options = {}
 ) {
   options = Object.assign(
     {
-      title: '',
-      titleAlignmentHorizontal: 'center',
-      titleAlignmentVertical: 'middle',
+      title: "",
+      titleAlignmentHorizontal: "center",
+      titleAlignmentVertical: "middle",
       titleAlignmentWrapText: false,
-      columnWidthTolerance: 5
+      columnWidthTolerance: 5,
     },
     options
   );
 
   if (!exportItems || !Array.isArray(exportItems) || exportItems.length === 0) {
-    messageUtil.alert('沒有可供匯出的資料！');
+    messageUtil.alert("沒有可供匯出的資料！");
     return;
   }
 
@@ -29,21 +29,21 @@ async function exportExcel(
 
     exportItems.forEach((exportItem) => {
       for (let key in exportItem) {
-        exportItem[key] = exportItem[key] ?? '';
+        exportItem[key] = exportItem[key] ?? "";
       }
     });
 
     const exceljs = await import(
       /* webpackChunkName: "exceljs" */
       /* webpackPrefetch: true */
-      'exceljs'
+      "exceljs"
     );
 
     const defaultBorder = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' }
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
     };
 
     const workbook = new exceljs.Workbook();
@@ -64,7 +64,7 @@ async function exportExcel(
       titleCell.alignment = {
         wrapText: options.titleAlignmentWrapText,
         vertical: options.titleAlignmentVertical,
-        horizontal: options.titleAlignmentHorizontal
+        horizontal: options.titleAlignmentHorizontal,
       };
       worksheet.mergeCells(1, 1, 1, exportColumns.length);
     }
@@ -77,15 +77,15 @@ async function exportExcel(
       const headerCell = headerRow.getCell(index + 1);
       headerCell.value = exportColumn.header;
       headerCell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'f3f3f3' }
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "f3f3f3" },
       };
       headerCell.border = defaultBorder;
       headerCell.alignment = {
         wrapText: true,
-        vertical: 'middle',
-        horizontal: 'left'
+        vertical: "middle",
+        horizontal: "left",
       };
     });
 
@@ -98,8 +98,8 @@ async function exportExcel(
         cell.border = defaultBorder;
         cell.alignment = {
           wrapText: true,
-          vertical: 'middle',
-          horizontal: 'left'
+          vertical: "middle",
+          horizontal: "left",
         };
       });
     });
@@ -107,7 +107,7 @@ async function exportExcel(
     // fix column width
     const strLen = (str) => {
       return (
-        str?.split('').reduce((prev, curr) => {
+        str?.split("").reduce((prev, curr) => {
           const charCode = curr.charCodeAt(0);
           const length = charCode >= 32 && charCode <= 126 ? 1 : 2;
           return prev + length;
@@ -129,8 +129,8 @@ async function exportExcel(
       const cellValueLengths = [];
       worksheetColumn.eachCell({ includeEmpty: true }, (cell, rowNumber) => {
         if (rowNumber >= headerRowNum) {
-          const cellValue = cell.value?.toString() ?? '';
-          const cellValueLines = cellValue.split('\n');
+          const cellValue = cell.value?.toString() ?? "";
+          const cellValueLines = cellValue.split("\n");
           for (let cellValueLine of cellValueLines) {
             cellValueLengths.push(strLen(cellValueLine));
           }
@@ -153,12 +153,12 @@ async function exportExcel(
     saveAs(new Blob([buffer]), `${exportName}.xlsx`);
   } catch (err) {
     console.log(err);
-    let errMsg = '匯出Excel時發生錯誤！';
+    let errMsg = "匯出Excel時發生錯誤！";
     if (
-      err.message === '不正確的字元集範圍' ||
-      err.message === 'Invalid range in character set'
+      err.message === "不正確的字元集範圍" ||
+      err.message === "Invalid range in character set"
     ) {
-      errMsg = '您的瀏覽器不支援匯出Excel，請使用建議的瀏覽器再試一次。';
+      errMsg = "您的瀏覽器不支援匯出Excel，請使用建議的瀏覽器再試一次。";
     }
     messageUtil.alert(errMsg);
   } finally {
@@ -169,28 +169,28 @@ async function exportExcel(
 async function exportPdf(
   exportItems,
   exportColumns,
-  exportName = 'export_data',
+  exportName = "export_data",
   options = {}
 ) {
   options = Object.assign(
     {
-      title: ''
+      title: "",
     },
     options,
     {
       docDefinition: Object.assign(
         {
-          pageSize: 'A4',
-          pageOrientation: 'landscape',
-          pageMargins: [5, 5, 5, 5]
+          pageSize: "A4",
+          pageOrientation: "landscape",
+          pageMargins: [5, 5, 5, 5],
         },
         options?.docDefinition
-      )
+      ),
     }
   );
 
   if (!exportItems || !Array.isArray(exportItems) || exportItems.length === 0) {
-    messageUtil.alert('沒有可供匯出的資料！');
+    messageUtil.alert("沒有可供匯出的資料！");
     return;
   }
 
@@ -199,7 +199,7 @@ async function exportPdf(
 
     exportItems.forEach((exportItem) => {
       for (let key in exportItem) {
-        exportItem[key] = exportItem[key] ?? '';
+        exportItem[key] = exportItem[key] ?? "";
       }
     });
 
@@ -207,13 +207,13 @@ async function exportPdf(
       import(
         /* webpackChunkName: "pdfmake" */
         /* webpackPrefetch: true */
-        'pdfmake/build/pdfmake'
+        "pdfmake/build/pdfmake"
       ),
       import(
         /* webpackChunkName: "vfs_fonts" */
         /* webpackPrefetch: true */
-        '../assets/vfs_fonts'
-      )
+        "../assets/vfs_fonts"
+      ),
     ]);
     const pdfmake = modules[0].default;
     const vfs_fonts = modules[1];
@@ -221,8 +221,8 @@ async function exportPdf(
 
     pdfmake.fonts = {
       NotoSansTC: {
-        normal: 'NotoSansTC-Regular.woff2'
-      }
+        normal: "NotoSansTC-Regular.woff2",
+      },
     };
 
     const tableBody = [];
@@ -232,7 +232,7 @@ async function exportPdf(
       titleRow[0] = {
         text: options.title,
         colSpan: exportColumns.length,
-        alignment: 'center'
+        alignment: "center",
       };
       tableBody.push(titleRow);
     }
@@ -240,7 +240,7 @@ async function exportPdf(
     tableBody.push(
       exportColumns.map((exportColumn) => ({
         text: exportColumn.header,
-        fillColor: '#cccccc'
+        fillColor: "#cccccc",
       }))
     );
     exportItems.forEach((exportItem) => {
@@ -254,15 +254,15 @@ async function exportPdf(
     let dd = Object.assign(
       {
         defaultStyle: {
-          font: 'NotoSansTC'
+          font: "NotoSansTC",
         },
         content: [
           {
             table: {
-              body: tableBody
-            }
-          }
-        ]
+              body: tableBody,
+            },
+          },
+        ],
       },
       options.docDefinition
     );
@@ -271,7 +271,7 @@ async function exportPdf(
     pdfmake.createPdf(dd).download(`${exportName}.pdf`);
   } catch (err) {
     console.log(err);
-    messageUtil.alert('匯出Pdf時發生錯誤！');
+    messageUtil.alert("匯出Pdf時發生錯誤！");
   } finally {
     myUtil.setLoading(false);
   }
@@ -279,5 +279,5 @@ async function exportPdf(
 
 export default {
   exportExcel,
-  exportPdf
+  exportPdf,
 };

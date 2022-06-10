@@ -6,14 +6,14 @@
         `modal-${size}`,
         {
           'modal-dialog-centered': centered,
-          'modal-dialog-scrollable': scrollable
-        }
+          'modal-dialog-scrollable': scrollable,
+        },
       ]"
     >
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            {{ modifyMode == 'create' ? '新增' : '修改' }}{{ title }}
+            {{ modifyMode == "create" ? "新增" : "修改" }}{{ title }}
           </h5>
           <button type="button" class="close" data-dismiss="modal">
             <span>&times;</span>
@@ -37,6 +37,9 @@
             @save-create-item="(item) => $emit('save-create-item', item)"
             @save-update-item="(item) => $emit('save-update-item', item)"
             @cancel-item="(item) => $emit('cancel-item', item)"
+            :form-grid="formGrid"
+            :form-group-class="formGroupClass"
+            :form-group-style="formGroupStyle"
           >
             <template
               v-for="(_, slot) in $scopedSlots"
@@ -61,94 +64,103 @@
 </template>
 
 <script>
-import $ from 'jquery';
-import 'bootstrap/js/dist/modal';
-import MyModifyForm from '../MyModifyForm';
-import '../MyModifyForm/style.css';
-import '../../configs/bootstrapDefaultSettings';
-import myUtil from '../../utils/myUtil';
+import $ from "jquery";
+import "bootstrap/js/dist/modal";
+import MyModifyForm from "../MyModifyForm";
+import "../MyModifyForm/style.css";
+import "../../configs/bootstrapDefaultSettings";
+import myUtil from "../../utils/myUtil";
 
 const events = [
-  'show.bs.modal',
-  'shown.bs.modal',
-  'hide.bs.modal',
-  'hidden.bs.modal',
-  'hidePrevented.bs.modal'
+  "show.bs.modal",
+  "shown.bs.modal",
+  "hide.bs.modal",
+  "hidden.bs.modal",
+  "hidePrevented.bs.modal",
 ];
 
 export default {
-  name: 'MyModifyModal',
+  name: "MyModifyModal",
 
   components: {
-    MyModifyForm
+    MyModifyForm,
   },
 
   props: {
     modifyItem: {
-      type: Object
+      type: Object,
     },
 
     columns: {
       type: Array,
       required: true,
-      validator: (columns) => columns.every((column) => column.key)
+      validator: (columns) => columns.every((column) => column.key),
     },
 
     invisibleColumnKeys: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
 
     updateOnlyColumnKeys: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
 
     hideHeaderColumnKeys: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
 
     rowKey: {
       type: String,
-      default: 'id'
+      default: "id",
     },
 
     title: {
-      type: String
+      type: String,
     },
 
     size: {
       type: String,
-      default: 'md',
+      default: "md",
       validator(value) {
-        return ['sm', 'md', 'lg', 'xl'].indexOf(value) !== -1;
-      }
+        return ["sm", "md", "lg", "xl"].indexOf(value) !== -1;
+      },
     },
 
     centered: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     scrollable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
+
+    formGrid: {
+      type: Boolean,
+      default: false,
+    },
+
+    formGroupClass: null,
+
+    formGroupStyle: null,
   },
 
   data() {
     return {
       inner: {
         modifyItem: this.modifyItem,
-        columns: this.columns
-      }
+        columns: this.columns,
+      },
     };
   },
 
@@ -158,13 +170,13 @@ export default {
     },
 
     modifyMode() {
-      return !this.modifyItem?.[this.rowKey] ? 'create' : 'update';
-    }
+      return !this.modifyItem?.[this.rowKey] ? "create" : "update";
+    },
   },
 
   methods: {
     close() {
-      $(this.$el).modal('hide');
+      $(this.$el).modal("hide");
     },
 
     _onHidden() {
@@ -173,19 +185,19 @@ export default {
 
     save() {
       this.$refs.modifyForm.save();
-    }
+    },
   },
 
   mounted() {
     $(this.$el)
       .modal({ show: false })
-      .on('hidden.bs.modal', () => {
+      .on("hidden.bs.modal", () => {
         this._onHidden();
       });
 
     events.forEach((event) => {
       $(this.$el).on(event, (...args) => {
-        const eventName = event.replace(/[.|:]/g, '-');
+        const eventName = event.replace(/[.|:]/g, "-");
         this.$emit(eventName, ...args);
         this.$root.$emit(eventName, ...args);
       });
@@ -193,16 +205,16 @@ export default {
   },
 
   beforeDestroy() {
-    $(this.$el).off('').modal('dispose');
+    $(this.$el).off("").modal("dispose");
   },
 
   watch: {
-    'inner.modifyItem': {
+    "inner.modifyItem": {
       deep: true,
       handler() {
-        this.$emit('update:modifyItem', this.inner.modifyItem);
+        this.$emit("update:modifyItem", this.inner.modifyItem);
       },
-      immediate: true
+      immediate: true,
     },
 
     modifyItem: [
@@ -211,25 +223,25 @@ export default {
           if (this.inner.modifyItem !== this.modifyItem) {
             this.inner.modifyItem = this.modifyItem;
           }
-        }
+        },
       },
       {
         handler(modifyItem, old) {
           if (modifyItem && !old) {
-            $(this.$el).modal('show');
+            $(this.$el).modal("show");
           } else if (!modifyItem) {
-            $(this.$el).modal('hide');
+            $(this.$el).modal("hide");
           }
-        }
-      }
+        },
+      },
     ],
 
-    'inner.columns': {
+    "inner.columns": {
       deep: true,
       handler() {
-        this.$emit('update:columns', this.inner.columns);
+        this.$emit("update:columns", this.inner.columns);
       },
-      immediate: true
+      immediate: true,
     },
 
     columns: {
@@ -238,8 +250,8 @@ export default {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this.columns;
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>

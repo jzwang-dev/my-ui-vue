@@ -1,16 +1,16 @@
 export const defaultFiltering = {
   ignoreCase: true,
-  logicOperation: 'and'
+  logicOperation: "and",
 };
 
 export const defaultSorting = {
-  key: '',
-  direction: 'asc'
+  key: "",
+  direction: "asc",
 };
 
 export const defaultPaging = {
   page: 1,
-  itemsPerPage: 100
+  itemsPerPage: 100,
 };
 
 export const defaultPaginator = {
@@ -21,17 +21,17 @@ export const defaultPaginator = {
   showNextGrp: true,
   showNext: true,
   showLast: false,
-  pageLinks: 5
+  pageLinks: 5,
 };
 
 export const defaultItemsPerPageOptions = [10, 25, 50, 100];
 
 export const defaultControlTypes = {
-  [String]: 'input',
-  [Number]: 'input',
-  [Boolean]: 'checkbox',
-  [Array]: 'checkboxlist',
-  [Date]: 'input'
+  [String]: "input",
+  [Number]: "input",
+  [Boolean]: "checkbox",
+  [Array]: "checkboxlist",
+  [Date]: "input",
 };
 
 export const controlAllowedDataTypes = {
@@ -40,5 +40,5 @@ export const controlAllowedDataTypes = {
   radiobuttonlist: [String, Number],
   checkbox: [Boolean, String, Number],
   checkboxlist: [Array],
-  textarea: [String]
+  textarea: [String],
 };

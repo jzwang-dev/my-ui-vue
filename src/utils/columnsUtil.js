@@ -1,7 +1,7 @@
 function validateItemField(value, column, item) {
   column.errors = [];
   for (let validator of column.validators ?? []) {
-    if (Object.prototype.toString.call(validator) !== '[object Function]') {
+    if (Object.prototype.toString.call(validator) !== "[object Function]") {
       continue;
     }
     const result = validator(value, item);
@@ -49,7 +49,7 @@ function getErrors(columns) {
       return {
         key: column.key,
         errors,
-        errMsg: errors.join(column.errorsSeparator || ', ')
+        errMsg: errors.join(column.errorsSeparator || ", "),
       };
     })
     .filter((column) => column.errors.length);
@@ -64,16 +64,16 @@ function validateColumn(value, column, item) {
 function isColumnRequired(column, item) {
   const isRequired = column.validators?.some(
     (validator) =>
-      validator.validatorName === 'required' ||
-      (validator.validatorName === 'requiredIf' && validator.testFunc(item))
+      validator.validatorName === "required" ||
+      (validator.validatorName === "requiredIf" && validator.testFunc(item))
   );
   return isRequired;
 }
 
 function normalizeDataSource(
   dataSource,
-  dataValueField = 'value',
-  dataTextField = 'text'
+  dataValueField = "value",
+  dataTextField = "text"
 ) {
   if (
     dataSource.every((dataItem) =>
@@ -87,7 +87,7 @@ function normalizeDataSource(
 
   return dataSource.map((dataItem) => ({
     [dataValueField]: dataItem?.toString(),
-    [dataTextField]: dataItem?.toString()
+    [dataTextField]: dataItem?.toString(),
   }));
 }
 
@@ -98,5 +98,5 @@ export default {
   getErrors,
   validateColumn,
   isColumnRequired,
-  normalizeDataSource
+  normalizeDataSource,
 };

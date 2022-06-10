@@ -1,5 +1,5 @@
-import { defaultControlTypes, controlAllowedDataTypes } from '../../configs';
-import myUtil from '../../utils/myUtil';
+import { defaultControlTypes, controlAllowedDataTypes } from "../../configs";
+import myUtil from "../../utils/myUtil";
 
 function _normalizeColumn(column) {
   const normalizedColumn = Object.assign(
@@ -10,7 +10,7 @@ function _normalizeColumn(column) {
       allowHtml: false,
       defaultValue: null,
       format: (value) => value,
-      nullText: '--',
+      nullText: "--",
       filterable: true,
       sortable: true,
       sort: null,
@@ -24,11 +24,11 @@ function _normalizeColumn(column) {
       dataType: String,
       validators: [],
       errors: [],
-      errorsSeparator: ', ',
+      errorsSeparator: ", ",
       visibleInModifyForm: column.visible ?? true,
       visibleInModifyFormIf: null,
       visibleInDetailTable: column.visible ?? true,
-      visibleInDetailTableIf: null
+      visibleInDetailTableIf: null,
     },
     column,
     {
@@ -38,24 +38,24 @@ function _normalizeColumn(column) {
           cssClass: null,
           style: null,
           dataSource: [],
-          dataValueField: 'value',
-          dataTextField: 'text',
+          dataValueField: "value",
+          dataTextField: "text",
           showEmptyOption: true,
           emptyOptionValue: null,
-          emptyOptionText: '-請選擇-',
+          emptyOptionText: "-請選擇-",
           inline: false,
           trueValue: true,
-          falseValue: false
+          falseValue: false,
         },
         column.control
       ),
       validationMode: Object.assign(
         {
           greedy: false,
-          lazy: false
+          lazy: false,
         },
         column.validationMode
-      )
+      ),
     }
   );
 
@@ -69,7 +69,7 @@ function _normalizeColumn(column) {
         normalizedColumn.dataType
       )}) 是否有誤？ (allowedDataTypes: ${allowedDataTypes
         .map((type) => myUtil.typeToString(type))
-        .join(', ')})`
+        .join(", ")})`
     );
   }
 

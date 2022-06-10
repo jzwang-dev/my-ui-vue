@@ -105,7 +105,7 @@ email: jason@gms.ndhu.edu.tw
                 :key="option"
                 :value="option"
               >
-                {{ option === 0 ? '-不限-' : option }}
+                {{ option === 0 ? "-不限-" : option }}
               </option>
             </select>
             項結果
@@ -240,7 +240,7 @@ email: jason@gms.ndhu.edu.tw
                 (inner.sorting.direction &&
                   inner.sorting.direction.toLowerCase()) === 'desc'
                   ? 'fa-sort-down'
-                  : 'fa-sort-up'
+                  : 'fa-sort-up',
               ]"
               v-show="inner.sorting && inner.sorting.key === column.key"
             ></i>
@@ -314,7 +314,7 @@ email: jason@gms.ndhu.edu.tw
                   />
                 </div>
                 <div class="invalid-feedback">
-                  {{ column.errors.join(column.errorsSeparator || ', ') }}
+                  {{ column.errors.join(column.errorsSeparator || ", ") }}
                 </div>
               </slot>
               <slot
@@ -406,7 +406,14 @@ email: jason@gms.ndhu.edu.tw
     <!-- pagebar(bottom) (begin) -->
     <div
       ref="paginator"
-      class="pagebar border d-sm-flex align-items-center justify-content-between p-2"
+      class="
+        pagebar
+        border
+        d-sm-flex
+        align-items-center
+        justify-content-between
+        p-2
+      "
       :class="pagebarClass"
       :style="pagebarStyle"
       v-if="showPagebar && pagebarPosition === 'bottom'"
@@ -441,32 +448,32 @@ email: jason@gms.ndhu.edu.tw
 </template>
 
 <script>
-import MyPaginator from '../MyPaginator';
-import '../MyPaginator/style.css';
-import ColumnEditControl from '../MyColumnEditControl';
-import _normalizeColumn from './_normalizeColumn';
+import MyPaginator from "../MyPaginator";
+import "../MyPaginator/style.css";
+import ColumnEditControl from "../MyColumnEditControl";
+import _normalizeColumn from "./_normalizeColumn";
 import {
   defaultFiltering,
   defaultSorting,
   defaultPaging,
   defaultPaginator,
-  defaultItemsPerPageOptions
-} from '../../configs';
-import myUtil from '../../utils/myUtil';
-import exportUtil from '../../utils/exportUtil';
-import columnsUtil from '../../utils/columnsUtil';
-import { nulltext } from '../../filters';
+  defaultItemsPerPageOptions,
+} from "../../configs";
+import myUtil from "../../utils/myUtil";
+import exportUtil from "../../utils/exportUtil";
+import columnsUtil from "../../utils/columnsUtil";
+import { nulltext } from "../../filters";
 
 export default {
-  name: 'MyTable',
+  name: "MyTable",
 
   components: {
     MyPaginator,
-    ColumnEditControl
+    ColumnEditControl,
   },
 
   filters: {
-    nulltext
+    nulltext,
   },
 
   props: {
@@ -476,7 +483,7 @@ export default {
      */
     items: {
       type: Array,
-      required: true
+      required: true,
     },
 
     /**
@@ -486,63 +493,63 @@ export default {
     columns: {
       type: Array,
       required: true,
-      validator: (columns) => columns.every((column) => column.key)
+      validator: (columns) => columns.every((column) => column.key),
     },
 
     displayingColumnKeys: {
-      type: Array
+      type: Array,
     },
 
     rowKey: {
       type: String,
-      default: 'id'
+      default: "id",
     },
 
     selected: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
 
     searchTerm: {
       type: String,
-      default: ''
+      default: "",
     },
 
     searchFilter: {
       type: Object,
       defualt() {
         return {};
-      }
+      },
     },
 
     filtering: {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
 
     sorting: {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
 
     paging: {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
 
     paginator: {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
 
     itemsPerPageOptions: {
@@ -552,74 +559,74 @@ export default {
       },
       validator(options) {
         return options.every((option) => !isNaN(option));
-      }
+      },
     },
 
     serverTotalItems: {
-      type: Number
+      type: Number,
     },
 
     showToolbar: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showCreate: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showSearch: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showMenubar: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showDestroy: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showExport: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showItemsPerPage: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showDisplayingColumns: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showPagebar: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showPaginator: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showPageInfo: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     pagebarPosition: {
       type: String,
-      default: 'top',
+      default: "top",
       validator(position) {
-        return ['top', 'bottom'].indexOf(position.toLowerCase()) !== -1;
-      }
+        return ["top", "bottom"].indexOf(position.toLowerCase()) !== -1;
+      },
     },
 
     toolbarClass: null,
@@ -635,25 +642,25 @@ export default {
     pagebarStyle: null,
 
     exportExcel: {
-      type: Function
+      type: Function,
     },
 
     exportPdf: {
-      type: Function
+      type: Function,
     },
 
     exportName: {
       type: String,
-      default: 'export_data'
+      default: "export_data",
     },
 
     exportColumnKeys: {
-      type: Array
+      type: Array,
     },
 
     showSelection: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     selectionsThClass: null,
@@ -666,7 +673,7 @@ export default {
 
     showActions: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     actionsThClass: null,
@@ -679,34 +686,34 @@ export default {
 
     showRead: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showUpdate: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     showDelete: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     emptyText: {
       type: String,
-      default: '查無資料！'
+      default: "查無資料！",
     },
 
     inlineEditItem: {
       type: Object,
       default() {
         return null;
-      }
+      },
     },
 
     smallTable: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     tableClass: null,
@@ -715,30 +722,30 @@ export default {
 
     bordered: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     striped: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     hover: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     cloneMode: {
       type: String,
-      default: 'shallowcopy',
+      default: "shallowcopy",
       validator(value) {
         return (
-          ['nocopy', 'shallowcopy', 'deepcopy'].indexOf(
+          ["nocopy", "shallowcopy", "deepcopy"].indexOf(
             value?.toLowerCase()
           ) !== -1
         );
-      }
-    }
+      },
+    },
   },
 
   data() {
@@ -755,12 +762,12 @@ export default {
         paginator: Object.assign({}, defaultPaginator, this.paginator),
         itemsPerPageOptions: this._normalized_itemsPerPageOptions(),
         exportColumnKeys: this._normalized_exportColumnKeys(),
-        inlineEditItem: this._normalized_inlineEditItem()
+        inlineEditItem: this._normalized_inlineEditItem(),
       },
       processedItems: [],
       filteredItems: [],
       sortedItems: [],
-      pagedItems: []
+      pagedItems: [],
     };
   },
 
@@ -796,7 +803,7 @@ export default {
         }
 
         this.inner.selected = selected;
-      }
+      },
     },
 
     totalItems() {
@@ -841,21 +848,21 @@ export default {
     },
 
     _tableClass() {
-      const props = ['bordered', 'striped', 'hover'];
+      const props = ["bordered", "striped", "hover"];
       const defaultTableClass = {
-        'table-sm': this.smallTable
+        "table-sm": this.smallTable,
       };
       for (let prop of props) {
         defaultTableClass[`table-${prop}`] = this[prop];
       }
 
       const tableClassType = Object.prototype.toString.call(this.tableClass);
-      if (tableClassType === '[object Object]') {
+      if (tableClassType === "[object Object]") {
         return Object.assign({}, this.tableClass, defaultTableClass);
-      } else if (tableClassType === '[object Array]') {
+      } else if (tableClassType === "[object Array]") {
         const classArray = [...this.tableClass];
         if (this.smallTable) {
-          classArray.push('table-sm');
+          classArray.push("table-sm");
         }
         for (let prop of props) {
           if (this[prop]) {
@@ -863,10 +870,10 @@ export default {
           }
         }
         return classArray;
-      } else if (tableClassType === '[object String]') {
+      } else if (tableClassType === "[object String]") {
         let classString = this.tableClass;
         if (this.smallTable) {
-          classString += ' table-sm';
+          classString += " table-sm";
         }
         for (let prop of props) {
           if (this[prop]) {
@@ -877,16 +884,16 @@ export default {
       }
 
       return this.tableClass ?? defaultTableClass;
-    }
+    },
   },
 
   methods: {
     _cloneObject(source) {
       try {
         switch (this.cloneMode?.toLowerCase()) {
-          case 'shallowcopy':
+          case "shallowcopy":
             return Object.assign({}, source);
-          case 'deepcopy':
+          case "deepcopy":
             return structuredClone(source);
           default:
             return source;
@@ -917,7 +924,7 @@ export default {
     },
 
     _normalized_searchTerm() {
-      return this.searchTerm ?? '';
+      return this.searchTerm ?? "";
     },
 
     _normalized_searchFilter() {
@@ -938,16 +945,16 @@ export default {
       const sorting = { ...this.sorting };
       if (
         sorting.direction != null &&
-        ['desc', 'asc'].indexOf(sorting.direction.toLowerCase()) === -1
+        ["desc", "asc"].indexOf(sorting.direction.toLowerCase()) === -1
       ) {
-        sorting.direction = 'asc';
+        sorting.direction = "asc";
       }
       return Object.assign({}, defaultSorting, this.sorting, sorting);
     },
 
     _normalized_itemsPerPageOptions() {
       const options = [
-        ...(this.itemsPerPageOptions ?? defaultItemsPerPageOptions)
+        ...(this.itemsPerPageOptions ?? defaultItemsPerPageOptions),
       ];
       const itemsPerPage = this.paging?.itemsPerPage;
       if (itemsPerPage != null && !options.includes(itemsPerPage)) {
@@ -1005,11 +1012,11 @@ export default {
     },
 
     doFilter(searchTerm, searchFilter) {
-      this.inner.searchTerm = searchTerm ?? '';
+      this.inner.searchTerm = searchTerm ?? "";
       Object.assign(this.inner.searchFilter, searchFilter);
-      this.$emit('change-filtering', {
+      this.$emit("change-filtering", {
         searchTerm: this.inner.searchTerm,
-        searchFilter: this.inner.searchFilter
+        searchFilter: this.inner.searchFilter,
       });
     },
 
@@ -1017,26 +1024,26 @@ export default {
       if (direction != null) {
         this.inner.sorting = {
           key,
-          direction
+          direction,
         };
-        this.$emit('change-sorting', this.inner.sorting);
+        this.$emit("change-sorting", this.inner.sorting);
         return;
       }
 
       if (this.inner.sorting.key !== key) {
-        this.inner.sorting.direction = 'asc';
+        this.inner.sorting.direction = "asc";
         this.inner.sorting.key = key;
-        this.$emit('change-sorting', this.inner.sorting);
+        this.$emit("change-sorting", this.inner.sorting);
         return;
       }
 
-      if (this.inner.sorting.direction === 'asc') {
-        this.inner.sorting.direction = 'desc';
+      if (this.inner.sorting.direction === "asc") {
+        this.inner.sorting.direction = "desc";
       } else {
-        this.inner.sorting.key = '';
-        this.inner.sorting.direction = 'asc';
+        this.inner.sorting.key = "";
+        this.inner.sorting.direction = "asc";
       }
-      this.$emit('change-sorting', this.inner.sorting);
+      this.$emit("change-sorting", this.inner.sorting);
     },
 
     doPage(page, itemsPerPage) {
@@ -1045,12 +1052,12 @@ export default {
 
     _processItems() {
       if (this.serverTotalItems != null) {
-        this.$emit('request', {
+        this.$emit("request", {
           searchTerm: this.inner.searchTerm,
           searchFilter: this.inner.searchFilter,
           filtering: this.inner.filtering,
           sorting: this.inner.sorting,
-          paging: this.inner.paging
+          paging: this.inner.paging,
         });
         return;
       }
@@ -1122,7 +1129,7 @@ export default {
             passedInfos.push({
               key: column.key,
               searchTermPassed,
-              searchFilterPassed
+              searchFilterPassed,
             });
           }
 
@@ -1132,7 +1139,7 @@ export default {
             (info) => info.searchTermPassed
           );
 
-          if (this.inner.filtering.logicOperation?.toLowerCase() === 'or') {
+          if (this.inner.filtering.logicOperation?.toLowerCase() === "or") {
             return (
               itemSearchTermPassed ||
               passedInfos.some((info) => info.searchFilterPassed)
@@ -1165,15 +1172,15 @@ export default {
             return column.sort(valueA, valueB);
           }
 
-          if (typeof valueA === 'number' && typeof valueB === 'number') {
+          if (typeof valueA === "number" && typeof valueB === "number") {
             valueA = valueA ?? 0;
             valueB = valueB ?? 0;
 
             return valueA - valueB;
           }
 
-          valueA = valueA?.toString() ?? '';
-          valueB = valueB?.toString() ?? '';
+          valueA = valueA?.toString() ?? "";
+          valueB = valueB?.toString() ?? "";
 
           if (valueA < valueB) {
             return -1;
@@ -1184,7 +1191,7 @@ export default {
           return 0;
         });
 
-        if (this.inner.sorting?.direction?.toLowerCase() === 'desc') {
+        if (this.inner.sorting?.direction?.toLowerCase() === "desc") {
           items.reverse();
         }
       }
@@ -1207,19 +1214,19 @@ export default {
       const exportItems = this.processedItems.map((item) => {
         const tmpItem = {};
         exportColumns.forEach((column) => {
-          let value = '';
+          let value = "";
 
           if (column.valueToExport) {
             value = column.valueToExport(item);
           } else if (column.value) {
             value = column.value(item);
           } else {
-            value = item[column.key] ?? '';
+            value = item[column.key] ?? "";
           }
 
-          value = value ?? '';
+          value = value ?? "";
 
-          if (Object.prototype.toString.call(value) !== '[object String]') {
+          if (Object.prototype.toString.call(value) !== "[object String]") {
             value = JSON.stringify(value);
           }
 
@@ -1231,12 +1238,12 @@ export default {
 
       const _exportColumns = exportColumns.map((column) => ({
         key: column.key,
-        header: column.header ?? column.key
+        header: column.header ?? column.key,
       }));
 
       return {
         exportItems,
-        exportColumns: _exportColumns
+        exportColumns: _exportColumns,
       };
     },
 
@@ -1291,9 +1298,9 @@ export default {
 
     _onSave() {
       if (!this.validateInlineEditItem()) {
-        this.$emit('validate-item-failed', {
+        this.$emit("validate-item-failed", {
           errors: this.getErrors(),
-          item: this.inner.inlineEditItem
+          item: this.inner.inlineEditItem,
         });
         return;
       }
@@ -1302,9 +1309,9 @@ export default {
 
       if (!inlineEditItem[this.rowKey]) {
         delete inlineEditItem._myui_itemIndex;
-        this.$emit('save-create-item', inlineEditItem);
+        this.$emit("save-create-item", inlineEditItem);
       } else {
-        this.$emit('save-update-item', inlineEditItem);
+        this.$emit("save-update-item", inlineEditItem);
       }
     },
 
@@ -1314,26 +1321,26 @@ export default {
       if (inlineEditItem._myui_itemIndex != null) {
         let items = [...this.items];
         items.splice(inlineEditItem._myui_itemIndex, 1);
-        this.$emit('update:items', items);
+        this.$emit("update:items", items);
         delete inlineEditItem._myui_itemIndex;
       }
-      this.$emit('cancel-item', inlineEditItem);
+      this.$emit("cancel-item", inlineEditItem);
       this.inner.inlineEditItem = null;
     },
 
     _onRead(item) {
       const _clonedItem = this._cloneObject(item);
-      this.$emit('read-item', _clonedItem);
+      this.$emit("read-item", _clonedItem);
     },
 
     _onUpdate(item) {
       const _clonedItem = this._cloneObject(item);
-      this.$emit('update-item', _clonedItem);
+      this.$emit("update-item", _clonedItem);
     },
 
     _onDelete(item) {
       const _clonedItem = this._cloneObject(item);
-      this.$emit('delete-item', _clonedItem);
+      this.$emit("delete-item", _clonedItem);
     },
 
     _onCreate() {
@@ -1348,30 +1355,30 @@ export default {
         const defaultValueType = Object.prototype.toString.call(
           column.defaultValue
         );
-        if (defaultValueType === '[object Function]') {
+        if (defaultValueType === "[object Function]") {
           item[column.key] = column.defaultValue();
-        } else if (defaultValueType === '[object Array]') {
+        } else if (defaultValueType === "[object Array]") {
           item[column.key] = [...column.defaultValue];
-        } else if (defaultValueType === '[object Object]') {
+        } else if (defaultValueType === "[object Object]") {
           item[column.key] = { ...column.defaultValue };
         } else {
           item[column.key] = column.defaultValue;
         }
       }
-      this.$emit('create-item', item, _myui_itemIndex);
+      this.$emit("create-item", item, _myui_itemIndex);
     },
 
     _formatValue(format, value) {
       return myUtil.formatValue(format, value);
-    }
+    },
   },
 
   created() {
-    this.$emit('update:searchTerm', this.inner.searchTerm);
-    this.$emit('update:searchFilter', this.inner.searchFilter);
-    this.$emit('update:filtering', this.inner.filtering);
-    this.$emit('update:sorting', this.inner.sorting);
-    this.$emit('update:paging', this.inner.paging);
+    this.$emit("update:searchTerm", this.inner.searchTerm);
+    this.$emit("update:searchFilter", this.inner.searchFilter);
+    this.$emit("update:filtering", this.inner.filtering);
+    this.$emit("update:sorting", this.inner.sorting);
+    this.$emit("update:paging", this.inner.paging);
   },
 
   watch: {
@@ -1389,15 +1396,15 @@ export default {
         //console.log('items:_processItems');
         this._processItems();
       },
-      immediate: true
+      immediate: true,
     },
 
-    'inner.columns': {
+    "inner.columns": {
       deep: true,
       handler() {
-        this.$emit('update:columns', this.inner.columns);
+        this.$emit("update:columns", this.inner.columns);
       },
-      immediate: true
+      immediate: true,
     },
 
     columns: {
@@ -1406,17 +1413,17 @@ export default {
         if (this.inner.columns !== this.columns) {
           this.inner.columns = this._normalized_columns();
         }
-      }
+      },
     },
 
-    'inner.displayingColumnKeys': {
+    "inner.displayingColumnKeys": {
       handler() {
         this.$emit(
-          'update:displayingColumnKeys',
+          "update:displayingColumnKeys",
           this.inner.displayingColumnKeys
         );
       },
-      immediate: true
+      immediate: true,
     },
 
     displayingColumnKeys: {
@@ -1425,14 +1432,14 @@ export default {
           this.inner.displayingColumnKeys =
             this._normalized_displayingColumnKeys();
         }
-      }
+      },
     },
 
-    'inner.selected': {
+    "inner.selected": {
       handler() {
-        this.$emit('update:selected', this.inner.selected);
+        this.$emit("update:selected", this.inner.selected);
       },
-      immediate: true
+      immediate: true,
     },
 
     selected: {
@@ -1440,14 +1447,14 @@ export default {
         if (this.inner.selected !== this.selected) {
           this.inner.selected = this._normalized_selected();
         }
-      }
+      },
     },
 
-    'inner.searchTerm': {
+    "inner.searchTerm": {
       handler() {
         this._onFilteringChange();
-        this.$emit('update:searchTerm', this.inner.searchTerm);
-      }
+        this.$emit("update:searchTerm", this.inner.searchTerm);
+      },
     },
 
     searchTerm: {
@@ -1455,15 +1462,15 @@ export default {
         if (this.inner.searchTerm !== this.searchTerm) {
           this.inner.searchTerm = this._normalized_searchTerm();
         }
-      }
+      },
     },
 
-    'inner.searchFilter': {
+    "inner.searchFilter": {
       deep: true,
       handler() {
         this._onFilteringChange();
-        this.$emit('update:searchFilter', this.inner.searchFilter);
-      }
+        this.$emit("update:searchFilter", this.inner.searchFilter);
+      },
     },
 
     searchFilter: {
@@ -1471,15 +1478,15 @@ export default {
         if (this.inner.searchFilter !== this.searchFilter) {
           this.inner.searchFilter = this._normalized_searchFilter();
         }
-      }
+      },
     },
 
-    'inner.filtering': {
+    "inner.filtering": {
       deep: true,
       handler() {
         this._onFilteringChange();
-        this.$emit('update:filtering', this.inner.filtering);
-      }
+        this.$emit("update:filtering", this.inner.filtering);
+      },
     },
 
     filtering: {
@@ -1487,10 +1494,10 @@ export default {
         if (this.inner.filtering !== this.filtering) {
           this.inner.filtering = this._normalized_filtering();
         }
-      }
+      },
     },
 
-    'inner.sorting': {
+    "inner.sorting": {
       deep: true,
       handler() {
         // if (this.inner.paging.page !== 1) {
@@ -1503,8 +1510,8 @@ export default {
 
         //console.log('inner.sorting:_processItems');
         this._processItems();
-        this.$emit('update:sorting', this.inner.sorting);
-      }
+        this.$emit("update:sorting", this.inner.sorting);
+      },
     },
 
     sorting: {
@@ -1512,23 +1519,23 @@ export default {
         if (this.inner.sorting !== this.sorting) {
           this.inner.sorting = this._normalized_sorting();
         }
-      }
+      },
     },
 
-    'inner.paging': {
+    "inner.paging": {
       handler() {
-        this.$emit('update:paging', this.inner.paging);
-      }
+        this.$emit("update:paging", this.inner.paging);
+      },
     },
 
-    'inner.paging.page': {
+    "inner.paging.page": {
       handler() {
         //console.log('inner.paging.page:_processItems');
         this._processItems();
-      }
+      },
     },
 
-    'inner.paging.itemsPerPage': {
+    "inner.paging.itemsPerPage": {
       handler() {
         if (this.inner.paging.page !== 1) {
           this.inner.paging.page = 1;
@@ -1540,23 +1547,23 @@ export default {
 
         //console.log('inner.paging.itemsPerPage:_processItems');
         this._processItems();
-      }
+      },
     },
 
-    'inner.paginator': {
+    "inner.paginator": {
       handler() {
-        this.$emit('update:paginator', this.inner.paginator);
-      }
+        this.$emit("update:paginator", this.inner.paginator);
+      },
     },
 
-    'inner.itemsPerPageOptions': {
+    "inner.itemsPerPageOptions": {
       handler() {
         this.$emit(
-          'update:itemsPerPageOptions',
+          "update:itemsPerPageOptions",
           this.inner.itemsPerPageOptions
         );
       },
-      immediate: true
+      immediate: true,
     },
 
     itemsPerPageOptions: {
@@ -1565,14 +1572,14 @@ export default {
           this.inner.itemsPerPageOptions =
             this._normalized_itemsPerPageOptions();
         }
-      }
+      },
     },
 
-    'inner.exportColumnKeys': {
+    "inner.exportColumnKeys": {
       handler() {
-        this.$emit('update:exportColumnKeys', this.inner.exportColumnKeys);
+        this.$emit("update:exportColumnKeys", this.inner.exportColumnKeys);
       },
-      immediate: true
+      immediate: true,
     },
 
     exportColumnKeys: {
@@ -1580,15 +1587,15 @@ export default {
         if (this.inner.exportColumnKeys !== this.exportColumnKeys) {
           this.inner.exportColumnKeys = this._normalized_exportColumnKeys();
         }
-      }
+      },
     },
 
-    'inner.inlineEditItem': {
+    "inner.inlineEditItem": {
       deep: true,
       handler() {
-        this.$emit('update:inlineEditItem', this.inner.inlineEditItem);
+        this.$emit("update:inlineEditItem", this.inner.inlineEditItem);
       },
-      immediate: true
+      immediate: true,
     },
 
     inlineEditItem: {
@@ -1596,8 +1603,8 @@ export default {
         if (this.inner.inlineEditItem !== this.inlineEditItem) {
           this.inner.inlineEditItem = this._normalized_inlineEditItem();
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>

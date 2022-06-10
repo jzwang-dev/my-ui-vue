@@ -38,13 +38,13 @@
 }
 
 .my-table .hbox,
-.my-table [class*='hbox-'] {
+.my-table [class*="hbox-"] {
   align-items: center !important;
   gap: 0.25rem;
 }
 
-.my-table .hbox[class*='-right'],
-.my-table [class*='hbox-'][class*='-right'] {
+.my-table .hbox[class*="-right"],
+.my-table [class*="hbox-"][class*="-right"] {
   justify-content: flex-end;
 }
 

@@ -18,50 +18,50 @@
 
 <script>
 export default {
-  name: 'MyCheckBox',
+  name: "MyCheckBox",
 
   inheritAttrs: false,
 
   model: {
-    prop: 'checked',
-    event: 'change'
+    prop: "checked",
+    event: "change",
   },
 
   props: {
     checked: {
       type: [Boolean, String, Number],
-      default: false
+      default: false,
     },
 
     name: {
       type: String,
-      required: true
+      required: true,
     },
 
     trueValue: {
       type: [Boolean, String, Number],
-      default: true
+      default: true,
     },
 
     falseValue: {
       type: [Boolean, String, Number],
-      default: false
+      default: false,
     },
 
     label: {
       type: String,
-      default: ''
+      default: "",
     },
 
     inputClass: null,
 
-    inputStyle: null
+    inputStyle: null,
   },
 
   computed: {
     _id() {
       return this.$attrs.id ?? this.name;
-    }
-  }
+    },
+  },
 };
 </script>

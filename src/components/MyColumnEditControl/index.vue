@@ -21,7 +21,7 @@
     :class="[
       column.control.cssClass,
       { 'is-invalid': column.errors.length },
-      `form-control-${size}`
+      `form-control-${size}`,
     ]"
     :style="column.control.style"
     @input="_onModelChange($event.target.value, $event)"
@@ -41,7 +41,7 @@
     :class="[
       column.control.cssClass,
       { 'is-invalid': column.errors.length },
-      `form-control-${size}`
+      `form-control-${size}`,
     ]"
     :style="column.control.style"
     @change="_onModelChange($event.target.value, $event)"
@@ -136,7 +136,7 @@
     :class="[
       column.control.cssClass,
       { 'is-invalid': column.errors.length },
-      `form-control-${size}`
+      `form-control-${size}`,
     ]"
     :style="column.control.style"
     @input="_onModelChange($event.target.value, $event)"
@@ -144,58 +144,58 @@
 </template>
 
 <script>
-import MyRadioButtonList from '../MyRadioButtonList';
-import MyCheckBox from '../MyCheckBox';
-import MyCheckBoxList from '../MyCheckBoxList';
-import columnUtil from '../../utils/columnsUtil';
+import MyRadioButtonList from "../MyRadioButtonList";
+import MyCheckBox from "../MyCheckBox";
+import MyCheckBoxList from "../MyCheckBoxList";
+import columnUtil from "../../utils/columnsUtil";
 
 export default {
-  name: 'MyColumnEditControl',
+  name: "MyColumnEditControl",
 
   inheritAttrs: false,
 
   components: {
     MyRadioButtonList,
     MyCheckBox,
-    MyCheckBoxList
+    MyCheckBoxList,
   },
 
   props: {
     column: {
       type: Object,
-      required: true
+      required: true,
     },
 
     editItem: {
       type: Object,
-      required: true
+      required: true,
     },
 
     idPrefix: {
       type: String,
-      default: 'column-edit-'
+      default: "column-edit-",
     },
 
     size: {
       type: String,
-      default: 'md',
+      default: "md",
       validator(value) {
-        return ['sm', 'md', 'lg', 'xl'].indexOf(value) !== -1;
-      }
-    }
+        return ["sm", "md", "lg", "xl"].indexOf(value) !== -1;
+      },
+    },
   },
 
   data() {
     return {
       inner: {
-        editItem: this.editItem
-      }
+        editItem: this.editItem,
+      },
     };
   },
 
   methods: {
     _onModelChange(value, event) {
-      this.$emit('model-change', value, event);
+      this.$emit("model-change", value, event);
     },
 
     normalizeDataSource(column) {
@@ -204,15 +204,15 @@ export default {
         column.control.dataValueField,
         column.control.dataTextField
       );
-    }
+    },
   },
 
   watch: {
-    'inner.editItem': {
+    "inner.editItem": {
       deep: true,
       handler() {
-        this.$emit('update:editItem', this.inner.editItem);
-      }
+        this.$emit("update:editItem", this.inner.editItem);
+      },
     },
 
     editItem: {
@@ -220,8 +220,8 @@ export default {
         if (this.inner.editItem !== this.editItem) {
           this.inner.editItem = this.editItem;
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>

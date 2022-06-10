@@ -28,18 +28,18 @@
 </template>
 
 <script>
-import dataSourceMixin from '../../mixins/dataSourceMixin';
+import dataSourceMixin from "../../mixins/dataSourceMixin";
 
 export default {
-  name: 'MyCheckBoxList',
+  name: "MyCheckBoxList",
 
   inheritAttrs: false,
 
   mixins: [dataSourceMixin],
 
   model: {
-    prop: 'checked',
-    event: 'change'
+    prop: "checked",
+    event: "change",
   },
 
   props: {
@@ -47,39 +47,39 @@ export default {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
 
     name: {
       type: String,
-      required: true
+      required: true,
     },
 
     inline: {
-      type: Boolean
+      type: Boolean,
     },
 
     inputClass: null,
 
-    inputStyle: null
+    inputStyle: null,
   },
 
   data() {
     return {
-      innerChecked: this.checked
+      innerChecked: this.checked,
     };
   },
 
   computed: {
     _id() {
       return this.$attrs.id ?? this.name;
-    }
+    },
   },
 
   watch: {
     innerChecked() {
-      this.$emit('change', this.innerChecked);
-    }
-  }
+      this.$emit("change", this.innerChecked);
+    },
+  },
 };
 </script>

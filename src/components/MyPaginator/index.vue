@@ -75,46 +75,46 @@ email: jason@gms.ndhu.edu.tw
 </template>
 
 <script>
-import { defaultPaging, defaultPaginator } from '../../configs';
+import { defaultPaging, defaultPaginator } from "../../configs";
 
 export default {
-  name: 'MyPaginator',
+  name: "MyPaginator",
 
   props: {
     paging: {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
 
     paginator: {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
 
     totalItems: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     size: {
       type: String,
-      default: 'md',
+      default: "md",
       validator(value) {
-        return ['sm', 'md', 'lg', 'xl'].indexOf(value) !== -1;
-      }
-    }
+        return ["sm", "md", "lg", "xl"].indexOf(value) !== -1;
+      },
+    },
   },
 
   data() {
     return {
       inner: {
         paging: this._normalize_paging(),
-        paginator: this._normalize_paginator()
-      }
+        paginator: this._normalize_paginator(),
+      },
     };
   },
 
@@ -228,7 +228,7 @@ export default {
 
       const nextStart = nextPagerIndex * this.inner.paginator.pageLinks + 1;
       return nextStart;
-    }
+    },
   },
 
   methods: {
@@ -249,17 +249,17 @@ export default {
       if (itemsPerPage != null) {
         this.inner.paging.itemsPerPage = itemsPerPage;
       }
-      this.$emit('change-paging', this.inner.paging);
-    }
+      this.$emit("change-paging", this.inner.paging);
+    },
   },
 
   watch: {
-    'inner.paging': {
+    "inner.paging": {
       deep: true,
       handler() {
-        this.$emit('update:paging', this.inner.paging);
+        this.$emit("update:paging", this.inner.paging);
       },
-      immediate: true
+      immediate: true,
     },
 
     paging: {
@@ -267,15 +267,15 @@ export default {
         if (this.inner.paging !== this.paging) {
           this.inner.paging = this._normalize_paging();
         }
-      }
+      },
     },
 
-    'inner.paginator': {
+    "inner.paginator": {
       deep: true,
       handler() {
-        this.$emit('update:paginator', this.inner.paginator);
+        this.$emit("update:paginator", this.inner.paginator);
       },
-      immediate: true
+      immediate: true,
     },
 
     paginator: {
@@ -283,8 +283,8 @@ export default {
         if (this.inner.paginator !== this.paginator) {
           this.inner.paginator = this._normalize_paginator();
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
